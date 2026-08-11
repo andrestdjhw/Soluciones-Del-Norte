@@ -2,6 +2,273 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/scripts/Footer.js"
+/*!*******************************!*\
+  !*** ./src/scripts/Footer.js ***!
+  \*******************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Footer)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icons */ "./src/scripts/icons.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+/* ─────────────────────────────────────────────────────────────
+   Footer · arquetipo Ft1 (Mast headed)
+   Una sola banda en Space Indigo: marca y tagline anclan la
+   izquierda, cuatro bloques de datos la derecha, y una línea de
+   cierre debajo de la regla.
+   Deliberadamente NO lleva cuatro columnas de enlaces de servicio:
+   ese sitemap ya vive en el mega-menú, que es donde se busca.
+   ───────────────────────────────────────────────────────────── */
+
+const DEFAULTS = {
+  logoWhite: "/wp-content/uploads/2026/08/logo-blanco.png",
+  phone1: "971-477-8337",
+  phone2: "971-471-2600",
+  email: "Admin@solucionesnorte.com",
+  address: "1915 NE Stucki Ave, Suite 400, Hillsboro, OR 97006",
+  mapUrl: "https://maps.google.com/?q=1915%20NE%20Stucki%20Ave%20Suite%20400%20Hillsboro%20OR%2097006",
+  facebook: "https://facebook.com/solucionesdelnorte",
+  instagram: "https://instagram.com/solucionesdelnorte",
+  tiktok: "https://tiktok.com/@solucionesdelnorte",
+  agencyUrl: "https://828marketingsolutions.com",
+  lang: "es"
+};
+const COPY = {
+  es: {
+    logoAlt: "Soluciones del Norte",
+    tagline: "Nómina, contabilidad, impuestos y documentos para negocios de Oregon y Washington.",
+    social: "Redes sociales",
+    labelPhone: "Teléfono",
+    labelEmail: "Correo",
+    labelOffice: "Oficina",
+    labelHours: "Horario",
+    hours: "Lunes a viernes, 10:00–14:00",
+    hoursNote: "Cerrado fines de semana y días festivos.",
+    directions: "Cómo llegar",
+    navLabel: "Enlaces del pie",
+    links: [{
+      href: "/servicios",
+      label: "Servicios"
+    }, {
+      href: "/nosotros",
+      label: "Nosotros"
+    }, {
+      href: "/contacto",
+      label: "Contacto"
+    }, {
+      href: "/aviso-de-privacidad",
+      label: "Aviso de privacidad"
+    }],
+    rights: "Todos los derechos reservados.",
+    credit: "Sitio por"
+  },
+  en: {
+    logoAlt: "Soluciones del Norte",
+    tagline: "Payroll, bookkeeping, taxes and documents for Oregon and Washington businesses.",
+    social: "Social media",
+    labelPhone: "Phone",
+    labelEmail: "Email",
+    labelOffice: "Office",
+    labelHours: "Hours",
+    hours: "Monday to Friday, 10:00–14:00",
+    hoursNote: "Closed weekends and holidays.",
+    directions: "Getting here",
+    navLabel: "Footer links",
+    links: [{
+      href: "/en/services",
+      label: "Services"
+    }, {
+      href: "/en/about",
+      label: "About"
+    }, {
+      href: "/en/contact",
+      label: "Contact"
+    }, {
+      href: "/en/privacy",
+      label: "Privacy notice"
+    }],
+    rights: "All rights reserved.",
+    credit: "Site by"
+  }
+};
+
+/* Bloque de dato: etiqueta en versalitas mono, valor en mono tabular. */
+function DataBlock({
+  label,
+  icon: Icon,
+  children
+}) {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "min-w-0",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+      className: "flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
+        className: "h-3.5 w-3.5"
+      }), label]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "mt-2 space-y-1 font-mono text-[0.8125rem] leading-relaxed text-paper",
+      children: children
+    })]
+  });
+}
+function Footer(props) {
+  const site = {
+    ...DEFAULTS,
+    ...props
+  };
+  const lang = site.lang === "en" ? "en" : "es";
+  const t = COPY[lang];
+  const year = new Date().getFullYear();
+  const tel = n => `tel:+1${n.replace(/\D/g, "")}`;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("footer", {
+    className: "bg-deep text-paper",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "mx-auto max-w-[1200px] px-6 lg:px-12",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-16",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "min-w-0",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+            src: site.logoWhite,
+            alt: t.logoAlt,
+            width: "420",
+            height: "96",
+            className: "h-11 w-auto"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            className: "mt-6 max-w-[42ch] text-[0.9375rem] leading-relaxed text-rule",
+            children: t.tagline
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("nav", {
+            "aria-label": t.social,
+            className: "mt-7 flex items-center gap-2",
+            children: [{
+              href: site.facebook,
+              Icon: _icons__WEBPACK_IMPORTED_MODULE_1__.FacebookIcon,
+              name: "Facebook"
+            }, {
+              href: site.instagram,
+              Icon: _icons__WEBPACK_IMPORTED_MODULE_1__.InstagramIcon,
+              name: "Instagram"
+            }, {
+              href: site.tiktok,
+              Icon: _icons__WEBPACK_IMPORTED_MODULE_1__.TikTokIcon,
+              name: "TikTok"
+            }].map(({
+              href,
+              Icon,
+              name
+            }) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+              href: href,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "flex h-10 w-10 items-center justify-center rounded-sm border border-paper/20 text-rule transition-colors duration-150 hover:border-accent hover:bg-deep-2 hover:text-paper",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
+                className: "h-4 w-4"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                className: "sr-only",
+                children: name
+              })]
+            }, name))
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+          className: "grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(DataBlock, {
+            label: t.labelPhone,
+            icon: _icons__WEBPACK_IMPORTED_MODULE_1__.PhoneIcon,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+              href: tel(site.phone1),
+              className: "block tabular-nums hover:text-accent",
+              children: site.phone1
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+              href: tel(site.phone2),
+              className: "block tabular-nums hover:text-accent",
+              children: site.phone2
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(DataBlock, {
+            label: t.labelEmail,
+            icon: _icons__WEBPACK_IMPORTED_MODULE_1__.MailIcon,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+              href: `mailto:${site.email}`,
+              className: "block break-all hover:text-accent",
+              children: site.email
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(DataBlock, {
+            label: t.labelOffice,
+            icon: _icons__WEBPACK_IMPORTED_MODULE_1__.PinIcon,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("address", {
+              className: "not-italic",
+              children: site.address
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+              href: site.mapUrl,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "inline-flex items-center gap-1.5 whitespace-nowrap pt-1 text-accent hover:text-paper",
+              children: [t.directions, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_1__.ArrowIcon, {
+                className: "h-3.5 w-3.5"
+              })]
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(DataBlock, {
+            label: t.labelHours,
+            icon: _icons__WEBPACK_IMPORTED_MODULE_1__.PinIcon,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              className: "tabular-nums",
+              children: t.hours
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+              className: "text-rule",
+              children: t.hoursNote
+            })]
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: "flex flex-col gap-5 border-t border-paper/15 py-7 lg:flex-row lg:items-center lg:justify-between",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("nav", {
+          "aria-label": t.navLabel,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("ul", {
+            className: "flex flex-wrap items-center gap-x-6 gap-y-2",
+            children: t.links.map(l => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("li", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                href: l.href,
+                className: "whitespace-nowrap text-[0.875rem] text-rule transition-colors duration-150 hover:text-paper",
+                children: l.label
+              })
+            }, l.href))
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+          className: "flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.75rem] text-rule",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+            className: "tabular-nums",
+            children: ["\xA9 ", year, " Soluciones del Norte."]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            children: t.rights
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            "aria-hidden": "true",
+            className: "hidden text-paper/30 sm:inline",
+            children: "\xB7"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+            children: [t.credit, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+              href: site.agencyUrl,
+              target: "_blank",
+              rel: "noopener noreferrer",
+              className: "whitespace-nowrap text-paper underline decoration-paper/30 underline-offset-2 transition-colors duration-150 hover:decoration-accent",
+              children: "828 Marketing Solutions"
+            })]
+          })]
+        })]
+      })]
+    })
+  });
+}
+
+/***/ },
+
 /***/ "./src/scripts/Navbar.js"
 /*!*******************************!*\
   !*** ./src/scripts/Navbar.js ***!
@@ -846,8 +1113,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "react-dom/client");
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom_client__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scripts/Navbar */ "./src/scripts/Navbar.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scripts/Footer */ "./src/scripts/Footer.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -862,11 +1131,12 @@ __webpack_require__.r(__webpack_exports__);
 function mount(selector, Component) {
   const node = document.querySelector(selector);
   if (!node) return;
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(Component, {
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Component, {
     ...node.dataset
   }));
 }
 mount("#sdn-navbar", _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"]);
+mount("#sdn-footer", _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__["default"]);
 })();
 
 /******/ })()

@@ -71,6 +71,7 @@ function sdn_site_data() {
 		'home'          => home_url( '/' ),
 		// TODO: el archivo de la biblioteca tiene el nombre mal escrito ("dle").
 		'logo'          => content_url( '/uploads/2026/08/soluciones-dle-norte-horizontal.png' ),
+		'logo_white'    => content_url( '/uploads/2026/08/logo-blanco.png' ),
 		'phone1'        => '971-477-8337',
 		'phone2'        => '971-471-2600',
 		'email'         => 'Admin@solucionesnorte.com',
@@ -80,6 +81,7 @@ function sdn_site_data() {
 		'facebook'      => 'https://facebook.com/solucionesdelnorte',
 		'instagram'     => 'https://instagram.com/solucionesdelnorte',
 		'tiktok'        => 'https://tiktok.com/@solucionesdelnorte',
+		'agency_url'    => 'https://828marketingsolutions.com',
 		'lang'          => sdn_current_lang(),
 	);
 }
