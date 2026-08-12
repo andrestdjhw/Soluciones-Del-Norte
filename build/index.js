@@ -458,6 +458,453 @@ function Chatbot(props) {
 
 /***/ },
 
+/***/ "./src/scripts/ContactForm.js"
+/*!************************************!*\
+  !*** ./src/scripts/ContactForm.js ***!
+  \************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ContactForm)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./icons */ "./src/scripts/icons.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+/* ─────────────────────────────────────────────────────────────
+   ContactForm
+   Seis campos, los del copy deck. Los dos últimos —número de
+   empleados y estados— existen porque son exactamente las dos
+   respuestas que la home promete que bastan, y porque califican
+   la consulta antes de la llamada.
+
+   Envío: EmailJS. La configuración llega desde PHP
+   (wp_localize_script → window.sdnConfig.emailjs), nunca escrita
+   en el bundle. El SDK se carga bajo demanda: quien no envía el
+   formulario no descarga la librería.
+
+   Variantes por props:
+     density = "compact" (hero) | "comfortable" (página /contacto)
+     persistent = "true" — siempre visible, sin disparador
+   ───────────────────────────────────────────────────────────── */
+
+const EMAILJS_CDN = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+const COPY = {
+  es: {
+    name: "Nombre",
+    phone: "Teléfono",
+    email: "Correo",
+    employees: "Número de empleados",
+    statesLegend: "Estados donde operas",
+    stateOR: "Oregon",
+    stateWA: "Washington",
+    stateBoth: "Ambos",
+    message: "Mensaje",
+    messageHint: "Opcional. Si ya sabes qué necesitas, dínoslo aquí.",
+    send: "Enviar",
+    sending: "Enviando…",
+    successTitle: "Recibido.",
+    success: "Te contestamos en horario de oficina, de lunes a viernes.",
+    successAgain: "Enviar otro mensaje",
+    errorTitle: "No se pudo enviar.",
+    error: "Llámanos o escríbenos directamente:",
+    required: "Falta este dato.",
+    badEmail: "Revisa el correo: falta la arroba o el dominio.",
+    badPhone: "Revisa el teléfono: faltan dígitos.",
+    badEmployees: "Escribe un número.",
+    pickState: "Elige una opción.",
+    legal: "Al enviar aceptas que te contactemos por teléfono o correo sobre tu consulta.",
+    errorsTitle: "Revisa estos campos:"
+  },
+  en: {
+    name: "Name",
+    phone: "Phone",
+    email: "Email",
+    employees: "Number of employees",
+    statesLegend: "States you operate in",
+    stateOR: "Oregon",
+    stateWA: "Washington",
+    stateBoth: "Both",
+    message: "Message",
+    messageHint: "Optional. If you already know what you need, say so here.",
+    send: "Send",
+    sending: "Sending…",
+    successTitle: "Received.",
+    success: "We’ll reply during office hours, Monday to Friday.",
+    successAgain: "Send another message",
+    errorTitle: "Couldn’t send.",
+    error: "Call or write to us directly:",
+    required: "This one’s missing.",
+    badEmail: "Check the email — the @ or the domain is missing.",
+    badPhone: "Check the phone number — digits are missing.",
+    badEmployees: "Enter a number.",
+    pickState: "Pick one.",
+    legal: "By sending this you agree to be contacted by phone or email about your enquiry.",
+    errorsTitle: "Check these fields:"
+  }
+};
+
+/* Carga el SDK de EmailJS una sola vez, cuando hace falta. */
+let emailjsPromise = null;
+function loadEmailJs() {
+  if (window.emailjs) return Promise.resolve(window.emailjs);
+  if (emailjsPromise) return emailjsPromise;
+  emailjsPromise = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = EMAILJS_CDN;
+    s.async = true;
+    s.onload = () => window.emailjs ? resolve(window.emailjs) : reject(new Error("emailjs no disponible"));
+    s.onerror = () => reject(new Error("no se pudo cargar emailjs"));
+    document.head.appendChild(s);
+  });
+  return emailjsPromise;
+}
+const LABEL_CLS = "block font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted";
+
+/**
+ * Campo de texto. Vive a nivel de módulo a propósito: si se declara dentro
+ * de ContactForm, React lo ve como un tipo distinto en cada render, desmonta
+ * el input y el foco se pierde a cada tecla.
+ */
+function Field({
+  uid,
+  name,
+  label,
+  value,
+  error,
+  onChange,
+  pad,
+  type = "text",
+  inputMode,
+  autoComplete,
+  hint
+}) {
+  const fid = `${uid}-${name}`;
+  const describedBy = error ? `${fid}-err` : hint ? `${fid}-hint` : undefined;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    className: "min-w-0",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+      htmlFor: fid,
+      className: LABEL_CLS,
+      children: label
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+      id: fid,
+      name: name,
+      type: type,
+      inputMode: inputMode,
+      autoComplete: autoComplete,
+      value: value,
+      onChange: onChange,
+      "aria-invalid": error ? "true" : undefined,
+      "aria-describedby": describedBy,
+      className: `mt-1.5 block w-full rounded-sm border bg-paper ${pad} font-body text-[0.9375rem] text-ink placeholder:text-neutral transition-colors duration-150 ${error ? "border-accent-2" : "border-rule hover:border-rule-2"}`
+    }), hint && !error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+      id: `${fid}-hint`,
+      className: "mt-1.5 text-[0.75rem] text-muted",
+      children: hint
+    }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+      id: `${fid}-err`,
+      className: "mt-1.5 text-[0.75rem] text-accent-2",
+      children: error
+    })]
+  });
+}
+const EMPTY = {
+  name: "",
+  phone: "",
+  email: "",
+  employees: "",
+  states: "",
+  message: "",
+  company: "" // trampa para bots: un humano no la ve ni la llena
+};
+function ContactForm(props) {
+  const lang = props.lang === "en" ? "en" : "es";
+  const t = COPY[lang];
+  const compact = props.density === "compact";
+  const cfg = typeof window !== "undefined" && window.sdnConfig || {};
+  const ejs = {
+    ...(cfg.emailjs || {}),
+    ...props
+  };
+  const contact = {
+    phone: props.phone || cfg.phone || "971-477-8337",
+    email: props.email || cfg.email || "Admin@solucionesnorte.com"
+  };
+  const uid = (0,react__WEBPACK_IMPORTED_MODULE_0__.useId)();
+  const [values, setValues] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(EMPTY);
+  const [errors, setErrors] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});
+  const [status, setStatus] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("idle"); // idle | sending | success | error
+  const formRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const startedAt = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(Date.now());
+  const set = field => e => {
+    const v = e.target.value;
+    setValues(prev => ({
+      ...prev,
+      [field]: v
+    }));
+    setErrors(prev => prev[field] ? {
+      ...prev,
+      [field]: null
+    } : prev);
+  };
+  const validate = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => {
+    const e = {};
+    if (!values.name.trim()) e.name = t.required;
+    const digits = values.phone.replace(/\D/g, "");
+    if (!values.phone.trim()) e.phone = t.required;else if (digits.length < 10) e.phone = t.badPhone;
+    if (!values.email.trim()) e.email = t.required;else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email.trim())) e.email = t.badEmail;
+    if (!values.employees.trim()) e.employees = t.required;else if (!/^\d{1,5}$/.test(values.employees.trim())) e.employees = t.badEmployees;
+    if (!values.states) e.states = t.pickState;
+    return e;
+  }, [values, t]);
+  const handleSubmit = async event => {
+    event.preventDefault();
+    if (status === "sending") return;
+    const found = validate();
+    setErrors(found);
+    if (Object.keys(found).length) {
+      const first = formRef.current?.querySelector("[aria-invalid='true']");
+      first?.focus();
+      return;
+    }
+
+    // Trampa de bots: campo oculto lleno, o formulario enviado en menos de 3 s.
+    if (values.company || Date.now() - startedAt.current < 3000) {
+      setStatus("success"); // no damos pistas al bot
+      return;
+    }
+    setStatus("sending");
+    try {
+      if (!ejs.publicKey || !ejs.serviceId || !ejs.templateId) {
+        throw new Error("EmailJS sin configurar: revisa SDN_EMAILJS_* en wp-config.php");
+      }
+      const emailjs = await loadEmailJs();
+      emailjs.init({
+        publicKey: ejs.publicKey
+      });
+      await emailjs.send(ejs.serviceId, ejs.templateId, {
+        from_name: values.name.trim(),
+        from_phone: values.phone.trim(),
+        from_email: values.email.trim(),
+        employees: values.employees.trim(),
+        states: values.states,
+        message: values.message.trim(),
+        page_url: window.location.href,
+        lang
+      });
+      setStatus("success");
+      setValues(EMPTY);
+    } catch (err) {
+      console.error("[ContactForm]", err);
+      setStatus("error");
+    }
+  };
+  const restart = () => {
+    setStatus("idle");
+    setErrors({});
+    startedAt.current = Date.now();
+  };
+
+  /* ── Estilos compartidos ─────────────────────────────────── */
+  const pad = compact ? "px-3.5 py-2.5" : "px-4 py-3";
+  const gap = compact ? "space-y-4" : "space-y-5";
+
+  /* ── Estado: enviado ─────────────────────────────────────── */
+  if (status === "success") {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: `rounded-sm border border-rule bg-paper-2 ${compact ? "p-6" : "p-8"}`,
+      role: "status",
+      "aria-live": "polite",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        className: "h-1 w-12 bg-accent",
+        "aria-hidden": "true"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+        className: "mt-5 font-display text-xl font-semibold text-ink",
+        children: t.successTitle
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+        className: "sdn-measure mt-2 text-[0.9375rem] leading-relaxed text-ink-2",
+        children: t.success
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
+        type: "button",
+        onClick: restart,
+        className: "mt-6 inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-accent-2 hover:text-accent",
+        children: [t.successAgain, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_1__.ArrowIcon, {
+          className: "h-3.5 w-3.5"
+        })]
+      })]
+    });
+  }
+
+  /* ── Formulario ──────────────────────────────────────────── */
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: `rounded-sm border border-rule bg-paper-2 ${compact ? "p-6" : "p-8"}`,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("form", {
+      ref: formRef,
+      onSubmit: handleSubmit,
+      noValidate: true,
+      className: gap,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        "aria-hidden": "true",
+        className: "absolute left-[-9999px] h-px w-px overflow-hidden",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          htmlFor: `${uid}-company`,
+          children: "Company"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+          id: `${uid}-company`,
+          name: "company",
+          type: "text",
+          tabIndex: -1,
+          autoComplete: "off",
+          value: values.company,
+          onChange: set("company")
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: compact ? "grid gap-4 sm:grid-cols-2" : "grid gap-5 sm:grid-cols-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Field, {
+          uid: uid,
+          name: "name",
+          label: t.name,
+          autoComplete: "name",
+          value: values.name,
+          error: errors.name,
+          onChange: set("name"),
+          pad: pad
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Field, {
+          uid: uid,
+          name: "phone",
+          label: t.phone,
+          type: "tel",
+          inputMode: "tel",
+          autoComplete: "tel",
+          value: values.phone,
+          error: errors.phone,
+          onChange: set("phone"),
+          pad: pad
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Field, {
+        uid: uid,
+        name: "email",
+        label: t.email,
+        type: "email",
+        inputMode: "email",
+        autoComplete: "email",
+        value: values.email,
+        error: errors.email,
+        onChange: set("email"),
+        pad: pad
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        className: compact ? "grid gap-4 sm:grid-cols-2" : "grid gap-5 sm:grid-cols-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Field, {
+          uid: uid,
+          name: "employees",
+          label: t.employees,
+          inputMode: "numeric",
+          value: values.employees,
+          error: errors.employees,
+          onChange: set("employees"),
+          pad: pad
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("fieldset", {
+          className: "min-w-0",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("legend", {
+            className: LABEL_CLS,
+            children: t.statesLegend
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "mt-1.5 grid grid-cols-3 gap-2",
+            children: [{
+              value: "Oregon",
+              label: t.stateOR
+            }, {
+              value: "Washington",
+              label: t.stateWA
+            }, {
+              value: "Ambos",
+              label: t.stateBoth
+            }].map(opt => {
+              const checked = values.states === opt.value;
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
+                className: `flex cursor-pointer items-center justify-center rounded-sm border px-2 py-2.5 text-center text-[0.8125rem] transition-colors duration-150 ${checked ? "border-accent bg-accent-2 text-paper" : errors.states ? "border-accent-2 bg-paper text-ink hover:bg-paper-3" : "border-rule bg-paper text-ink hover:bg-paper-3"}`,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                  type: "radio",
+                  name: `${uid}-states`,
+                  value: opt.value,
+                  checked: checked,
+                  onChange: set("states"),
+                  "aria-invalid": errors.states ? "true" : undefined,
+                  "aria-describedby": errors.states ? `${uid}-states-err` : undefined,
+                  className: "sr-only"
+                }), opt.label]
+              }, opt.value);
+            })
+          }), errors.states && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+            id: `${uid}-states-err`,
+            className: "mt-1.5 text-[0.75rem] text-accent-2",
+            children: errors.states
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          htmlFor: `${uid}-message`,
+          className: LABEL_CLS,
+          children: t.message
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("textarea", {
+          id: `${uid}-message`,
+          name: "message",
+          rows: compact ? 3 : 4,
+          value: values.message,
+          onChange: set("message"),
+          "aria-describedby": `${uid}-message-hint`,
+          className: `mt-1.5 block w-full resize-y rounded-sm border border-rule bg-paper ${pad} font-body text-[0.9375rem] text-ink transition-colors duration-150 hover:border-rule-2`
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          id: `${uid}-message-hint`,
+          className: "mt-1.5 text-[0.75rem] text-muted",
+          children: t.messageHint
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+        type: "submit",
+        disabled: status === "sending",
+        className: "w-full rounded-sm bg-accent-2 px-6 py-3.5 font-body text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-accent active:translate-y-px disabled:pointer-events-none disabled:opacity-60",
+        children: status === "sending" ? t.sending : t.send
+      }), status === "error" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+        role: "alert",
+        className: "border-l-2 border-accent-2 bg-paper px-4 py-3",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: "text-[0.875rem] font-medium text-ink",
+          children: t.errorTitle
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+          className: "mt-1 text-[0.8125rem] text-ink-2",
+          children: t.error
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
+          className: "mt-2 space-y-1 font-mono text-[0.875rem]",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+            href: `tel:+1${contact.phone.replace(/\D/g, "")}`,
+            className: "flex items-center gap-2 tabular-nums text-accent-2 hover:text-accent",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_1__.PhoneIcon, {
+              className: "h-4 w-4"
+            }), contact.phone]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+            href: `mailto:${contact.email}`,
+            className: "flex items-center gap-2 break-all text-accent-2 hover:text-accent",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_icons__WEBPACK_IMPORTED_MODULE_1__.MailIcon, {
+              className: "h-4 w-4 shrink-0"
+            }), contact.email]
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+        className: "text-[0.75rem] leading-snug text-muted",
+        children: t.legal
+      })]
+    })
+  });
+}
+
+/***/ },
+
 /***/ "./src/scripts/Footer.js"
 /*!*******************************!*\
   !*** ./src/scripts/Footer.js ***!
@@ -585,10 +1032,17 @@ function Footer(props) {
   const t = COPY[lang];
   const year = new Date().getFullYear();
   const tel = n => `tel:+1${n.replace(/\D/g, "")}`;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("footer", {
-    className: "bg-deep text-paper",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-      className: "mx-auto max-w-[1200px] px-6 lg:px-12",
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("footer", {
+    className: "sdn-surface sdn-footer text-paper",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "sdn-blobs",
+      "aria-hidden": "true",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {})]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      className: "sdn-veil",
+      "aria-hidden": "true"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+      className: "sdn-layer mx-auto max-w-[1200px] px-6 lg:px-12",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-16",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -719,7 +1173,7 @@ function Footer(props) {
           })]
         })]
       })]
-    })
+    })]
   });
 }
 
@@ -992,15 +1446,12 @@ function Navbar(props) {
       children: t.skip
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("header", {
       ref: headerRef,
-      className: "sticky top-0 z-50",
+      className: `sdn-header ${topbarCollapsed ? "is-topbar-hidden" : ""}`,
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "sdn-topbar bg-deep text-paper",
-        style: {
-          height: topbarCollapsed ? "0rem" : "var(--sdn-topbar-h)"
-        },
         "aria-hidden": topbarCollapsed ? "true" : "false",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          className: "mx-auto flex h-9 max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-12",
+          className: "mx-auto flex h-full max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-12",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
             className: "flex min-w-0 items-center gap-4 font-mono text-[0.75rem] tracking-wide",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
@@ -1065,7 +1516,7 @@ function Navbar(props) {
           })]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        className: `sdn-bar border-b ${detached ? "border-rule bg-paper/90 shadow-[0_1px_16px_rgba(29,24,22,0.06)] backdrop-blur-md" : "border-transparent bg-paper"}`,
+        className: `sdn-bar ${detached ? "is-stuck" : ""}`,
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "mx-auto flex h-[var(--sdn-bar-h)] max-w-[1200px] items-center justify-between gap-6 px-6 lg:px-12",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
@@ -1297,6 +1748,88 @@ function Navbar(props) {
       className: `sdn-scrim fixed inset-0 z-40 hidden bg-ink/25 lg:block ${megaOpen ? "opacity-100" : "pointer-events-none opacity-0"}`
     })]
   });
+}
+
+/***/ },
+
+/***/ "./src/scripts/heroFinisher.js"
+/*!*************************************!*\
+  !*** ./src/scripts/heroFinisher.js ***!
+  \*************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ initHeroFinisher)
+/* harmony export */ });
+/**
+ * Fondo animado del hero — FinisherHeader.
+ *
+ * El script no viene en el repositorio: hay que descargar
+ * `finisher-header.es5.min.js` desde https://www.finisher.co/lab/header/
+ * y dejarlo en `assets/` del tema. functions.php lo encola solo si el
+ * archivo existe, así que mientras no esté, el hero usa la reserva en CSS
+ * y no se rompe nada.
+ *
+ * Configuración: la que Daniel generó en el laboratorio, con dos cambios
+ * deliberados:
+ *   · skew 0 — el corte inclinado lo hace el clip-path de `.sdn-hero`,
+ *     para que se vea igual con script y sin él. Dos skews se suman.
+ *   · sin movimiento si el visitante pide movimiento reducido.
+ *
+ * Los hex están escritos aquí porque el script no entiende `oklch()`.
+ * Son los mismos valores de marca que hay en los tokens de index.css:
+ * cambiar uno obliga a cambiar el otro.
+ */
+
+const CONFIG = {
+  count: 10,
+  size: {
+    min: 1300,
+    max: 1500,
+    pulse: 0
+  },
+  speed: {
+    x: {
+      min: 0.1,
+      max: 0.6
+    },
+    y: {
+      min: 0.1,
+      max: 0.6
+    }
+  },
+  colors: {
+    background: "#292d58",
+    // Space Indigo  → --color-deep
+    particles: ["#1581aa",
+    // Cerulean    → --color-brand-cerulean
+    "#1d1816",
+    // Coffee Bean → --color-ink
+    "#c2c7c7" // Silver      → --color-rule
+    ]
+  },
+  blending: "overlay",
+  opacity: {
+    center: 0.5,
+    edge: 0.05
+  },
+  skew: 0,
+  shapes: ["c"]
+};
+function initHeroFinisher() {
+  const hero = document.querySelector(".sdn-hero");
+  if (!hero) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (typeof window.FinisherHeader !== "function") return;
+  try {
+    hero.classList.add("finisher-header", "is-finisher");
+    new window.FinisherHeader(CONFIG);
+  } catch (err) {
+    // Si el script falla, volvemos a la reserva en CSS.
+    hero.classList.remove("finisher-header", "is-finisher");
+    console.error("[heroFinisher]", err);
+  }
 }
 
 /***/ },
@@ -1647,10 +2180,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom_client__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scripts/Navbar */ "./src/scripts/Navbar.js");
 /* harmony import */ var _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scripts/Footer */ "./src/scripts/Footer.js");
-/* harmony import */ var _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/Chatbot */ "./src/scripts/Chatbot.js");
-/* harmony import */ var _scripts_reveal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/reveal */ "./src/scripts/reveal.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _scripts_ContactForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/ContactForm */ "./src/scripts/ContactForm.js");
+/* harmony import */ var _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/Chatbot */ "./src/scripts/Chatbot.js");
+/* harmony import */ var _scripts_reveal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/reveal */ "./src/scripts/reveal.js");
+/* harmony import */ var _scripts_heroFinisher__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/heroFinisher */ "./src/scripts/heroFinisher.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+
+
 
 
 
@@ -1665,17 +2202,31 @@ __webpack_require__.r(__webpack_exports__);
  * y no hay que reconstruir el bundle para cambiarlos.
  */
 
+/* Componentes únicos por página. */
+
 function mount(selector, Component) {
   const node = document.querySelector(selector);
   if (!node) return;
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Component, {
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Component, {
     ...node.dataset
   }));
 }
+
+/* Componentes que pueden repetirse en la misma página: el ContactForm
+   vive a la vez en el hero y en el bloque de cierre de la home. */
+function mountAll(selector, Component) {
+  document.querySelectorAll(selector).forEach(node => {
+    react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Component, {
+      ...node.dataset
+    }));
+  });
+}
 mount("#sdn-navbar", _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"]);
 mount("#sdn-footer", _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__["default"]);
-mount("#sdn-chatbot", _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_4__["default"]);
-(0,_scripts_reveal__WEBPACK_IMPORTED_MODULE_5__["default"])();
+mountAll("[data-sdn-form]", _scripts_ContactForm__WEBPACK_IMPORTED_MODULE_4__["default"]);
+mount("#sdn-chatbot", _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_5__["default"]);
+(0,_scripts_reveal__WEBPACK_IMPORTED_MODULE_6__["default"])();
+(0,_scripts_heroFinisher__WEBPACK_IMPORTED_MODULE_7__["default"])();
 })();
 
 /******/ })()

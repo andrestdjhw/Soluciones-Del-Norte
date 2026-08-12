@@ -53,6 +53,10 @@
     scroll-padding-top: calc(var(--sdn-bar-h) + 1rem);
   }
 
+  body.admin-bar {
+    scroll-padding-top: calc(var(--sdn-bar-h) + 32px + 1rem);
+  }
+
   /* clip, nunca hidden: hidden rompe position:sticky */
   html,
   body {
@@ -87,18 +91,117 @@
   }
 }
 
-/* ── Cabecera ─────────────────────────────────────────────── */
+/* ── Cabecera ───────────────────────────────────────────────
+   El `sticky` va en el nodo de montaje, no en el <header> que
+   renderiza React. Un elemento pegajoso solo se desplaza dentro de
+   los límites de su padre, y el padre del <header> es este div, que
+   mide exactamente lo mismo que él: cero recorrido, cero efecto.
+   Poniéndolo aquí, el padre es <body> y la barra recorre la página.
+   ───────────────────────────────────────────────────────────── */
 
-/* La barra de utilidad colapsa su alto; el contenido no se deforma. */
-.sdn-topbar {
-  overflow: hidden;
-  transition: height 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
-  will-change: height;
+#sdn-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  /* Con la cabecera desplazada hacia arriba, la parte baja de este
+     contenedor queda vacía. Sin esto, esa franja transparente seguiría
+     interceptando los clics del contenido que pasa por debajo. */
+  pointer-events: none;
 }
 
+#sdn-navbar > * {
+  pointer-events: auto;
+}
+
+/* Con la barra de administración de WordPress delante, la cabecera se
+   pega por debajo de ella. En móvil la admin bar no es fija, así que
+   vuelve a 0. */
+body.admin-bar #sdn-navbar {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar #sdn-navbar {
+    top: 0;
+  }
+}
+
+
+/* La barra de utilidad colapsa su alto; el contenido no se deforma. */
+/* El topbar NO cambia de altura al ocultarse.
+   Animar su altura encogía la cabecera, y con ella el alto del documento;
+   el navegador reajustaba el scroll, eso disparaba otro evento de scroll y
+   la barra entraba en un vaivén. Ahora la cabecera entera se desplaza hacia
+   arriba: el espacio que ocupa en el flujo no cambia nunca y el rebote
+   desaparece. */
+
+.sdn-topbar {
+  height: var(--sdn-topbar-h);
+  overflow: hidden;
+}
+
+.sdn-header {
+  /* El z-index tiene que ser mayor que el del velo del mega-menú (40).
+     Antes lo daba la clase `sticky top-0 z-50` que llevaba el <header>;
+     al mover el sticky al contenedor, el header se quedó en `auto` y el
+     velo pasaba a pintarse por encima del panel: se veía oscurecido y
+     los clics los recibía el velo, que cerraba el menú. */
+  position: relative;
+  z-index: 50;
+
+  transition: transform 300ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  will-change: transform;
+}
+
+.sdn-header.is-topbar-hidden {
+  transform: translateY(calc(-1 * var(--sdn-topbar-h)));
+}
+
+/* Barra principal con bisel.
+   El relieve son tres cosas a la vez, no una sombra:
+     · un degradado vertical de paper a paper-2 — la luz cae desde arriba
+     · una línea interior blanca en el canto superior (el brillo del bisel)
+       y una línea de regla en el inferior (el canto en sombra)
+     · una sombra proyectada muy abierta y muy tenue, que separa la barra
+       del contenido sin dibujar un borde
+   Al despegarse del tope, el relieve sube: el bisel se marca más y la
+   sombra se abre. Es la señal de que la barra está flotando. */
+
 .sdn-bar {
-  transition: background-color 200ms ease, box-shadow 200ms ease,
-              border-color 200ms ease;
+  position: relative;
+  --sdn-bar-top: var(--color-paper);
+  --sdn-bar-bottom: var(--color-paper-2);
+
+  background-image: linear-gradient(
+    to bottom,
+    var(--sdn-bar-top) 0%,
+    var(--sdn-bar-top) 58%,
+    var(--sdn-bar-bottom) 100%
+  );
+
+  box-shadow:
+    /* brillo del canto superior — deliberadamente más claro que paper */
+    inset 0 1px 0 #ffffff,
+    /* canto inferior en sombra */
+    inset 0 -1px 0 var(--color-rule-2),
+    /* contacto */
+    0 1px 1px color-mix(in oklab, var(--color-ink) 4%, transparent),
+    /* separación */
+    0 10px 20px -14px color-mix(in oklab, var(--color-ink) 30%, transparent);
+
+  transition: box-shadow 200ms ease;
+}
+
+/* Al despegarse del tope solo cambia el relieve. La barra es opaca
+   siempre: con el patrón de retícula pasando por detrás, el desenfoque
+   de fondo dejaba leer el contenido a través de la barra. */
+.sdn-bar.is-stuck {
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -1px 0 var(--color-rule),
+    0 2px 3px color-mix(in oklab, var(--color-ink) 5%, transparent),
+    0 16px 30px -18px color-mix(in oklab, var(--color-ink) 45%, transparent);
 }
 
 .sdn-panel {
@@ -132,6 +235,243 @@ body[data-sdn-lock="true"] {
 .sdn-measure    { max-width: 68ch; }
 .sdn-measure-sm { max-width: 62ch; }
 
+/* ── Superficie con manchas a la deriva ───────────────────────
+   Capa reutilizable: la usa el hero y el footer. Manchas con
+   degradado radial y mezcla overlay — la receta del generador de
+   Finisher, en CSS.
+
+   Uso:
+     <section class="sdn-surface">
+       <div class="sdn-blobs"><span>×10</span></div>
+       <div class="sdn-veil"></div>
+       <div class="sdn-layer"> … contenido … </div>
+     </section>
+
+   El tamaño de las manchas se escala con --sdn-blob: 1 en el hero,
+   más pequeño en superficies bajas como el footer, donde una mancha
+   de 72rem se vería como color plano.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-surface {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--sdn-surface-bg, var(--color-deep));
+  --sdn-blob: 1;
+}
+
+/* Variantes claras. El color de fondo se declara como variable para que
+   la retícula pinte sus anillos exactamente del mismo tono, sin repetirlo. */
+.sdn-surface--paper   { --sdn-surface-bg: var(--color-paper); }
+.sdn-surface--paper-2 { --sdn-surface-bg: var(--color-paper-2); }
+
+/* El contenido, siempre por encima de las capas. */
+.sdn-layer {
+  position: relative;
+  z-index: 2;
+}
+
+.sdn-blobs {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Cada mancha es un degradado radial que cae de 0.5 en el centro a
+   0.05 en el borde — los mismos valores de opacidad del generador.
+   La mezcla overlay es lo que da la luminosidad por capas. */
+.sdn-blobs span {
+  position: absolute;
+  display: block;
+  border-radius: 9999px;
+  mix-blend-mode: overlay;
+  will-change: transform;
+}
+
+.sdn-blobs span:nth-child(3n + 1) {
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, var(--color-accent) 50%, transparent),
+    color-mix(in oklab, var(--color-accent) 5%, transparent) 70%,
+    transparent
+  );
+}
+.sdn-blobs span:nth-child(3n + 2) {
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, var(--color-ink) 50%, transparent),
+    color-mix(in oklab, var(--color-ink) 5%, transparent) 70%,
+    transparent
+  );
+}
+.sdn-blobs span:nth-child(3n + 3) {
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, var(--color-rule) 50%, transparent),
+    color-mix(in oklab, var(--color-rule) 5%, transparent) 70%,
+    transparent
+  );
+}
+
+/* Diez manchas. Duraciones primas entre sí: el bucle no se nota. */
+.sdn-blobs span:nth-child(1)  { width: calc(72rem * var(--sdn-blob)); height: calc(72rem * var(--sdn-blob)); top: -30rem; left: -22rem;   animation: sdn-drift-a 43s ease-in-out infinite alternate; }
+.sdn-blobs span:nth-child(2)  { width: calc(66rem * var(--sdn-blob)); height: calc(66rem * var(--sdn-blob)); top: -14rem; right: -26rem;  animation: sdn-drift-b 59s ease-in-out infinite alternate; }
+.sdn-blobs span:nth-child(3)  { width: calc(76rem * var(--sdn-blob)); height: calc(76rem * var(--sdn-blob)); bottom: -38rem; left: 12%;   animation: sdn-drift-c 71s ease-in-out infinite alternate; }
+.sdn-blobs span:nth-child(4)  { width: calc(62rem * var(--sdn-blob)); height: calc(62rem * var(--sdn-blob)); top: 6%;     left: 28%;      animation: sdn-drift-b 53s ease-in-out infinite alternate-reverse; }
+.sdn-blobs span:nth-child(5)  { width: calc(68rem * var(--sdn-blob)); height: calc(68rem * var(--sdn-blob)); bottom: -30rem; right: -8rem; animation: sdn-drift-a 67s ease-in-out infinite alternate-reverse; }
+.sdn-blobs span:nth-child(6)  { width: calc(60rem * var(--sdn-blob)); height: calc(60rem * var(--sdn-blob)); top: -20rem; left: 44%;      animation: sdn-drift-c 47s ease-in-out infinite alternate; }
+.sdn-blobs span:nth-child(7)  { width: calc(70rem * var(--sdn-blob)); height: calc(70rem * var(--sdn-blob)); top: 18%;    right: 14%;     animation: sdn-drift-a 79s ease-in-out infinite alternate; }
+.sdn-blobs span:nth-child(8)  { width: calc(64rem * var(--sdn-blob)); height: calc(64rem * var(--sdn-blob)); bottom: -26rem; left: -16rem; animation: sdn-drift-b 61s ease-in-out infinite alternate-reverse; }
+.sdn-blobs span:nth-child(9)  { width: calc(74rem * var(--sdn-blob)); height: calc(74rem * var(--sdn-blob)); top: -26rem; right: 30%;     animation: sdn-drift-c 83s ease-in-out infinite alternate-reverse; }
+.sdn-blobs span:nth-child(10) { width: calc(66rem * var(--sdn-blob)); height: calc(66rem * var(--sdn-blob)); bottom: -34rem; right: 36%;  animation: sdn-drift-a 73s ease-in-out infinite alternate; }
+
+@keyframes sdn-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(16vw, 9vh, 0) scale(1.14); }
+}
+@keyframes sdn-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.12); }
+  to   { transform: translate3d(-14vw, 12vh, 0) scale(0.9); }
+}
+@keyframes sdn-drift-c {
+  from { transform: translate3d(0, 0, 0) scale(0.94); }
+  to   { transform: translate3d(12vw, -11vh, 0) scale(1.2); }
+}
+
+/* Velo de contraste: el texto no depende de dónde quede una mancha. */
+.sdn-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-deep) 72%, transparent) 0%,
+    color-mix(in oklab, var(--color-deep) 40%, transparent) 55%,
+    color-mix(in oklab, var(--color-deep) 62%, transparent) 100%
+  );
+}
+
+/* ── Hero ─────────────────────────────────────────────────────
+   Además de la superficie, dos cosas propias: el corte inferior
+   inclinado (por eso la configuración de Finisher lleva skew 0, para
+   que no se sumen dos inclinaciones) y el relevo con el script:
+   cuando FinisherHeader toma el control, la reserva se apaga.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-hero {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.2vw), 0 100%);
+}
+
+.sdn-hero.is-finisher .sdn-blobs,
+.sdn-hero.is-finisher .sdn-veil {
+  display: none;
+}
+
+/* ── Footer ───────────────────────────────────────────────────
+   Manchas al 45 %: el footer es mucho más bajo que el hero y a
+   tamaño completo se vería como color plano. Velo más cerrado
+   porque aquí hay mucho texto pequeño en Silver.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-footer {
+  --sdn-blob: 0.45;
+}
+
+.sdn-footer .sdn-veil {
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-deep) 82%, transparent) 0%,
+    color-mix(in oklab, var(--color-deep) 62%, transparent) 55%,
+    color-mix(in oklab, var(--color-deep) 78%, transparent) 100%
+  );
+}
+
+/* ── Retícula hexagonal ───────────────────────────────────────
+   Adaptación del patrón de SelfMadeSystem (Uiverse). Se conserva la
+   geometría —celda de 12 × 20.78 px con el desplazamiento de media
+   celda que forma el panal— y se elimina el `hue-rotate`: un arcoíris
+   girando no cabe en una marca cuyo argumento es la exactitud, y
+   rompería el contraste cada pocos segundos.
+
+   Los anillos se pintan del color de fondo de la superficie, así que
+   por los huecos asoman tres manchas que derivan en 40 s.
+
+   Uso:
+     <section class="sdn-surface sdn-surface--paper">
+       <div class="sdn-grid"></div>
+       <div class="sdn-layer"> … contenido … </div>
+     </section>
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-grid {
+  position: absolute;
+  inset: -1em;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--sdn-grid-op, 0.55);
+
+  --c: 7px;
+  --p: 0px 0px, 6px 10.39230485px;
+
+  /* Por defecto, la versión oscura de la cinta de datos. */
+  --sdn-grid-ring: var(--sdn-surface-bg, var(--color-deep));
+  --sdn-grid-a: color-mix(in oklab, var(--color-accent) 45%, transparent);
+  --sdn-grid-b: color-mix(in oklab, var(--color-rule) 22%, transparent);
+  --sdn-grid-c: color-mix(in oklab, var(--color-accent-2) 55%, transparent);
+
+  background-color: var(--sdn-grid-ring);
+  background-image:
+    radial-gradient(circle at 50% 50%, #0000 1.5px, var(--sdn-grid-ring) 0 var(--c), #0000 var(--c)),
+    radial-gradient(circle at 50% 50%, #0000 1.5px, var(--sdn-grid-ring) 0 var(--c), #0000 var(--c)),
+    radial-gradient(circle at 50% 50%, var(--sdn-grid-a), transparent 60%),
+    radial-gradient(circle at 50% 50%, var(--sdn-grid-b), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, var(--sdn-grid-c), transparent 60%);
+  background-size:
+    12px 20.7846097px,
+    12px 20.7846097px,
+    200% 200%,
+    200% 200%,
+    200% 20.7846097px;
+  background-position:
+    var(--p),
+    0% 0%,
+    0% 0%,
+    0% 0px;
+  animation: sdn-grid-drift 40s linear infinite;
+}
+
+/* Versión clara: la misma retícula sobre papel, jugando solo con los
+   tres tonos de blanco del sistema más un apunte de cerúleo. Las
+   diferencias son mucho menores que en la banda oscura, así que la capa
+   va más opaca; aun así, el texto en tinta mantiene 16:1 largos. */
+.sdn-surface--paper .sdn-grid,
+.sdn-surface--paper-2 .sdn-grid {
+  --sdn-grid-op: 0.7;
+  --sdn-grid-a: color-mix(in oklab, var(--color-rule) 42%, transparent);
+  --sdn-grid-b: color-mix(in oklab, var(--color-paper-3) 90%, transparent);
+  --sdn-grid-c: color-mix(in oklab, var(--color-accent) 10%, transparent);
+}
+
+@keyframes sdn-grid-drift {
+  from {
+    background-position:
+      var(--p),
+      800% 400%,
+      1000% -400%,
+      400% 41.5692194px;
+  }
+  to {
+    background-position:
+      var(--p),
+      0% 0%,
+      0% 0%,
+      0% 0%;
+  }
+}
+
 /* ── Movimiento reducido ──────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -146,5 +486,27 @@ body[data-sdn-lock="true"] {
   [data-reveal] {
     opacity: 1;
     transform: none;
+  }
+
+  /* La cabecera cambia de estado sin deslizarse. */
+  .sdn-header {
+    transition: none !important;
+  }
+
+  /* Las manchas se quedan quietas, no desaparecen. */
+  .sdn-blobs span {
+    animation: none !important;
+  }
+
+  /* Con movimiento reducido nunca se inicializa el script, así que la
+     reserva en CSS tiene que seguir visible. */
+  .sdn-hero.is-finisher .sdn-blobs,
+  .sdn-hero.is-finisher .sdn-veil {
+    display: block;
+  }
+
+  /* La retícula se queda quieta; el patrón sigue ahí. */
+  .sdn-grid {
+    animation: none !important;
   }
 }

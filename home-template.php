@@ -36,12 +36,6 @@ $c = $is_en ? array(
 	'hero_deck'      => 'We run payroll, keep your books and prepare your taxes for businesses in Oregon and Washington. We check each state’s rules before every run, not after.',
 	'hero_cta1'      => 'Book an intake call',
 	'hero_cta2'      => 'See the seven services',
-	'hero_facts'     => array(
-		array( 'Office', 'Hillsboro, OR' ),
-		array( 'Coverage', 'Oregon + Washington' ),
-		array( 'Languages', 'Spanish / English' ),
-		array( 'Hours', 'Mon to Fri, 10:00–14:00' ),
-	),
 
 	/* 02 · Servicios */
 	'svc_eyebrow'    => 'What we do',
@@ -111,12 +105,6 @@ $c = $is_en ? array(
 	'hero_deck'      => 'Procesamos nómina, llevamos tus libros y preparamos tus impuestos para negocios de Oregon y Washington. Revisamos la regla de cada estado antes de cada corrida, no después.',
 	'hero_cta1'      => 'Agendar consulta inicial',
 	'hero_cta2'      => 'Ver los siete servicios',
-	'hero_facts'     => array(
-		array( 'Oficina', 'Hillsboro, OR' ),
-		array( 'Cobertura', 'Oregon + Washington' ),
-		array( 'Idiomas', 'Español / Inglés' ),
-		array( 'Horario', 'Lun a Vie, 10:00–14:00' ),
-	),
 
 	/* 02 · Servicios */
 	'svc_eyebrow'    => 'Qué hacemos',
@@ -185,22 +173,32 @@ $sdn_tel      = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone1'] );
 $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 ?>
 
-<!-- ══════════════ 01 · HERO — texto izquierda / datos derecha ══════════════ -->
-<section class="border-b border-rule">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 pb-20 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:pb-28 lg:pt-24">
+<!-- ══════════════ 01 · HERO — texto izquierda / formulario derecha ══════════════
+     Fondo animado: FinisherHeader si el script está en /assets/, y si no,
+     la reserva en CSS (.sdn-blobs). El velo garantiza el contraste del
+     texto pase lo que pase con las manchas: paper sobre deep da 12.66:1.
+     ═══════════════════════════════════════════════════════════════════════ -->
+<section class="sdn-surface sdn-hero text-paper">
+  <div class="sdn-blobs" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="sdn-veil" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 pb-24 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:pb-32 lg:pt-24">
 
     <div data-reveal>
-      <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
+      <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
         <?php echo esc_html( $c['hero_eyebrow'] ); ?>
       </p>
 
-      <h1 class="mt-5 font-display text-[2.125rem] font-bold leading-[1.05] tracking-[-0.02em] text-ink sm:text-5xl lg:text-[3.5rem]">
+      <h1 class="mt-5 font-display text-[2.125rem] font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-5xl lg:text-[3.5rem]">
         <?php echo esc_html( $c['hero_h1'] ); ?>
       </h1>
 
       <div class="mt-6 h-1 w-20 bg-accent" aria-hidden="true"></div>
 
-      <p class="sdn-measure mt-7 text-[1.0625rem] leading-relaxed text-ink-2">
+      <p class="sdn-measure mt-7 text-[1.0625rem] leading-relaxed text-rule">
         <?php echo esc_html( $c['hero_deck'] ); ?>
       </p>
 
@@ -210,34 +208,36 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
           <?php echo esc_html( $c['hero_cta1'] ); ?>
         </a>
         <a href="<?php echo esc_url( $sdn_services ); ?>"
-           class="whitespace-nowrap rounded-sm border border-rule px-6 py-3.5 font-body text-[0.9375rem] text-ink transition-colors duration-150 hover:border-accent hover:bg-paper-2">
+           class="whitespace-nowrap rounded-sm border border-paper/30 px-6 py-3.5 font-body text-[0.9375rem] text-paper transition-colors duration-150 hover:border-accent hover:bg-deep-2">
           <?php echo esc_html( $c['hero_cta2'] ); ?>
         </a>
       </div>
     </div>
 
-    <!-- Columna de datos: hechos verificables, no cifras sin fuente (ver Pendiente 04) -->
-    <div data-reveal="80" class="lg:pt-2">
-      <dl class="border-t border-rule">
-        <?php foreach ( $c['hero_facts'] as $fact ) : ?>
-          <div class="flex items-baseline justify-between gap-6 border-b border-rule py-4">
-            <dt class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
-              <?php echo esc_html( $fact[0] ); ?>
-            </dt>
-            <dd class="text-right font-mono text-[0.9375rem] tabular-nums text-ink">
-              <?php echo esc_html( $fact[1] ); ?>
-            </dd>
-          </div>
-        <?php endforeach; ?>
-      </dl>
+    <!-- Columna derecha: solo el formulario. Los datos de operación
+         (oficina, cobertura, idiomas, horario) siguen en el bloque 07. -->
+    <div data-reveal="80"
+         id="sdn-contact-form-hero"
+         data-sdn-form
+         data-density="compact"
+         data-persistent="true"
+         data-lang="<?php echo esc_attr( $sdn_lang ); ?>">
+      <div class="rounded-sm border border-rule bg-paper-2 p-6">
+        <p class="font-mono text-[0.9375rem] leading-relaxed text-ink">
+          <a href="<?php echo esc_url( $sdn_tel ); ?>" class="tabular-nums underline decoration-rule underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['phone1'] ); ?></a><br>
+          <a href="mailto:<?php echo esc_attr( $sdn['email'] ); ?>" class="break-all underline decoration-rule underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['email'] ); ?></a>
+        </p>
+      </div>
     </div>
 
   </div>
 </section>
 
 <!-- ══════════════ 02 · SERVICIOS — lista izquierda / texto derecha ══════════════ -->
-<section class="border-b border-rule">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section class="sdn-surface sdn-surface--paper border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <!-- Texto: en desktop va a la derecha, en móvil siempre primero -->
     <div data-reveal class="lg:order-2 lg:pt-2">
@@ -278,8 +278,10 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 </section>
 
 <!-- ══════════════ 03 · NÓMINA CERTIFICADA — foto izquierda / texto derecha ══════════════ -->
-<section class="border-b border-rule bg-paper-2">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:order-2 lg:pt-2">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent-2">
@@ -308,8 +310,10 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 </section>
 
 <!-- ══════════════ 04 · CÓMO EMPIEZA — texto izquierda / pasos derecha ══════════════ -->
-<section class="border-b border-rule">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section class="sdn-surface sdn-surface--paper border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -338,8 +342,10 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 </section>
 
 <!-- ══════════════ 05 · COBERTURA — mapa izquierda / texto derecha ══════════════ -->
-<section class="border-b border-rule bg-paper-2">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:order-2 lg:pt-2">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -379,8 +385,10 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 </section>
 
 <!-- ══════════════ 06 · IDIOMA — texto izquierda / foto derecha ══════════════ -->
-<section class="border-b border-rule">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section class="sdn-surface sdn-surface--paper border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -402,9 +410,14 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
   </div>
 </section>
 
-<!-- ══════════════ 07 · DATOS DE OPERACIÓN — banda a ancho completo ══════════════ -->
-<section class="bg-deep text-paper">
-  <div class="mx-auto max-w-[1200px] px-6 py-14 lg:px-12 lg:py-16">
+<!-- ══════════════ 07 · DATOS DE OPERACIÓN — banda a ancho completo ══════════════
+     Retícula hexagonal (.sdn-grid) sobre Space Indigo. El
+     contenido va en su propia capa para quedar siempre por encima.
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="sdn-surface text-paper">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-14 lg:px-12 lg:py-16">
     <div data-reveal class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
       <div class="min-w-0">
@@ -438,8 +451,10 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 </section>
 
 <!-- ══════════════ 08 · CIERRE — texto izquierda / formulario derecha ══════════════ -->
-<section id="contacto" class="border-t border-rule">
-  <div class="mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+<section id="contacto" class="sdn-surface sdn-surface--paper border-t border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
       <h2 class="font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl">
@@ -455,7 +470,8 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
       componente aún no existe, el visitante sigue teniendo una salida.
     -->
     <div data-reveal="80"
-         id="sdn-contact-form"
+         id="sdn-contact-form-cierre"
+         data-sdn-form
          data-density="comfortable"
          data-persistent="true"
          data-lang="<?php echo esc_attr( $sdn_lang ); ?>">

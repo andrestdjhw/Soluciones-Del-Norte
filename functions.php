@@ -33,12 +33,51 @@ function sdn_load_assets() {
 		sdn_asset_version( '/build/index.css' )
 	);
 
+	// Fondo animado del hero. El script se descarga desde
+	// finisher.co/lab/header y se deja en /assets/. Si no está, el hero
+	// usa la reserva en CSS: no hay error ni hueco.
+	$sdn_deps     = array( 'wp-element', 'react-jsx-runtime' );
+	$sdn_finisher = '/assets/finisher-header.es5.min.js';
+
+	if ( file_exists( get_theme_file_path( $sdn_finisher ) ) ) {
+		wp_enqueue_script(
+			'sdn-finisher',
+			get_theme_file_uri( $sdn_finisher ),
+			array(),
+			sdn_asset_version( $sdn_finisher ),
+			true
+		);
+
+		// El bundle se carga después: al inicializar, FinisherHeader ya existe.
+		$sdn_deps[] = 'sdn-finisher';
+	}
+
 	wp_enqueue_script(
 		'sdn-main',
 		get_theme_file_uri( '/build/index.js' ),
-		array( 'wp-element', 'react-jsx-runtime' ),
+		$sdn_deps,
 		sdn_asset_version( '/build/index.js' ),
 		true
+	);
+
+	// Configuración del front-end. Las tres claves de EmailJS son públicas
+	// por diseño, pero viven en wp-config.php para no quedar escritas en el
+	// bundle ni en el repositorio.
+	$sdn = sdn_site_data();
+
+	wp_localize_script(
+		'sdn-main',
+		'sdnConfig',
+		array(
+			'emailjs' => array(
+				'publicKey'  => defined( 'SDN_EMAILJS_PUBLIC_KEY' ) ? SDN_EMAILJS_PUBLIC_KEY : '',
+				'serviceId'  => defined( 'SDN_EMAILJS_SERVICE_ID' ) ? SDN_EMAILJS_SERVICE_ID : '',
+				'templateId' => defined( 'SDN_EMAILJS_TEMPLATE_ID' ) ? SDN_EMAILJS_TEMPLATE_ID : '',
+			),
+			'phone'   => $sdn['phone1'],
+			'email'   => $sdn['email'],
+			'lang'    => $sdn['lang'],
+		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'sdn_load_assets' );

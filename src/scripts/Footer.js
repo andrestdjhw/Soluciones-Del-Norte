@@ -98,8 +98,17 @@ export default function Footer(props) {
   const tel = (n) => `tel:+1${n.replace(/\D/g, "")}`
 
   return (
-    <footer className="bg-deep text-paper">
-      <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
+    <footer className="sdn-surface sdn-footer text-paper">
+      {/* Mismas capas que el hero: manchas a la deriva + velo de contraste.
+          Aquí van al 45 % de tamaño (--sdn-blob), porque el footer es mucho
+          más bajo y a escala completa se vería como color plano. */}
+      <div className="sdn-blobs" aria-hidden="true">
+        <span /><span /><span /><span /><span />
+        <span /><span /><span /><span /><span />
+      </div>
+      <div className="sdn-veil" aria-hidden="true" />
+
+      <div className="sdn-layer mx-auto max-w-[1200px] px-6 lg:px-12">
         {/* ── Banda principal ─────────────────────────────── */}
         <div className="grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-16">
           {/* Mástil: marca + tagline + redes */}

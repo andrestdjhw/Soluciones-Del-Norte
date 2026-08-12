@@ -217,14 +217,15 @@ export default function Navbar(props) {
         {t.skip}
       </a>
 
-      <header ref={headerRef} className="sticky top-0 z-50">
+      {/* El `sticky` vive en #sdn-navbar (index.css), no aquí: dentro de
+          este nodo el header no tendría recorrido donde pegarse. */}
+      <header ref={headerRef} className={`sdn-header ${topbarCollapsed ? "is-topbar-hidden" : ""}`}>
         {/* ── Barra de utilidad ─────────────────────────────── */}
         <div
           className="sdn-topbar bg-deep text-paper"
-          style={{ height: topbarCollapsed ? "0rem" : "var(--sdn-topbar-h)" }}
           aria-hidden={topbarCollapsed ? "true" : "false"}
         >
-          <div className="mx-auto flex h-9 max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-12">
+          <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-12">
             {/* Izquierda · teléfono y correo */}
             <div className="flex min-w-0 items-center gap-4 font-mono text-[0.75rem] tracking-wide">
               <a
@@ -277,13 +278,9 @@ export default function Navbar(props) {
         </div>
 
         {/* ── Barra principal ───────────────────────────────── */}
-        <div
-          className={`sdn-bar border-b ${
-            detached
-              ? "border-rule bg-paper/90 shadow-[0_1px_16px_rgba(29,24,22,0.06)] backdrop-blur-md"
-              : "border-transparent bg-paper"
-          }`}
-        >
+        {/* El relieve vive en index.css (.sdn-bar): degradado, bisel y
+            sombra proyectada. Aquí solo se marca si está despegada del tope. */}
+        <div className={`sdn-bar ${detached ? "is-stuck" : ""}`}>
           <div className="mx-auto flex h-[var(--sdn-bar-h)] max-w-[1200px] items-center justify-between gap-6 px-6 lg:px-12">
             {/* Logotipo */}
             <a href={routes.home} className="flex shrink-0 items-center" onClick={closeAll}>

@@ -174,7 +174,8 @@ $sdn_tel2 = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
         El contenido interno es la reserva si el JS no carga.
       -->
       <div class="mt-6"
-           id="sdn-contact-form"
+           id="sdn-contact-form-pagina"
+           data-sdn-form
            data-density="comfortable"
            data-persistent="true"
            data-lang="<?php echo esc_attr( $sdn_lang ); ?>">
