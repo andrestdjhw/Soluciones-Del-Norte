@@ -1470,6 +1470,51 @@ function TikTokIcon(props) {
 
 /***/ },
 
+/***/ "./src/scripts/reveal.js"
+/*!*******************************!*\
+  !*** ./src/scripts/reveal.js ***!
+  \*******************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ initReveal)
+/* harmony export */ });
+/**
+ * Revelado de secciones al entrar en viewport.
+ * Sin librería: el proyecto es motion-cut, así que esto es
+ * IntersectionObserver + dos clases. Una sola vez por elemento.
+ *
+ * Uso en las plantillas:  <div data-reveal>  ·  <div data-reveal="80">
+ * El valor opcional es el desfase en milisegundos.
+ */
+
+function initReveal() {
+  const nodes = document.querySelectorAll("[data-reveal]");
+  if (!nodes.length) return;
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Sin IntersectionObserver o con movimiento reducido: estado final directo.
+  if (reduced || !("IntersectionObserver" in window)) {
+    nodes.forEach(n => n.classList.add("is-revealed"));
+    return;
+  }
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const delay = Number(entry.target.dataset.reveal) || 0;
+      window.setTimeout(() => entry.target.classList.add("is-revealed"), delay);
+      io.unobserve(entry.target);
+    });
+  }, {
+    rootMargin: "0px 0px -12% 0px",
+    threshold: 0.08
+  });
+  nodes.forEach(n => io.observe(n));
+}
+
+/***/ },
+
 /***/ "react"
 /*!************************!*\
   !*** external "React" ***!
@@ -1603,8 +1648,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scripts/Navbar */ "./src/scripts/Navbar.js");
 /* harmony import */ var _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./scripts/Footer */ "./src/scripts/Footer.js");
 /* harmony import */ var _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./scripts/Chatbot */ "./src/scripts/Chatbot.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _scripts_reveal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/reveal */ "./src/scripts/reveal.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -1621,13 +1668,14 @@ __webpack_require__.r(__webpack_exports__);
 function mount(selector, Component) {
   const node = document.querySelector(selector);
   if (!node) return;
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Component, {
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Component, {
     ...node.dataset
   }));
 }
 mount("#sdn-navbar", _scripts_Navbar__WEBPACK_IMPORTED_MODULE_2__["default"]);
 mount("#sdn-footer", _scripts_Footer__WEBPACK_IMPORTED_MODULE_3__["default"]);
 mount("#sdn-chatbot", _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_4__["default"]);
+(0,_scripts_reveal__WEBPACK_IMPORTED_MODULE_5__["default"])();
 })();
 
 /******/ })()
