@@ -114,3 +114,31 @@ function sdn_canonical_url() {
 	}
 	return home_url( add_query_arg( array() ) );
 }
+
+/**
+ * Rutas por idioma en un solo lugar. El Chatbot y el ContactForm las
+ * reciben ya resueltas, así que no repiten el prefijo /en en JS.
+ */
+function sdn_route( $key ) {
+	$routes = array(
+		'es' => array(
+			'home'     => '/',
+			'services' => '/servicios',
+			'about'    => '/nosotros',
+			'contact'  => '/contacto',
+			'privacy'  => '/aviso-de-privacidad',
+		),
+		'en' => array(
+			'home'     => '/en',
+			'services' => '/en/services',
+			'about'    => '/en/about',
+			'contact'  => '/en/contact',
+			'privacy'  => '/en/privacy',
+		),
+	);
+
+	$lang = sdn_current_lang();
+	$path = isset( $routes[ $lang ][ $key ] ) ? $routes[ $lang ][ $key ] : '/';
+
+	return home_url( $path );
+}

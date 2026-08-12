@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import Navbar from "./scripts/Navbar"
 import Footer from "./scripts/Footer"
+import Chatbot from "./scripts/Chatbot"
 
 /**
  * Monta los componentes React del tema.
@@ -18,3 +19,4 @@ function mount(selector, Component) {
 
 mount("#sdn-navbar", Navbar)
 mount("#sdn-footer", Footer)
+mount("#sdn-chatbot", Chatbot)

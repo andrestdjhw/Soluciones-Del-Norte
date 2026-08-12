@@ -62,6 +62,31 @@ export function ArrowIcon(props) {
   )
 }
 
+export function ChatIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M20.5 12.2c0 4-3.8 7.2-8.5 7.2a9.8 9.8 0 0 1-2.6-.35L4.5 20.5l1.35-3.9A6.9 6.9 0 0 1 3.5 12.2C3.5 8.2 7.3 5 12 5s8.5 3.2 8.5 7.2Z" />
+    </svg>
+  )
+}
+
+export function CloseIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="m6 6 12 12M18 6 6 18" />
+    </svg>
+  )
+}
+
+export function BackIcon(props) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M20 12H5" />
+      <path d="m11 6-6 6 6 6" />
+    </svg>
+  )
+}
+
 /* Las marcas van en relleno sólido, no en trazo: así se leen a 16 px. */
 const brand = {
   xmlns: "http://www.w3.org/2000/svg",

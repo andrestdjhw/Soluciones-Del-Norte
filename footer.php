@@ -16,6 +16,14 @@
       data-lang="<?php echo esc_attr( $sdn['lang'] ); ?>"
     ></div>
 
+    <div
+      id="sdn-chatbot"
+      data-phone1="<?php echo esc_attr( $sdn['phone1'] ); ?>"
+      data-email="<?php echo esc_attr( $sdn['email'] ); ?>"
+      data-contact-url="<?php echo esc_url( sdn_route( 'contact' ) ); ?>"
+      data-lang="<?php echo esc_attr( $sdn['lang'] ); ?>"
+    ></div>
+
     <?php wp_footer(); ?>
   </body>
 </html>
