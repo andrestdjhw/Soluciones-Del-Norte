@@ -1745,7 +1745,7 @@ function Navbar(props) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       onClick: () => setMegaOpen(false),
       "aria-hidden": "true",
-      className: `sdn-scrim fixed inset-0 z-40 hidden bg-ink/25 lg:block ${megaOpen ? "opacity-100" : "pointer-events-none opacity-0"}`
+      className: `sdn-scrim fixed inset-0 z-40 hidden bg-ink/25 lg:block ${megaOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`
     })]
   });
 }

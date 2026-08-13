@@ -520,7 +520,7 @@ export default function Navbar(props) {
         onClick={() => setMegaOpen(false)}
         aria-hidden="true"
         className={`sdn-scrim fixed inset-0 z-40 hidden bg-ink/25 lg:block ${
-          megaOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          megaOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
     </>

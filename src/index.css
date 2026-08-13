@@ -110,7 +110,14 @@
   pointer-events: none;
 }
 
-#sdn-navbar > * {
+/* Se devuelven los clics elemento por elemento, NO con `> *`.
+   Un selector con id pesa más que cualquier clase de Tailwind, así que
+   `> *` también le devolvía los clics al velo del mega-menú — que es
+   `fixed inset-0` y vive dentro de este contenedor. Invisible a opacidad
+   0, pero capturando todos los clics de la página. El velo se gobierna
+   solo con sus clases, desde el componente. */
+#sdn-navbar > a,
+#sdn-navbar > header {
   pointer-events: auto;
 }
 
