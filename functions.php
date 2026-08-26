@@ -181,3 +181,98 @@ function sdn_route( $key ) {
 
 	return home_url( $path );
 }
+
+/**
+ * Los siete servicios: nombre, línea de alcance y ruta, en el idioma
+ * de la vista actual. El orden del array es el orden del índice.
+ *
+ * Vive aquí y no en cada plantilla por la misma razón que sdn_site_data():
+ * es infraestructura compartida, no copy. El hub lo usa para pintar el
+ * índice y cada página de servicio para la fila de "los otros seis".
+ * Renombrar un servicio o mover una ruta se hace una vez, no nueve.
+ *
+ * El copy propio de cada página —H1, deck, las cuatro etapas— sigue
+ * viviendo dentro de su plantilla, que es lo que la hace autocontenida.
+ *
+ * Las claves son estables y no se traducen: las plantillas las usan
+ * para excluirse a sí mismas de la fila de cierre.
+ */
+function sdn_services() {
+	$es = array(
+		'payroll'           => array(
+			'name' => 'Nómina',
+			'desc' => 'Cálculo, pagos y retenciones en el ciclo que ya usas: semanal, quincenal o mensual.',
+			'path' => '/servicios/nomina',
+		),
+		'certified-payroll' => array(
+			'name' => 'Nómina certificada',
+			'desc' => 'Reportes semanales para contratos estatales y municipales.',
+			'path' => '/servicios/nomina-certificada',
+		),
+		'bookkeeping'       => array(
+			'name' => 'Contabilidad',
+			'desc' => 'Libros al día y un reporte mensual que puedes leer sin traductor.',
+			'path' => '/servicios/contabilidad',
+		),
+		'taxes'             => array(
+			'name' => 'Impuestos',
+			'desc' => 'Preparación personal y de negocio, con las fechas marcadas por adelantado.',
+			'path' => '/servicios/impuestos',
+		),
+		'notary'            => array(
+			'name' => 'Notaría y documentos',
+			'desc' => 'Certificación de documentos legales en la oficina de Hillsboro.',
+			'path' => '/servicios/notaria',
+		),
+		'time-attendance'   => array(
+			'name' => 'Tiempo y asistencia',
+			'desc' => 'Horas y asistencia ordenadas antes de que lleguen a la nómina.',
+			'path' => '/servicios/tiempo-y-asistencia',
+		),
+		'payroll-audits'    => array(
+			'name' => 'Auditorías de nómina',
+			'desc' => 'Revisión de registros y procesos cuando algo no cuadra.',
+			'path' => '/servicios/auditorias-de-nomina',
+		),
+	);
+
+	$en = array(
+		'payroll'           => array(
+			'name' => 'Payroll',
+			'desc' => 'Calculation, payments and withholdings on the cycle you already use: weekly, biweekly or monthly.',
+			'path' => '/en/services/payroll',
+		),
+		'certified-payroll' => array(
+			'name' => 'Certified payroll',
+			'desc' => 'Weekly reports for state and city contracts.',
+			'path' => '/en/services/certified-payroll',
+		),
+		'bookkeeping'       => array(
+			'name' => 'Bookkeeping',
+			'desc' => 'Books kept current and a monthly report you can read without a translator.',
+			'path' => '/en/services/bookkeeping',
+		),
+		'taxes'             => array(
+			'name' => 'Taxes',
+			'desc' => 'Personal and business preparation, with deadlines flagged in advance.',
+			'path' => '/en/services/taxes',
+		),
+		'notary'            => array(
+			'name' => 'Notary and documents',
+			'desc' => 'Certification of legal documents at the Hillsboro office.',
+			'path' => '/en/services/notary',
+		),
+		'time-attendance'   => array(
+			'name' => 'Time and attendance',
+			'desc' => 'Hours and attendance sorted before they hit payroll.',
+			'path' => '/en/services/time-attendance',
+		),
+		'payroll-audits'    => array(
+			'name' => 'Payroll audits',
+			'desc' => 'Review of records and processes when something doesn’t add up.',
+			'path' => '/en/services/payroll-audits',
+		),
+	);
+
+	return ( 'en' === sdn_current_lang() ) ? $en : $es;
+}

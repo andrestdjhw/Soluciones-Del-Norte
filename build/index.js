@@ -1752,6 +1752,71 @@ function Navbar(props) {
 
 /***/ },
 
+/***/ "./src/scripts/Videobg.js"
+/*!********************************!*\
+  !*** ./src/scripts/Videobg.js ***!
+  \********************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ initVideoBg)
+/* harmony export */ });
+/**
+ * Fondo en video para superficies .sdn-surface.
+ *
+ * El `src` no va en el HTML: lo pone este módulo cuando la sección
+ * se acerca al viewport. Así el MP4 no se descarga en la primera
+ * carga de la home, ni se descarga nunca si el visitante pide
+ * movimiento reducido.
+ *
+ * El mismo observador pausa el video al salir de pantalla: un bucle
+ * reproduciéndose fuera de vista solo gasta batería.
+ *
+ * Uso en las plantillas:
+ *   <video class="sdn-video" data-sdn-video data-src="…" poster="…"
+ *          muted loop playsinline preload="none" aria-hidden="true"></video>
+ */
+
+function initVideoBg() {
+  const videos = document.querySelectorAll("video[data-sdn-video]");
+  if (!videos.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  videos.forEach(video => {
+    if (!video.dataset.src) return;
+
+    // El atributo `muted` del HTML basta, pero algunos navegadores
+    // solo respetan la propiedad para el autoplay programático.
+    video.muted = true;
+    video.addEventListener("playing", () => video.classList.add("is-playing"), {
+      once: true
+    });
+    const start = () => {
+      if (!video.src) {
+        video.src = video.dataset.src;
+        video.load();
+      }
+      // En modo de bajo consumo el navegador rechaza la promesa:
+      // el póster se queda puesto y no hay nada que arreglar.
+      video.play()?.catch(() => {});
+    };
+    if (!("IntersectionObserver" in window)) {
+      start();
+      return;
+    }
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) start();else if (!video.paused) video.pause();
+      });
+    }, {
+      rootMargin: "200px 0px"
+    });
+    io.observe(video);
+  });
+}
+
+/***/ },
+
 /***/ "./src/scripts/heroFinisher.js"
 /*!*************************************!*\
   !*** ./src/scripts/heroFinisher.js ***!
@@ -2184,8 +2249,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./scripts/Chatbot */ "./src/scripts/Chatbot.js");
 /* harmony import */ var _scripts_reveal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./scripts/reveal */ "./src/scripts/reveal.js");
 /* harmony import */ var _scripts_heroFinisher__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./scripts/heroFinisher */ "./src/scripts/heroFinisher.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _scripts_Videobg__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./scripts/Videobg */ "./src/scripts/Videobg.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__);
+
 
 
 
@@ -2207,7 +2274,7 @@ __webpack_require__.r(__webpack_exports__);
 function mount(selector, Component) {
   const node = document.querySelector(selector);
   if (!node) return;
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Component, {
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(Component, {
     ...node.dataset
   }));
 }
@@ -2216,7 +2283,7 @@ function mount(selector, Component) {
    vive a la vez en el hero y en el bloque de cierre de la home. */
 function mountAll(selector, Component) {
   document.querySelectorAll(selector).forEach(node => {
-    react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Component, {
+    react_dom_client__WEBPACK_IMPORTED_MODULE_1___default().createRoot(node).render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(Component, {
       ...node.dataset
     }));
   });
@@ -2227,6 +2294,7 @@ mountAll("[data-sdn-form]", _scripts_ContactForm__WEBPACK_IMPORTED_MODULE_4__["d
 mount("#sdn-chatbot", _scripts_Chatbot__WEBPACK_IMPORTED_MODULE_5__["default"]);
 (0,_scripts_reveal__WEBPACK_IMPORTED_MODULE_6__["default"])();
 (0,_scripts_heroFinisher__WEBPACK_IMPORTED_MODULE_7__["default"])();
+(0,_scripts_Videobg__WEBPACK_IMPORTED_MODULE_8__["default"])();
 })();
 
 /******/ })()

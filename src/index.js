@@ -6,6 +6,7 @@ import ContactForm from "./scripts/ContactForm"
 import Chatbot from "./scripts/Chatbot"
 import initReveal from "./scripts/reveal"
 import initHeroFinisher from "./scripts/heroFinisher"
+import initVideoBg from "./scripts/Videobg"
 
 /**
  * Monta los componentes React del tema.
@@ -36,3 +37,4 @@ mount("#sdn-chatbot", Chatbot)
 
 initReveal()
 initHeroFinisher()
+initVideoBg()

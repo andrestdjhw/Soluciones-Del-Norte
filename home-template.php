@@ -27,6 +27,23 @@ $is_en    = ( 'en' === $sdn_lang );
 $sdn_img_certified = content_url( '/uploads/2026/08/nomina-certificada.webp' );
 $sdn_img_team      = content_url( '/uploads/2026/08/equipo-oficina.webp' );
 
+/* ── Video de fondo del bloque de cierre ───────────────────
+   Ojo con la mayúscula: el archivo se subió como
+   "Abstract_blue_dark.mp4" y el servidor de producción sí distingue
+   mayúsculas de minúsculas.
+
+   El póster es el primer fotograma: es lo que ve quien pide movimiento
+   reducido y lo que tapa el hueco mientras el MP4 carga. Va vacío
+   hasta que exista el archivo — con la cadena vacía el atributo no se
+   imprime y no hay 404. Se genera con:
+     ffmpeg -i Abstract_blue_dark.mp4 -vf "select=eq(n\,30)" \
+            -vframes 1 -q:v 80 abstract-blue-dark-poster.webp
+   y luego se devuelve la línea comentada de abajo.
+   ───────────────────────────────────────────────────────── */
+$sdn_video_bg     = content_url( '/uploads/2026/08/Abstract_blue_dark.mp4' );
+$sdn_video_poster = '';
+// $sdn_video_poster = content_url( '/uploads/2026/08/abstract-blue-dark-poster.webp' );
+
 /* ── Copy ──────────────────────────────────────────────── */
 $c = $is_en ? array(
 
@@ -450,18 +467,38 @@ $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
   </div>
 </section>
 
-<!-- ══════════════ 08 · CIERRE — texto izquierda / formulario derecha ══════════════ -->
-<section id="contacto" class="sdn-surface sdn-surface--paper border-t border-rule">
-  <div class="sdn-grid" aria-hidden="true"></div>
+<!-- ══════════════ 08 · CIERRE — texto izquierda / formulario derecha ══════════════
+     Fondo en video sobre Space Indigo. El color de la superficie está
+     debajo del <video>, así que el contraste del texto no depende de
+     que el MP4 cargue: si falla, si tarda, o si el visitante pide
+     movimiento reducido, la banda se ve en color plano y se lee igual.
+
+     El `src` no va aquí: lo pone videoBg.js cuando la sección se
+     acerca al viewport, para no descargar el archivo en la primera
+     carga de la home.
+
+     Sin .sdn-grid: la retícula hexagonal encima del video sería una
+     textura sobre otra y no se leería ninguna de las dos.
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="contacto" class="sdn-surface sdn-surface--video border-t border-paper/15 text-paper">
+  <video
+    class="sdn-video"
+    data-sdn-video
+    data-src="<?php echo esc_url( $sdn_video_bg ); ?>"
+    <?php if ( $sdn_video_poster ) : ?>poster="<?php echo esc_url( $sdn_video_poster ); ?>"<?php endif; ?>
+    muted loop playsinline preload="none"
+    aria-hidden="true" tabindex="-1"></video>
+
+  <div class="sdn-veil" aria-hidden="true"></div>
 
   <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
-      <h2 class="font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl">
+      <h2 class="font-display text-[1.75rem] font-semibold leading-[1.15] sm:text-4xl">
         <?php echo esc_html( $c['end_h2'] ); ?>
       </h2>
-      <p class="sdn-measure mt-5 leading-relaxed text-ink-2"><?php echo esc_html( $c['end_deck'] ); ?></p>
-      <p class="mt-6 font-mono text-[0.8125rem] text-muted"><?php echo esc_html( $c['end_note'] ); ?></p>
+      <p class="sdn-measure mt-5 leading-relaxed text-rule"><?php echo esc_html( $c['end_deck'] ); ?></p>
+      <p class="mt-6 font-mono text-[0.8125rem] text-rule"><?php echo esc_html( $c['end_note'] ); ?></p>
     </div>
 
     <!--

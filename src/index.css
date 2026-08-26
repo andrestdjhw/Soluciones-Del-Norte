@@ -396,6 +396,276 @@ body[data-sdn-lock="true"] {
   );
 }
 
+/* ── Fondo en video ───────────────────────────────────────────
+   Capa hermana de .sdn-blobs: se usa igual dentro de .sdn-surface,
+   pero la textura la pone un MP4 en bucle.
+
+   El color de la superficie sigue debajo del video, así que si no
+   carga —o el visitante pide movimiento reducido— la sección se ve
+   en Space Indigo plano y el texto no pierde contraste en ningún
+   momento. El fundido evita que el primer fotograma entre de golpe
+   sobre el póster.
+
+   Uso:
+     <section class="sdn-surface sdn-surface--video">
+       <video class="sdn-video" data-sdn-video data-src="…"></video>
+       <div class="sdn-veil"></div>
+       <div class="sdn-layer"> … contenido … </div>
+     </section>
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+/* La clase la pone videoBg.js en el evento `playing`, no antes:
+   así el fundido arranca cuando ya hay imagen que mostrar. */
+.sdn-video.is-playing {
+  opacity: 1;
+}
+
+/* Velo más abierto que el del hero: el video ya es oscuro de por sí.
+   El 62 % de la izquierda es lo que protege el titular y la nota en
+   mono; el 38 % del centro cae detrás de la tarjeta del formulario,
+   que es opaca, así que ahí el video puede respirar sin costo de
+   contraste. */
+.sdn-surface--video .sdn-veil {
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-deep) 62%, transparent) 0%,
+    color-mix(in oklab, var(--color-deep) 38%, transparent) 55%,
+    color-mix(in oklab, var(--color-deep) 58%, transparent) 100%
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AÑADIR A src/index.css
+
+   Pegar justo después del bloque `.sdn-surface--video .sdn-veil`
+   y antes de la sección "Retícula hexagonal".
+
+   Ojo: la parte de movimiento reducido va al final del archivo,
+   dentro del @media que ya existe. Está marcada abajo.
+   ───────────────────────────────────────────────────────────── */
+
+
+/* ── Carrusel continuo ────────────────────────────────────────
+   Marquee en CSS, sin librería: el proyecto sigue siendo motion-cut.
+
+   El truco del bucle sin costura son dos copias de la misma lista y
+   un desplazamiento de exactamente la mitad del riel. La mitad de un
+   flex con `gap` no es el 50 % justo: sobra medio hueco, y por eso el
+   desplazamiento resta la mitad del gap. Si cambias --sdn-marquee-gap,
+   la resta se ajusta sola.
+
+   La duración se declara aquí y no en la plantilla porque es una
+   decisión de sistema: 64 s para catorce tarjetas es un paso de
+   lectura, no un anuncio. Bajarla de ~45 s empieza a marear.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-marquee {
+  --sdn-marquee-gap: 1.25rem;
+  --sdn-marquee-time: 64s;
+
+  overflow: hidden;
+
+  /* El riel sangra a todo el ancho de la ventana, no al contenedor:
+     que las tarjetas se corten en el borde es lo que dice que siguen. */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 3rem,
+    #000 calc(100% - 3rem),
+    transparent 100%
+  );
+}
+
+.sdn-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: var(--sdn-marquee-gap);
+  padding-inline: 1.5rem;
+
+  animation: sdn-marquee var(--sdn-marquee-time) linear infinite;
+  will-change: transform;
+}
+
+/* Se detiene con el cursor encima y cuando algo dentro recibe el foco
+   de teclado. Sin esto cada tarjeta es un objetivo en movimiento. */
+.sdn-marquee:hover .sdn-marquee__track,
+.sdn-marquee:focus-within .sdn-marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes sdn-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-50% - var(--sdn-marquee-gap) / 2), 0, 0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sdn-marquee__track {
+    padding-inline: 3rem;
+  }
+}
+
+
+/* ── Riel horizontal ──────────────────────────────────────────
+   El carrusel de testimonios: scroll-snap nativo, sin movimiento
+   automático. Aquí el visitante está leyendo, y un texto que se
+   desplaza solo no se lee.
+
+   El <ul> lleva tabindex="0" porque un contenedor con scroll necesita
+   foco para poder recorrerse con las flechas.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-rail {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+  scroll-padding-inline: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .sdn-rail {
+    scroll-padding-inline: 3rem;
+  }
+}
+
+.sdn-rail::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sdn-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sdn-rail::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 9999px;
+}
+
+.sdn-rail::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral);
+}
+
+
+/* ── Acordeón de preguntas ────────────────────────────────────
+   <details> nativo. Solo se le quita el triángulo del navegador: el
+   indicador de estado es el chevrón que dibuja la plantilla, y dos
+   marcadores a la vez sobran.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-faq summary {
+  list-style: none;
+}
+
+.sdn-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* El contorno va en el <summary> entero, no solo en el texto: es el
+   elemento que recibe el foco. */
+.sdn-faq summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+
+/* ═════════════════════════════════════════════════════════════
+   ESTO OTRO VA DENTRO DEL @media (prefers-reduced-motion: reduce)
+   QUE YA EXISTE AL FINAL DEL ARCHIVO — no lo dupliques.
+
+   El marquee necesita `animation: none !important` explícito: la
+   regla global de ese bloque solo baja la duración a 0.01 ms, y eso
+   no detiene el riel, lo dispara de golpe hasta el final.
+
+   Sin movimiento, el riel se convierte en una lista deslizable normal
+   y los clones se ocultan: siete tarjetas, no catorce.
+   ═════════════════════════════════════════════════════════════ */
+
+/*
+  .sdn-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-rule) transparent;
+  }
+
+  .sdn-marquee__track {
+    animation: none !important;
+    width: auto;
+  }
+
+  .sdn-marquee__track > [aria-hidden="true"] {
+    display: none;
+  }
+*/
+
+.sdn-rail {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rule) transparent;
+
+  /* Que la tarjeta enganchada no quede pegada al canal lateral. */
+  scroll-padding-inline: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .sdn-rail {
+    scroll-padding-inline: 3rem;
+  }
+}
+
+.sdn-rail::-webkit-scrollbar {
+  height: 6px;
+}
+
+.sdn-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sdn-rail::-webkit-scrollbar-thumb {
+  background: var(--color-rule);
+  border-radius: 9999px;
+}
+
+.sdn-rail::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral);
+}
+
+/* ── Acordeón de preguntas ────────────────────────────────────
+   <details> nativo. Solo se le quita el triángulo del navegador:
+   el indicador de estado es el chevrón que dibuja la plantilla, y
+   dos marcadores a la vez sobran.
+   ───────────────────────────────────────────────────────────── */
+
+.sdn-faq summary {
+  list-style: none;
+}
+
+.sdn-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* El contorno va en el <summary> entero, no solo en el texto:
+   es el elemento que recibe el foco. */
+.sdn-faq summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* ── Retícula hexagonal ───────────────────────────────────────
    Adaptación del patrón de SelfMadeSystem (Uiverse). Se conserva la
    geometría —celda de 12 × 20.78 px con el desplazamiento de media
@@ -510,6 +780,12 @@ body[data-sdn-lock="true"] {
   .sdn-hero.is-finisher .sdn-blobs,
   .sdn-hero.is-finisher .sdn-veil {
     display: block;
+  }
+
+  /* El video tampoco se inicializa; se oculta para que el póster no
+     quede a medio fundir sobre el color plano. */
+  .sdn-video {
+    display: none;
   }
 
   /* La retícula se queda quieta; el patrón sigue ahí. */
