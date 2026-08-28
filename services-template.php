@@ -54,7 +54,7 @@ $is_en    = ( 'en' === $sdn_lang );
    notaria           → "notary public stamping document signature desk"
                        alterna: "signing legal document pen close up office"
    tiempo-y-asistencia → "landscaping crew field workers timesheet"
-                       alterna: "warehouse shift workers clocking in"
+                       alterna: "s"
    auditorias        → "reviewing spreadsheets magnifier audit paperwork"
                        alterna: "two people reviewing documents together desk"
 
@@ -74,16 +74,42 @@ $sdn_photos = array(
 	'payroll-audits'    => 'servicio-auditorias-de-nomina.webp',
 );
 
-/* Devuelve la URL solo si el archivo está subido. Así la página no
-   muestra imágenes rotas mientras se consigue la fotografía. */
-$sdn_photo_url = function ( $key ) use ( $sdn_photos, $sdn_upload_dir ) {
+/* Devuelve el tamaño mediano ya generado por WordPress, no el
+   original completo —hasta 14 MB en este set— para una tarjeta que
+   se pinta a 17-20rem. `sdn_attachment_image()` (functions.php) hace
+   la resolución; aquí solo se ajusta el `sizes` al ancho real de la
+   tarjeta y se decide qué pasa si el archivo no existe todavía o no
+   es un adjunto de la biblioteca. */
+$sdn_photo = function ( $key ) use ( $sdn_photos, $sdn_upload_dir ) {
 	if ( empty( $sdn_photos[ $key ] ) ) {
-		return '';
+		return null;
 	}
 
 	$relative = $sdn_upload_dir . $sdn_photos[ $key ];
 
-	return file_exists( WP_CONTENT_DIR . $relative ) ? content_url( $relative ) : '';
+	if ( ! file_exists( WP_CONTENT_DIR . $relative ) ) {
+		return null;
+	}
+
+	$full_url = content_url( $relative );
+	$img      = sdn_attachment_image( $full_url );
+
+	// Archivo copiado directo a uploads/, sin pasar por la biblioteca:
+	// no hay adjunto que resolver. Cae al original completo —lento,
+	// pero no roto— en vez de perder la foto.
+	if ( ! $img ) {
+		return array(
+			'src'    => $full_url,
+			'srcset' => '',
+			'sizes'  => '',
+			'width'  => 1200,
+			'height' => 900,
+		);
+	}
+
+	$img['sizes'] = '(min-width: 640px) 20rem, 17rem';
+
+	return $img;
 };
 
 /* ── Testimonios ───────────────────────────────────────────
@@ -325,7 +351,7 @@ $sdn_video_poster = '';
         	<?php foreach ( $sdn_list as $i => $svc ) : ?>
         		<?php
         		$key = $sdn_keys[ $i ];
-        		$img = $sdn_photo_url( $key );
+        		$img = $sdn_photo( $key );
         		$alt = isset( $c['alts'][ $key ] ) ? $c['alts'][ $key ] : $svc['name'];
         		?>
         		<li class="w-[17rem] shrink-0 sm:w-[20rem]"
@@ -335,9 +361,11 @@ $sdn_video_poster = '';
         			   class="group flex h-full flex-col overflow-hidden rounded-sm border border-rule bg-paper transition-colors duration-150 hover:border-accent">
 
         				<?php if ( $img ) : ?>
-        					<img src="<?php echo esc_url( $img ); ?>"
+        					<img src="<?php echo esc_url( $img['src'] ); ?>"
+        					     <?php if ( $img['srcset'] ) : ?>srcset="<?php echo esc_attr( $img['srcset'] ); ?>" sizes="<?php echo esc_attr( $img['sizes'] ); ?>"<?php endif; ?>
         					     alt="<?php echo $clone ? '' : esc_attr( $alt ); ?>"
-        					     width="1200" height="900" loading="lazy" decoding="async"
+        					     width="<?php echo esc_attr( $img['width'] ); ?>" height="<?php echo esc_attr( $img['height'] ); ?>"
+        					     loading="lazy" decoding="async"
         					     class="aspect-[4/3] w-full object-cover">
         				<?php else : ?>
         					<!-- Reserva mientras no exista el archivo: una banda de
@@ -522,7 +550,7 @@ $sdn_video_poster = '';
           <a href="mailto:<?php echo esc_attr( $sdn['email'] ); ?>" class="break-all underline decoration-rule underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['email'] ); ?></a>
         </p>
         <a href="<?php echo esc_url( $sdn_contact ); ?>"
-           class="mt-6 inline-block whitespace-nowrap rounded-sm bg-accent-2 px-6 py-3.5 font-body text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-accent active:translate-y-px">
+           class="sdn-cta mt-6">
           <?php echo esc_html( $c['end_cta'] ); ?>
         </a>
       </div>

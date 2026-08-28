@@ -3,6 +3,7 @@ import {
   PhoneIcon, MailIcon, PinIcon, ArrowIcon,
   FacebookIcon, InstagramIcon, TikTokIcon,
 } from "./icons"
+import { useLang } from "./langState"
 
 /* ─────────────────────────────────────────────────────────────
    Footer · arquetipo Ft1 (Mast headed)
@@ -21,9 +22,9 @@ const DEFAULTS = {
   address: "1915 NE Stucki Ave, Suite 400, Hillsboro, OR 97006",
   mapUrl:
     "https://maps.google.com/?q=1915%20NE%20Stucki%20Ave%20Suite%20400%20Hillsboro%20OR%2097006",
-  facebook: "https://facebook.com/solucionesdelnorte",
-  instagram: "https://instagram.com/solucionesdelnorte",
-  tiktok: "https://tiktok.com/@solucionesdelnorte",
+  facebook: "https://www.facebook.com/profile.php?id=61592189014190",
+  instagram: "https://www.instagram.com/solucionesdelnorte_us",
+  tiktok: "https://www.tiktok.com/@solucionesnorte",
   agencyUrl: "https://828marketingsolutions.com",
   lang: "es",
 }
@@ -47,6 +48,7 @@ const COPY = {
       { href: "/nosotros", label: "Nosotros" },
       { href: "/contacto", label: "Contacto" },
       { href: "/aviso-de-privacidad", label: "Aviso de privacidad" },
+      { href: "/terminos-y-condiciones", label: "Términos y condiciones" },
     ],
     rights: "Todos los derechos reservados.",
     credit: "Sitio por",
@@ -64,11 +66,15 @@ const COPY = {
     hoursNote: "Closed weekends and holidays.",
     directions: "Getting here",
     navLabel: "Footer links",
+    // Sin páginas /en todavía (Pendiente 01 en functions.php): estos
+    // links navegan a la página real en español, igual que en
+    // Navbar.js — ver el comentario ahí para el porqué completo.
     links: [
-      { href: "/en/services", label: "Services" },
-      { href: "/en/about", label: "About" },
-      { href: "/en/contact", label: "Contact" },
-      { href: "/en/privacy", label: "Privacy notice" },
+      { href: "/servicios", label: "Services" },
+      { href: "/nosotros", label: "About" },
+      { href: "/contacto", label: "Contact" },
+      { href: "/aviso-de-privacidad", label: "Privacy notice" },
+      { href: "/terminos-y-condiciones", label: "Terms & conditions" },
     ],
     rights: "All rights reserved.",
     credit: "Site by",
@@ -92,7 +98,7 @@ function DataBlock({ label, icon: Icon, children }) {
 
 export default function Footer(props) {
   const site = { ...DEFAULTS, ...props }
-  const lang = site.lang === "en" ? "en" : "es"
+  const lang = useLang(site.lang)
   const t = COPY[lang]
   const year = new Date().getFullYear()
   const tel = (n) => `tel:+1${n.replace(/\D/g, "")}`
@@ -136,7 +142,7 @@ export default function Footer(props) {
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/20 text-rule transition-colors duration-150 hover:border-accent hover:bg-deep-2 hover:text-paper"
+                  className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/20 text-rule transition-colors duration-150 hover:border-paper hover:bg-paper hover:text-accent-2"
                 >
                   <Icon className="h-4 w-4" />
                   <span className="sr-only">{name}</span>

@@ -7,6 +7,8 @@ import Chatbot from "./scripts/Chatbot"
 import initReveal from "./scripts/reveal"
 import initHeroFinisher from "./scripts/heroFinisher"
 import initVideoBg from "./scripts/Videobg"
+import initSteps from "./scripts/Steps"
+import { initI18n } from "./scripts/I18n"
 
 /**
  * Monta los componentes React del tema.
@@ -38,3 +40,5 @@ mount("#sdn-chatbot", Chatbot)
 initReveal()
 initHeroFinisher()
 initVideoBg()
+initSteps()
+initI18n()

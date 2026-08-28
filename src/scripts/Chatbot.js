@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
 import { ChatIcon, CloseIcon, BackIcon, PhoneIcon, ArrowIcon } from "./icons"
+import { useLang } from "./langState"
 
 /* ─────────────────────────────────────────────────────────────
    Chatbot · guionizado (Pendiente 12, opción A)
@@ -186,7 +187,7 @@ const SCRIPT = {
       escalate: true,
       options: [
         { label: "What if I only have 1099 contractors?", to: "payroll-1099" },
-        { label: "See the Payroll page", href: "/en/services/payroll" },
+        { label: "See the Payroll page", href: "/servicios/nomina" },
       ],
     },
     "payroll-1099": {
@@ -194,7 +195,7 @@ const SCRIPT = {
         "If you only work with 1099 contractors you don't need payroll — you need bookkeeping, plus 1099 preparation at year end.",
       ],
       escalate: true,
-      options: [{ label: "See Bookkeeping", href: "/en/services/bookkeeping" }],
+      options: [{ label: "See Bookkeeping", href: "/servicios/contabilidad" }],
     },
     certified: {
       body: [
@@ -208,7 +209,7 @@ const SCRIPT = {
       ],
       escalate: true,
       options: [
-        { label: "See Certified payroll", href: "/en/services/certified-payroll" },
+        { label: "See Certified payroll", href: "/servicios/nomina-certificada" },
         { label: "My project is private", to: "payroll" },
       ],
     },
@@ -219,16 +220,16 @@ const SCRIPT = {
       ],
       need: ["The unsigned document", "Current government-issued ID for each signer"],
       escalate: true,
-      options: [{ label: "See Notary and documents", href: "/en/services/notary" }],
+      options: [{ label: "See Notary and documents", href: "/servicios/notaria" }],
     },
     other: {
       body: [
         "We also handle personal and business taxes, time and attendance, and payroll audits.",
       ],
       options: [
-        { label: "Taxes", href: "/en/services/taxes" },
-        { label: "Time and attendance", href: "/en/services/time-attendance" },
-        { label: "Payroll audits", href: "/en/services/payroll-audits" },
+        { label: "Taxes", href: "/servicios/impuestos" },
+        { label: "Time and attendance", href: "/servicios/tiempo-y-asistencia" },
+        { label: "Payroll audits", href: "/servicios/auditorias-de-nomina" },
         { label: "I'd rather talk to someone", to: "human" },
       ],
     },
@@ -244,7 +245,7 @@ const SCRIPT = {
 
 export default function Chatbot(props) {
   const site = { ...DEFAULTS, ...props }
-  const lang = site.lang === "en" ? "en" : "es"
+  const lang = useLang(site.lang)
   const t = COPY[lang]
   const script = SCRIPT[lang]
 

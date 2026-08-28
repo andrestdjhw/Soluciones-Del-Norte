@@ -3,6 +3,8 @@ import {
   PhoneIcon, MailIcon, PinIcon, ChevronIcon, ArrowIcon,
   FacebookIcon, InstagramIcon, TikTokIcon,
 } from "./icons"
+import LanguageToggle from "./LanguageToggle"
+import { useLang } from "./langState"
 
 /* ─────────────────────────────────────────────────────────────
    Navbar · arquetipo N11 (mega-menu panel)
@@ -20,9 +22,9 @@ const DEFAULTS = {
   addressShort: "Hillsboro, OR",
   mapUrl:
     "https://maps.google.com/?q=1915%20NE%20Stucki%20Ave%20Suite%20400%20Hillsboro%20OR%2097006",
-  facebook: "https://facebook.com/solucionesdelnorte",
-  instagram: "https://instagram.com/solucionesdelnorte",
-  tiktok: "https://tiktok.com/@solucionesdelnorte",
+  facebook: "https://www.facebook.com/profile.php?id=61592189014190",
+  instagram: "https://www.instagram.com/solucionesdelnorte_us",
+  tiktok: "https://www.tiktok.com/@solucionesnorte",
   lang: "es",
 }
 
@@ -34,9 +36,6 @@ const COPY = {
     about: "Nosotros",
     contact: "Contacto",
     cta: "Agendar consulta",
-    altLang: "EN",
-    altLangLabel: "Ver este sitio en inglés",
-    altHref: "/en",
     panelTitle: "Los siete servicios",
     panelFoot: "¿No sabes cuál necesitas? Empieza por la consulta inicial.",
     panelFootCta: "Agendar consulta inicial",
@@ -58,9 +57,6 @@ const COPY = {
     about: "About",
     contact: "Contact",
     cta: "Book a call",
-    altLang: "ES",
-    altLangLabel: "View this site in Spanish",
-    altHref: "/",
     panelTitle: "All seven services",
     panelFoot: "Not sure which one you need? Start with the intake call.",
     panelFootCta: "Book an intake call",
@@ -87,25 +83,42 @@ const SERVICES = {
     { href: "/servicios/tiempo-y-asistencia", name: "Tiempo y asistencia", desc: "Horas ordenadas antes de la corrida." },
     { href: "/servicios/auditorias-de-nomina", name: "Auditorías de nómina", desc: "Revisión de periodos anteriores." },
   ],
+  /* Todavía no hay páginas de WordPress con prefijo /en (falta
+     instalar Polylang o WPML — "Pendiente 01" en functions.php). Un
+     link a /en/services/payroll no lleva a ningún lado: 404. Mientras
+     tanto, en modo inglés los links navegan a la MISMA página real
+     en español —que sí existe— y el idioma elegido se vuelve a
+     aplicar solo al cargar, vía el localStorage que ya guarda
+     LanguageToggle.js (ver langState.js). El nombre y la descripción
+     de la tarjeta sí quedan en inglés: solo el destino del link es
+     compartido. */
   en: [
-    { href: "/en/services/payroll", name: "Payroll", desc: "Calculation, payments and withholdings." },
-    { href: "/en/services/certified-payroll", name: "Certified payroll", desc: "Reports for state and city projects." },
-    { href: "/en/services/bookkeeping", name: "Bookkeeping", desc: "Books kept current, monthly close." },
-    { href: "/en/services/taxes", name: "Taxes", desc: "Personal and business returns." },
-    { href: "/en/services/notary", name: "Notary and documents", desc: "Certification by appointment in Hillsboro." },
-    { href: "/en/services/time-attendance", name: "Time and attendance", desc: "Hours sorted before the run." },
-    { href: "/en/services/payroll-audits", name: "Payroll audits", desc: "Review of prior periods." },
+    { href: "/servicios/nomina", name: "Payroll", desc: "Calculation, payments and withholdings." },
+    { href: "/servicios/nomina-certificada", name: "Certified payroll", desc: "Reports for state and city projects." },
+    { href: "/servicios/contabilidad", name: "Bookkeeping", desc: "Books kept current, monthly close." },
+    { href: "/servicios/impuestos", name: "Taxes", desc: "Personal and business returns." },
+    { href: "/servicios/notaria", name: "Notary and documents", desc: "Certification by appointment in Hillsboro." },
+    { href: "/servicios/tiempo-y-asistencia", name: "Time and attendance", desc: "Hours sorted before the run." },
+    { href: "/servicios/auditorias-de-nomina", name: "Payroll audits", desc: "Review of prior periods." },
   ],
 }
 
+/* Mismo criterio que arriba: sin páginas /en todavía, "en" reutiliza
+   las rutas reales de "es" — no son rutas en inglés, son las únicas
+   rutas que existen. */
 const ROUTES = {
   es: { home: "/", services: "/servicios", about: "/nosotros", contact: "/contacto", featured: "/servicios/nomina-certificada" },
-  en: { home: "/en", services: "/en/services", about: "/en/about", contact: "/en/contact", featured: "/en/services/certified-payroll" },
+  en: { home: "/", services: "/servicios", about: "/nosotros", contact: "/contacto", featured: "/servicios/nomina-certificada" },
 }
 
 export default function Navbar(props) {
   const site = { ...DEFAULTS, ...props }
-  const lang = site.lang === "en" ? "en" : "es"
+  // El idioma del servidor es solo el punto de partida: si el
+  // visitante ya cambió de idioma con el interruptor en esta misma
+  // sesión (en esta página o en otra), useLang() lo detecta por el
+  // evento que dispara LanguageToggle.js y este componente entero
+  // se vuelve a renderizar en el idioma elegido, sin recargar.
+  const lang = useLang(site.lang)
   const t = COPY[lang]
   const routes = ROUTES[lang]
   const services = SERVICES[lang]
@@ -296,6 +309,7 @@ export default function Navbar(props) {
             {/* Enlaces · desde lg */}
             <nav aria-label={t.services} className="hidden items-center gap-8 lg:flex">
               <a href={routes.home} className={navLink}>{t.home}</a>
+              <a href={routes.about} className={navLink}>{t.about}</a>
 
               <button
                 ref={megaTriggerRef}
@@ -313,23 +327,16 @@ export default function Navbar(props) {
                 />
               </button>
 
-              <a href={routes.about} className={navLink}>{t.about}</a>
               <a href={routes.contact} className={navLink}>{t.contact}</a>
             </nav>
 
             {/* Idioma + CTA */}
             <div className="flex shrink-0 items-center gap-3">
-              <a
-                href={t.altHref}
-                aria-label={t.altLangLabel}
-                className="hidden rounded-sm border border-rule px-2.5 py-1 font-mono text-[0.75rem] tracking-widest text-muted transition-colors duration-150 hover:border-accent hover:text-accent-2 md:block"
-              >
-                {t.altLang}
-              </a>
+              <LanguageToggle lang={lang} size="sm" className="hidden md:inline-flex" />
 
               <a
                 href={routes.contact}
-                className="hidden whitespace-nowrap rounded-sm bg-accent-2 px-5 py-2.5 font-body text-[0.875rem] font-medium text-paper transition-colors duration-150 hover:bg-accent active:translate-y-px md:inline-block"
+                className="hidden sdn-cta sdn-cta--sm md:inline-block"
               >
                 {t.cta}
               </a>
@@ -447,6 +454,10 @@ export default function Navbar(props) {
               {t.home}
             </a>
 
+            <a href={routes.about} onClick={closeAll} className="block border-b border-rule-2 py-4 font-display text-lg font-semibold text-ink">
+              {t.about}
+            </a>
+
             <div className="border-b border-rule-2">
               <button
                 type="button"
@@ -474,9 +485,6 @@ export default function Navbar(props) {
               </ul>
             </div>
 
-            <a href={routes.about} onClick={closeAll} className="block border-b border-rule-2 py-4 font-display text-lg font-semibold text-ink">
-              {t.about}
-            </a>
             <a href={routes.contact} onClick={closeAll} className="block border-b border-rule-2 py-4 font-display text-lg font-semibold text-ink">
               {t.contact}
             </a>
@@ -484,7 +492,7 @@ export default function Navbar(props) {
             <a
               href={routes.contact}
               onClick={closeAll}
-              className="mt-6 block rounded-sm bg-accent-2 px-5 py-3.5 text-center font-body text-[0.9375rem] font-medium text-paper"
+              className="sdn-cta mt-6 w-full"
             >
               {t.cta}
             </a>
@@ -505,12 +513,7 @@ export default function Navbar(props) {
               <p className="pt-1">{t.hoursShort}</p>
             </div>
 
-            <a
-              href={t.altHref}
-              className="mt-6 inline-block rounded-sm border border-rule px-3 py-1.5 font-mono text-[0.75rem] tracking-widest text-muted"
-            >
-              {t.altLang}
-            </a>
+            <LanguageToggle lang={lang} className="mt-6 inline-flex" />
           </nav>
         </div>
       </header>

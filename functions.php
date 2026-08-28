@@ -60,27 +60,120 @@ function sdn_load_assets() {
 		true
 	);
 
-	// Configuración del front-end. Las tres claves de EmailJS son públicas
-	// por diseño, pero viven en wp-config.php para no quedar escritas en el
-	// bundle ni en el repositorio.
+	// reCAPTCHA v3, cargado con la site key en la URL: es lo que activa
+	// `window.grecaptcha` de una vez, sin una segunda llamada de
+	// inicialización. Solo se encola si la constante está puesta —
+	// mientras no lo esté, el formulario sigue funcionando sin el
+	// filtro extra (le queda el honeypot y la trampa de tiempo).
+	if ( defined( 'SDN_RECAPTCHA_SITE_KEY' ) && SDN_RECAPTCHA_SITE_KEY ) {
+		wp_enqueue_script(
+			'sdn-recaptcha',
+			'https://www.google.com/recaptcha/api.js?render=' . rawurlencode( SDN_RECAPTCHA_SITE_KEY ),
+			array(),
+			null,
+			true
+		);
+	}
+
+	// Configuración del front-end. Las claves públicas de EmailJS y de
+	// reCAPTCHA viven en wp-config.php para no quedar escritas en el
+	// bundle ni en el repositorio — la secreta de reCAPTCHA nunca sale
+	// de PHP, la usa sdn_verify_recaptcha() más abajo.
 	$sdn = sdn_site_data();
 
 	wp_localize_script(
 		'sdn-main',
 		'sdnConfig',
 		array(
-			'emailjs' => array(
+			'emailjs'   => array(
 				'publicKey'  => defined( 'SDN_EMAILJS_PUBLIC_KEY' ) ? SDN_EMAILJS_PUBLIC_KEY : '',
 				'serviceId'  => defined( 'SDN_EMAILJS_SERVICE_ID' ) ? SDN_EMAILJS_SERVICE_ID : '',
 				'templateId' => defined( 'SDN_EMAILJS_TEMPLATE_ID' ) ? SDN_EMAILJS_TEMPLATE_ID : '',
 			),
-			'phone'   => $sdn['phone1'],
-			'email'   => $sdn['email'],
-			'lang'    => $sdn['lang'],
+			'recaptcha' => array(
+				'siteKey'  => defined( 'SDN_RECAPTCHA_SITE_KEY' ) ? SDN_RECAPTCHA_SITE_KEY : '',
+				'verifyUrl' => rest_url( 'sdn/v1/recaptcha-verify' ),
+			),
+			'phone'     => $sdn['phone1'],
+			'email'     => $sdn['email'],
+			'lang'      => $sdn['lang'],
 		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'sdn_load_assets' );
+
+/**
+ * Verificación server-side de reCAPTCHA v3.
+ *
+ * El token que junta el navegador no prueba nada por sí solo — cualquiera
+ * puede copiarlo y mandarlo directo. Hay que reenviarlo a Google desde el
+ * servidor, con la clave secreta, y es Google quien contesta si el token
+ * es válido y qué tan humano parece (`score`, de 0 a 1).
+ *
+ * Endpoint público a propósito: lo llama gente sin sesión de WordPress,
+ * así que no hay nonce que pedir. No toca nada de la base de datos, solo
+ * reenvía una pregunta a Google — no hay nada que un CSRF pudiera abusar.
+ */
+add_action(
+	'rest_api_init',
+	function () {
+		register_rest_route(
+			'sdn/v1',
+			'/recaptcha-verify',
+			array(
+				'methods'             => 'POST',
+				'callback'            => 'sdn_verify_recaptcha',
+				'permission_callback' => '__return_true',
+				'args'                => array(
+					'token'  => array( 'required' => true, 'type' => 'string' ),
+					'action' => array( 'required' => true, 'type' => 'string' ),
+				),
+			)
+		);
+	}
+);
+
+function sdn_verify_recaptcha( WP_REST_Request $request ) {
+	if ( ! defined( 'SDN_RECAPTCHA_SECRET_KEY' ) || ! SDN_RECAPTCHA_SECRET_KEY ) {
+		return new WP_REST_Response( array( 'success' => false, 'reason' => 'not_configured' ), 500 );
+	}
+
+	$token          = (string) $request->get_param( 'token' );
+	$expected_action = (string) $request->get_param( 'action' );
+
+	$response = wp_remote_post(
+		'https://www.google.com/recaptcha/api/siteverify',
+		array(
+			'timeout' => 8,
+			'body'    => array(
+				'secret'   => SDN_RECAPTCHA_SECRET_KEY,
+				'response' => $token,
+				'remoteip' => $request->get_header( 'x_forwarded_for' ) ?: $_SERVER['REMOTE_ADDR'] ?? '',
+			),
+		)
+	);
+
+	if ( is_wp_error( $response ) ) {
+		return new WP_REST_Response( array( 'success' => false, 'reason' => 'request_failed' ), 502 );
+	}
+
+	$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+	// Umbral de 0.5: el punto medio que recomienda Google para arrancar.
+	// Si con el tiempo entra spam de verdad, es un solo número que subir.
+	$ok =
+		! empty( $body['success'] ) &&
+		( $body['action'] ?? '' ) === $expected_action &&
+		( $body['score'] ?? 0 ) >= 0.5;
+
+	return new WP_REST_Response(
+		array(
+			'success' => $ok,
+			'score'   => $body['score'] ?? null,
+		),
+		200
+	);
+}
 
 function sdn_resource_hints( $urls, $relation_type ) {
 	if ( 'preconnect' === $relation_type ) {
@@ -117,9 +210,9 @@ function sdn_site_data() {
 		'address'       => $address,
 		'address_short' => 'Hillsboro, OR',
 		'map_url'       => 'https://maps.google.com/?q=' . rawurlencode( $address ),
-		'facebook'      => 'https://facebook.com/solucionesdelnorte',
-		'instagram'     => 'https://instagram.com/solucionesdelnorte',
-		'tiktok'        => 'https://tiktok.com/@solucionesdelnorte',
+		'facebook'      => 'https://www.facebook.com/profile.php?id=61592189014190',
+		'instagram'     => 'https://www.instagram.com/solucionesdelnorte_us',
+		'tiktok'        => 'https://www.tiktok.com/@solucionesnorte',
 		'agency_url'    => 'https://828marketingsolutions.com',
 		'lang'          => sdn_current_lang(),
 	);
@@ -166,6 +259,7 @@ function sdn_route( $key ) {
 			'about'    => '/nosotros',
 			'contact'  => '/contacto',
 			'privacy'  => '/aviso-de-privacidad',
+			'terms'    => '/terminos-y-condiciones',
 		),
 		'en' => array(
 			'home'     => '/en',
@@ -173,6 +267,7 @@ function sdn_route( $key ) {
 			'about'    => '/en/about',
 			'contact'  => '/en/contact',
 			'privacy'  => '/en/privacy',
+			'terms'    => '/en/terms',
 		),
 	);
 
@@ -275,4 +370,53 @@ function sdn_services() {
 	);
 
 	return ( 'en' === sdn_current_lang() ) ? $en : $es;
+}
+
+/**
+ * Resuelve la URL de un tamaño intermedio (no el original completo) a
+ * partir de la URL pública del archivo tal como se subió.
+ *
+ * Las fotos de banco de este sitio llegan por encima del umbral de
+ * "imagen grande" de WordPress (2560 px) — hasta 14 MB el archivo
+ * completo. Cuando eso pasa, WordPress no trabaja sobre el archivo
+ * que subiste sino sobre una copia -scaled, y ES ESE nombre el que
+ * queda en _wp_attached_file: `attachment_url_to_postid()` con el
+ * nombre original no encuentra nada, y sin el segundo intento con el
+ * sufijo la plantilla termina sirviendo el original entero.
+ *
+ * Devuelve null si el archivo no existe todavía o no es un adjunto
+ * de la biblioteca (se copió directo a uploads/, sin pasar por el
+ * subidor) — quien llama decide qué hacer con eso: caer al original
+ * de todos modos, o mostrar una reserva.
+ *
+ * @param string $full_url URL pública del archivo tal como se subió.
+ * @param string $size     Tamaño registrado de WordPress. 'medium_large' por defecto.
+ * @return array{src: string, srcset: string, sizes: string, width: int, height: int}|null
+ */
+function sdn_attachment_image( $full_url, $size = 'medium_large' ) {
+	$id = attachment_url_to_postid( $full_url );
+
+	if ( ! $id ) {
+		$ext    = pathinfo( $full_url, PATHINFO_EXTENSION );
+		$scaled = preg_replace( '/\.' . preg_quote( $ext, '/' ) . '$/', '-scaled.' . $ext, $full_url );
+		$id     = attachment_url_to_postid( $scaled );
+	}
+
+	if ( ! $id ) {
+		return null;
+	}
+
+	$sized = wp_get_attachment_image_src( $id, $size );
+
+	if ( ! $sized ) {
+		return null;
+	}
+
+	return array(
+		'src'    => $sized[0],
+		'srcset' => wp_get_attachment_image_srcset( $id, $size ),
+		'sizes'  => wp_get_attachment_image_sizes( $id, $size ),
+		'width'  => $sized[1],
+		'height' => $sized[2],
+	);
 }

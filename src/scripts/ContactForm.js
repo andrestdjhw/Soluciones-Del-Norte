@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useId } from "react"
 import { PhoneIcon, MailIcon, ArrowIcon } from "./icons"
+import { useLang } from "./langState"
 
 /* ─────────────────────────────────────────────────────────────
    ContactForm
@@ -13,6 +14,14 @@ import { PhoneIcon, MailIcon, ArrowIcon } from "./icons"
    en el bundle. El SDK se carga bajo demanda: quien no envía el
    formulario no descarga la librería.
 
+   Antispam: honeypot + trampa de tiempo (ya estaban) y reCAPTCHA v3
+   (window.sdnConfig.recaptcha). El script de Google lo encola PHP
+   —necesita la site key en la URL desde el primer momento—, así que
+   aquí solo se pide el token y se manda a verificar al endpoint REST
+   que sdn_verify_recaptcha() atiende en functions.php. Si la site key
+   no está configurada, se salta el paso: el formulario sigue
+   funcionando con lo que ya tenía.
+
    Variantes por props:
      density = "compact" (hero) | "comfortable" (página /contacto)
      persistent = "true" — siempre visible, sin disparador
@@ -20,6 +29,8 @@ import { PhoneIcon, MailIcon, ArrowIcon } from "./icons"
 
 const EMAILJS_CDN =
   "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+
+const RECAPTCHA_ACTION = "contact"
 
 const COPY = {
   es: {
@@ -97,6 +108,40 @@ function loadEmailJs() {
   return emailjsPromise
 }
 
+/* Token de reCAPTCHA v3 para esta llamada — no se reutiliza, cada
+   verificación pide el suyo. `grecaptcha.ready` resuelve enseguida si
+   el script ya cargó (lo normal, porque PHP lo encola de entrada) y
+   espera si todavía no. */
+function getRecaptchaToken(siteKey) {
+  return new Promise((resolve, reject) => {
+    if (!window.grecaptcha) {
+      reject(new Error("grecaptcha no disponible"))
+      return
+    }
+    window.grecaptcha.ready(() => {
+      window.grecaptcha
+        .execute(siteKey, { action: RECAPTCHA_ACTION })
+        .then(resolve, reject)
+    })
+  })
+}
+
+/* Manda el token al endpoint REST de functions.php, que es quien
+   consulta a Google con la clave secreta. Un `false` aquí puede ser
+   spam de verdad o solo un tropiezo de red — en ambos casos se trata
+   igual que un fallo de envío: la salida por teléfono/correo sigue
+   ahí. */
+async function verifyRecaptcha(verifyUrl, token) {
+  const res = await fetch(verifyUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, action: RECAPTCHA_ACTION }),
+  })
+  if (!res.ok) return false
+  const data = await res.json()
+  return !!data.success
+}
+
 const LABEL_CLS =
   "block font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted"
 
@@ -153,12 +198,13 @@ const EMPTY = {
 }
 
 export default function ContactForm(props) {
-  const lang = props.lang === "en" ? "en" : "es"
+  const lang = useLang(props.lang)
   const t = COPY[lang]
   const compact = props.density === "compact"
 
   const cfg = (typeof window !== "undefined" && window.sdnConfig) || {}
   const ejs = { ...(cfg.emailjs || {}), ...props }
+  const recaptcha = cfg.recaptcha || {}
   const contact = {
     phone: props.phone || cfg.phone || "971-477-8337",
     email: props.email || cfg.email || "Admin@solucionesnorte.com",
@@ -218,6 +264,16 @@ export default function ContactForm(props) {
     setStatus("sending")
 
     try {
+      // Si la site key está configurada, un token que no verifica corta
+      // el envío aquí mismo — mismo tratamiento que un fallo de EmailJS.
+      // Si no está configurada, se salta el paso entero: sin site key no
+      // hay nada que pedirle a Google.
+      if (recaptcha.siteKey) {
+        const token = await getRecaptchaToken(recaptcha.siteKey)
+        const ok = await verifyRecaptcha(recaptcha.verifyUrl, token)
+        if (!ok) throw new Error("reCAPTCHA no verificó el envío")
+      }
+
       if (!ejs.publicKey || !ejs.serviceId || !ejs.templateId) {
         throw new Error("EmailJS sin configurar: revisa SDN_EMAILJS_* en wp-config.php")
       }
@@ -375,7 +431,7 @@ export default function ContactForm(props) {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="w-full rounded-sm bg-accent-2 px-6 py-3.5 font-body text-[0.9375rem] font-medium text-paper transition-colors duration-150 hover:bg-accent active:translate-y-px disabled:pointer-events-none disabled:opacity-60"
+          className="sdn-cta w-full"
         >
           {status === "sending" ? t.sending : t.send}
         </button>

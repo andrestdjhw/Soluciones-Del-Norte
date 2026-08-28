@@ -173,7 +173,11 @@ body.admin-bar #sdn-navbar {
      · una sombra proyectada muy abierta y muy tenue, que separa la barra
        del contenido sin dibujar un borde
    Al despegarse del tope, el relieve sube: el bisel se marca más y la
-   sombra se abre. Es la señal de que la barra está flotando. */
+   sombra se abre. Es la señal de que la barra está flotando.
+
+   Este bisel es lo que distingue la cabecera del resto del sitio. Por eso
+   no se repite en botones ni en tarjetas: si aparece en todas partes deja
+   de significar nada. */
 
 .sdn-bar {
   position: relative;
@@ -370,9 +374,17 @@ body[data-sdn-lock="true"] {
 
 .sdn-hero {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.2vw), 0 100%);
+
+  /* Sin esto, Chrome rasteriza el borde diagonal en mosaicos y deja
+     costuras grises visibles donde se juntan —justo encima del <video>
+     en movimiento, que fuerza su propia capa de composición. El
+     truco de siempre para forzar una sola capa: un transform que no
+     mueve nada. */
+  transform: translateZ(0);
 }
 
 .sdn-hero.is-finisher .sdn-blobs,
+.sdn-hero.is-finisher .sdn-video,
 .sdn-hero.is-finisher .sdn-veil {
   display: none;
 }
@@ -446,17 +458,6 @@ body[data-sdn-lock="true"] {
   );
 }
 
-/* ─────────────────────────────────────────────────────────────
-   AÑADIR A src/index.css
-
-   Pegar justo después del bloque `.sdn-surface--video .sdn-veil`
-   y antes de la sección "Retícula hexagonal".
-
-   Ojo: la parte de movimiento reducido va al final del archivo,
-   dentro del @media que ya existe. Está marcada abajo.
-   ───────────────────────────────────────────────────────────── */
-
-
 /* ── Carrusel continuo ────────────────────────────────────────
    Marquee en CSS, sin librería: el proyecto sigue siendo motion-cut.
 
@@ -468,7 +469,7 @@ body[data-sdn-lock="true"] {
 
    La duración se declara aquí y no en la plantilla porque es una
    decisión de sistema: 64 s para catorce tarjetas es un paso de
-   lectura, no un anuncio. Bajarla de ~45 s empieza a marear.
+   lectura, no un anuncio. Por debajo de ~45 s empieza a marear.
    ───────────────────────────────────────────────────────────── */
 
 .sdn-marquee {
@@ -477,8 +478,8 @@ body[data-sdn-lock="true"] {
 
   overflow: hidden;
 
-  /* El riel sangra a todo el ancho de la ventana, no al contenedor:
-     que las tarjetas se corten en el borde es lo que dice que siguen. */
+  /* Las tarjetas se desvanecen en los bordes en vez de cortarse a
+     hachazo: es lo que dice que la fila sigue más allá del encuadre. */
   mask-image: linear-gradient(
     to right,
     transparent 0,
@@ -499,7 +500,9 @@ body[data-sdn-lock="true"] {
 }
 
 /* Se detiene con el cursor encima y cuando algo dentro recibe el foco
-   de teclado. Sin esto cada tarjeta es un objetivo en movimiento. */
+   de teclado. Sin esto cada tarjeta es un objetivo en movimiento, y
+   clicarla es una pelea: es la diferencia entre un carrusel y un
+   anuncio. */
 .sdn-marquee:hover .sdn-marquee__track,
 .sdn-marquee:focus-within .sdn-marquee__track {
   animation-play-state: paused;
@@ -519,7 +522,6 @@ body[data-sdn-lock="true"] {
     padding-inline: 3rem;
   }
 }
-
 
 /* ── Riel horizontal ──────────────────────────────────────────
    El carrusel de testimonios: scroll-snap nativo, sin movimiento
@@ -559,7 +561,6 @@ body[data-sdn-lock="true"] {
   background: var(--color-neutral);
 }
 
-
 /* ── Acordeón de preguntas ────────────────────────────────────
    <details> nativo. Solo se le quita el triángulo del navegador: el
    indicador de estado es el chevrón que dibuja la plantilla, y dos
@@ -582,88 +583,129 @@ body[data-sdn-lock="true"] {
   border-radius: 2px;
 }
 
+/* ── Botones de llamada a la acción ───────────────────────────
+   Adaptación del botón de Allyhere (Uiverse). Se conserva la
+   mecánica —un degradado de 280 % que se desplaza en el hover, sin
+   repintar nada— y se cambia todo lo demás:
 
-/* ═════════════════════════════════════════════════════════════
-   ESTO OTRO VA DENTRO DEL @media (prefers-reduced-motion: reduce)
-   QUE YA EXISTE AL FINAL DEL ARCHIVO — no lo dupliques.
+     · Los colores. Los originales, hsl(194 100% 69%) y
+       hsl(217 100% 56%), dan 1.62:1 y 4.18:1 con texto blanco. El
+       primero hace desaparecer el texto, y como el degradado viaja,
+       el botón pasaría por su peor punto justo al pasar el cursor.
+       Los dos extremos de aquí dan 8.59:1 y 5.20:1: AA en todo el
+       recorrido.
 
-   El marquee necesita `animation: none !important` explícito: la
-   regla global de ese bloque solo baja la duración a 0.01 ms, y eso
-   no detiene el riel, lo dispara de golpe hasta el final.
+     · El resplandor y el bisel interior. El bisel ya significa algo
+       en este sistema —es lo que separa la barra de cabecera del
+       contenido, en .sdn-bar—; repetirlo en los botones lo vacía.
 
-   Sin movimiento, el riel se convierte en una lista deslizable normal
-   y los clones se ocultan: siete tarjetas, no catorce.
-   ═════════════════════════════════════════════════════════════ */
+     · El radio, de 8 px a 2 px, que es el del resto del sitio.
 
-/*
-  .sdn-marquee {
-    overflow-x: auto;
-    mask-image: none;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-rule) transparent;
-  }
+   El degradado NO usa var(--color-accent): son dos tonos propios del
+   botón, sobre el mismo eje 231°. El acento sigue siendo el de las
+   reglas y los subrayados.
 
-  .sdn-marquee__track {
-    animation: none !important;
-    width: auto;
-  }
-
-  .sdn-marquee__track > [aria-hidden="true"] {
-    display: none;
-  }
-*/
-
-.sdn-rail {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-rule) transparent;
-
-  /* Que la tarjeta enganchada no quede pegada al canal lateral. */
-  scroll-padding-inline: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .sdn-rail {
-    scroll-padding-inline: 3rem;
-  }
-}
-
-.sdn-rail::-webkit-scrollbar {
-  height: 6px;
-}
-
-.sdn-rail::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sdn-rail::-webkit-scrollbar-thumb {
-  background: var(--color-rule);
-  border-radius: 9999px;
-}
-
-.sdn-rail::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neutral);
-}
-
-/* ── Acordeón de preguntas ────────────────────────────────────
-   <details> nativo. Solo se le quita el triángulo del navegador:
-   el indicador de estado es el chevrón que dibuja la plantilla, y
-   dos marcadores a la vez sobran.
+   Uso:
+     <a class="sdn-cta">Agendar consulta</a>
+     <a class="sdn-cta sdn-cta--ghost">Ver servicios</a>        (fondo oscuro)
+     <a class="sdn-cta sdn-cta--ghost-ink">Ver servicios</a>    (fondo claro)
+     <a class="sdn-cta sdn-cta--sm">Agendar consulta</a>        (navbar, más compacto)
    ───────────────────────────────────────────────────────────── */
 
-.sdn-faq summary {
-  list-style: none;
+.sdn-cta {
+  --sdn-cta-dark: oklch(40% 0.12 231);
+  --sdn-cta-light: oklch(52% 0.13 231);
+
+  display: inline-block;
+  cursor: pointer;
+  padding: 0.875rem 1.5rem;
+  min-height: 44px;
+
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--color-paper);
+
+  border: none;
+  border-radius: 2px;
+
+  background-size: 280% auto;
+  background-position: left center;
+  background-image: linear-gradient(
+    325deg,
+    var(--sdn-cta-dark) 0%,
+    var(--sdn-cta-light) 55%,
+    var(--sdn-cta-dark) 90%
+  );
+
+  /* Solo lo que tiene que moverse. El `transition: 0.8s` del original
+     también animaba el contorno de foco, que debe ser instantáneo para
+     que se vea al tabular rápido. */
+  transition: background-position 600ms ease, transform 100ms ease;
 }
 
-.sdn-faq summary::-webkit-details-marker {
-  display: none;
+.sdn-cta:hover {
+  background-position: right center;
 }
 
-/* El contorno va en el <summary> entero, no solo en el texto:
-   es el elemento que recibe el foco. */
-.sdn-faq summary:focus-visible {
+.sdn-cta:active {
+  transform: translateY(1px);
+}
+
+/* El foco usa el contorno del sistema, no un anillo propio: es el mismo
+   que ya tienen los campos del formulario y los enlaces. */
+.sdn-cta:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  border-radius: 2px;
+}
+
+.sdn-cta:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Variante secundaria: el botón de contorno que acompaña al principal
+   en el hero y en los cierres. No lleva degradado —dos botones
+   animados uno al lado del otro compiten— pero sí la misma caja, para
+   que el par quede alineado al pixel. */
+.sdn-cta--ghost {
+  background-image: none;
+  background-color: transparent;
+  color: var(--color-paper);
+  border: 1px solid color-mix(in oklab, var(--color-paper) 30%, transparent);
+  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+/* Invertido: de contorno sobre fondo oscuro a placa blanca con texto
+   en cerulean. Mismo botón, colores al revés — más presencia que
+   solo iluminar el borde. */
+.sdn-cta--ghost:hover {
+  border-color: var(--color-paper);
+  background-color: var(--color-paper);
+  color: var(--color-accent-2);
+}
+
+/* Sobre fondo claro el fantasma cambia de tinta. */
+.sdn-cta--ghost-ink {
+  color: var(--color-ink);
+  border-color: var(--color-rule);
+}
+
+.sdn-cta--ghost-ink:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-paper-3);
+}
+
+/* Variante compacta: el CTA de la barra de navegación convive con el
+   logo y el selector de idioma en una franja angosta —el tamaño del
+   botón principal no cabe ahí a propósito. Mismo color, mismo
+   comportamiento, menos caja. */
+.sdn-cta--sm {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
 }
 
 /* ── Retícula hexagonal ───────────────────────────────────────
@@ -699,24 +741,44 @@ body[data-sdn-lock="true"] {
   --sdn-grid-b: color-mix(in oklab, var(--color-rule) 22%, transparent);
   --sdn-grid-c: color-mix(in oklab, var(--color-accent-2) 55%, transparent);
 
+  /* Solo el panal, quieto: dos capas del mismo punto, desplazadas media
+     celda. Las manchas que derivan van aparte, ver más abajo — animar
+     `background-position` aquí repinta la celda entera en cada cuadro,
+     y en una página con seis u ocho de estas superficies a la vez eso
+     es lo que hacía que el scroll se sintiera a los tirones. */
   background-color: var(--sdn-grid-ring);
   background-image:
     radial-gradient(circle at 50% 50%, #0000 1.5px, var(--sdn-grid-ring) 0 var(--c), #0000 var(--c)),
-    radial-gradient(circle at 50% 50%, #0000 1.5px, var(--sdn-grid-ring) 0 var(--c), #0000 var(--c)),
+    radial-gradient(circle at 50% 50%, #0000 1.5px, var(--sdn-grid-ring) 0 var(--c), #0000 var(--c));
+  background-size: 12px 20.7846097px, 12px 20.7846097px;
+  background-position: var(--p);
+}
+
+/* Las tres manchas que antes viajaban por `background-position` ahora
+   viven en una sola capa de compositor aparte y se mueven con
+   `transform`, que la GPU anima sin tocar el hilo principal. Iban en
+   dos capas (b y c juntas, a sola) en una primera versión; medido en
+   una página con seis-ocho de estas superficies a la vez, la cuenta
+   de capas pesaba más que su tamaño — una sola capa por retícula fue
+   lo que de verdad devolvió el scroll a 60 fps, no encoger la caja.
+   El costo es que las tres manchas ya se mueven juntas, no cada una
+   por su lado.
+
+   La caja mide el doble del panal — `inset: -50%` — para que el
+   recorrido no deje ver un borde recto. Ya no reproduce el camino
+   exacto del `background-position` de antes (rutas en porcentajes
+   atados al tamaño de cada superficie); el barrido lento en diagonal
+   que se ve es equivalente, no idéntico. */
+.sdn-grid::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  will-change: transform;
+  background-image:
     radial-gradient(circle at 50% 50%, var(--sdn-grid-a), transparent 60%),
     radial-gradient(circle at 50% 50%, var(--sdn-grid-b), transparent 60%),
     radial-gradient(ellipse at 50% 50%, var(--sdn-grid-c), transparent 60%);
-  background-size:
-    12px 20.7846097px,
-    12px 20.7846097px,
-    200% 200%,
-    200% 200%,
-    200% 20.7846097px;
-  background-position:
-    var(--p),
-    0% 0%,
-    0% 0%,
-    0% 0px;
+  background-size: 100% 100%, 100% 100%, 100% 10%;
   animation: sdn-grid-drift 40s linear infinite;
 }
 
@@ -733,23 +795,32 @@ body[data-sdn-lock="true"] {
 }
 
 @keyframes sdn-grid-drift {
-  from {
-    background-position:
-      var(--p),
-      800% 400%,
-      1000% -400%,
-      400% 41.5692194px;
-  }
-  to {
-    background-position:
-      var(--p),
-      0% 0%,
-      0% 0%,
-      0% 0%;
-  }
+  from { transform: translate3d(20%, 10%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 
-/* ── Movimiento reducido ──────────────────────────────────── */
+/* ── Tarjeta de valores — hover bouncy ──────────────────────────
+   Pedido explícito: un rebote con overshoot al pasar el cursor, no
+   el ease-out estándar del resto del sitio. La curva "back out"
+   —sube un poco más de lo que va a quedarse y vuelve— es la que
+   usan la mayoría de librerías de animación para simular un
+   resorte. El `*` universal de movimiento reducido, más abajo, ya
+   neutraliza esta transición sin que haga falta repetirla aquí. */
+.sdn-value-card {
+  transition: transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 150ms ease;
+}
+
+.sdn-value-card:hover {
+  transform: translateY(-6px) scale(1.04);
+  border-color: var(--color-accent-2);
+}
+
+/* ── Movimiento reducido ──────────────────────────────────────
+   Regla de oro de este bloque: nada desaparece, todo se queda quieto.
+   El visitante que pide menos movimiento sigue viendo la misma página,
+   no una versión recortada.
+   ───────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -788,8 +859,37 @@ body[data-sdn-lock="true"] {
     display: none;
   }
 
+  /* El carrusel se convierte en una lista deslizable normal.
+     `animation: none` explícito y no solo la duración global de arriba:
+     0.01 ms no detiene el riel, lo dispara de golpe hasta el final.
+     Los clones se ocultan — siete tarjetas, no catorce. */
+  .sdn-marquee {
+    overflow-x: auto;
+    mask-image: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-rule) transparent;
+  }
+
+  .sdn-marquee__track {
+    animation: none !important;
+    width: auto;
+  }
+
+  .sdn-marquee__track > [aria-hidden="true"] {
+    display: none;
+  }
+
+  /* El botón conserva el cambio de estado, sin el viaje del degradado. */
+  .sdn-cta {
+    transition: none !important;
+  }
+
+  .sdn-cta:hover {
+    background-position: center center;
+  }
+
   /* La retícula se queda quieta; el patrón sigue ahí. */
-  .sdn-grid {
+  .sdn-grid::before {
     animation: none !important;
   }
 }

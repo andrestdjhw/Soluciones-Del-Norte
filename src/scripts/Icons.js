@@ -119,3 +119,50 @@ export function TikTokIcon(props) {
     </svg>
   )
 }
+
+/* ── Banderas del selector de idioma ─────────────────────────────
+   Dibujos propios y simplificados (franjas y formas geométricas,
+   sin el escudo nacional ni ningún emblema con derechos), recortados
+   en círculo. Llevan su propio color de relleno — no heredan
+   currentColor como los íconos de trazo de arriba. */
+
+export function FlagUSIcon(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
+      <defs>
+        <clipPath id="sdn-flag-us"><circle cx="12" cy="12" r="11" /></clipPath>
+      </defs>
+      <g clipPath="url(#sdn-flag-us)">
+        <rect x="1" y="1" width="22" height="22" fill="#fff" />
+        <g fill="#b22234">
+          <rect x="1" y="1" width="22" height="1.7" />
+          <rect x="1" y="4.4" width="22" height="1.7" />
+          <rect x="1" y="7.8" width="22" height="1.7" />
+          <rect x="1" y="11.15" width="22" height="1.7" />
+          <rect x="1" y="14.5" width="22" height="1.7" />
+          <rect x="1" y="17.9" width="22" height="1.7" />
+          <rect x="1" y="21.3" width="22" height="1.7" />
+        </g>
+        <rect x="1" y="1" width="10" height="11.9" fill="#3c3b6e" />
+      </g>
+      <circle cx="12" cy="12" r="11" fill="none" stroke="rgba(0,0,0,.14)" />
+    </svg>
+  )
+}
+
+export function FlagMXIcon(props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" {...props}>
+      <defs>
+        <clipPath id="sdn-flag-mx"><circle cx="12" cy="12" r="11" /></clipPath>
+      </defs>
+      <g clipPath="url(#sdn-flag-mx)">
+        <rect x="1" y="1" width="7.33" height="22" fill="#006847" />
+        <rect x="8.33" y="1" width="7.33" height="22" fill="#fff" />
+        <rect x="15.66" y="1" width="7.34" height="22" fill="#ce1126" />
+        <circle cx="12" cy="12" r="2.1" fill="none" stroke="#8a6d3b" strokeWidth="1" />
+      </g>
+      <circle cx="12" cy="12" r="11" fill="none" stroke="rgba(0,0,0,.14)" />
+    </svg>
+  )
+}
