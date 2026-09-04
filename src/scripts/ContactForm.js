@@ -310,11 +310,19 @@ export default function ContactForm(props) {
   const pad = compact ? "px-3.5 py-2.5" : "px-4 py-3"
   const gap = compact ? "space-y-4" : "space-y-5"
 
+  /* La versión "compact" solo la usa el hero de home, que ahora tiene
+     video de fondo: un cristal esmerilado deja asomar el video detrás
+     sin sacrificar legibilidad (el fondo sigue siendo blanco, solo
+     que translúcido — el texto y los campos no cambian de color). */
+  const cardCls = compact
+    ? "rounded-sm border border-paper bg-paper/75 shadow-[0_20px_50px_rgba(29,24,22,0.25)] backdrop-blur-md"
+    : "sdn-frame rounded-sm border border-rule bg-paper-2"
+
   /* ── Estado: enviado ─────────────────────────────────────── */
   if (status === "success") {
     return (
       <div
-        className={`rounded-sm border border-rule bg-paper-2 ${compact ? "p-6" : "p-8"}`}
+        className={`${cardCls} ${compact ? "p-6" : "p-8"}`}
         role="status"
         aria-live="polite"
       >
@@ -335,7 +343,7 @@ export default function ContactForm(props) {
 
   /* ── Formulario ──────────────────────────────────────────── */
   return (
-    <div className={`rounded-sm border border-rule bg-paper-2 ${compact ? "p-6" : "p-8"}`}>
+    <div className={`${cardCls} ${compact ? "p-6" : "p-8"}`}>
       <form ref={formRef} onSubmit={handleSubmit} noValidate className={gap}>
 
         {/* Trampa de bots — fuera de pantalla, fuera del orden de tabulación */}

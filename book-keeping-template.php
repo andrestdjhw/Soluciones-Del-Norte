@@ -178,6 +178,31 @@ $sdn_stages = array(
 	array( '3', $c['st3'], $c['get'], null ),
 	array( '4', $c['st4'], $c['who'], null ),
 );
+
+/* Mismo mecanismo que el titular de home-template.php: el H1 se
+   trocea en palabras con CSS puro (.sdn-kinetic-word), cada una
+   entra por separado en vez del bloque completo de una vez. Los tres
+   tonos de marca, para el ciclo de las tarjetas de "En corto" del
+   FAQ más abajo — igual que en about/home. */
+$sdn_hero_words = explode( ' ', $c['h1'] );
+$sdn_tones      = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-accent-2)' );
+
+/* Cinta en marcha bajo el hero — mismo componente que home/about
+   (.sdn-ticker), reutilizando las claves de traducción de
+   about.facts.N.dt/dd: son los mismos cuatro datos reales (oficina,
+   cobertura, idiomas, horario), no información nueva. El primer
+   ítem es este servicio (clave propia de esta página). */
+$sdn_ticker_facts = $is_en ? array(
+	array( 'Office', 'Hillsboro, OR' ),
+	array( 'Coverage', 'Oregon + Washington' ),
+	array( 'Languages', 'Spanish / English' ),
+	array( 'Hours', 'Mon–Fri 9:00–18:00 · Sat 10:00–14:00' ),
+) : array(
+	array( 'Oficina', 'Hillsboro, OR' ),
+	array( 'Cobertura', 'Oregon + Washington' ),
+	array( 'Idiomas', 'Español / Inglés' ),
+	array( 'Horario', 'Lun a Vie 9:00–18:00 · Sáb 10:00–14:00' ),
+);
 ?>
 
 <!-- ══════════════ Hero — foto de fondo ══════════════
@@ -186,48 +211,73 @@ $sdn_stages = array(
      que si no carga el contraste del texto no se pierde. Sin
      .sdn-grid: la retícula encima de una foto sería una textura
      sobre otra y no se leería ninguna de las dos.
+
+     La entrada usa el mismo mecanismo que el hero de home: CSS puro
+     (.sdn-hero-fade/.sdn-kinetic-word/.sdn-hero-rule), sin depender
+     del observer — es contenido siempre visible al cargar, así que
+     no hace falta esperar a que algo "entre" en la ventana.
      ═══════════════════════════════════════════════════════════════ -->
 <section class="sdn-surface sdn-surface--video text-paper border-b border-paper/15">
   <?php if ( $sdn_img_hero ) : ?>
     <img src="<?php echo esc_url( $sdn_img_hero['src'] ); ?>"
          <?php if ( $sdn_img_hero['srcset'] ) : ?>srcset="<?php echo esc_attr( $sdn_img_hero['srcset'] ); ?>" sizes="100vw"<?php endif; ?>
          alt="" aria-hidden="true" fetchpriority="high"
-         class="absolute inset-0 h-full w-full object-cover">
+         class="sdn-reveal-scale absolute inset-0 h-full w-full object-cover">
   <?php endif; ?>
   <div class="sdn-veil" aria-hidden="true"></div>
 
   <div class="sdn-layer mx-auto max-w-[1200px] px-6 pb-16 pt-16 lg:px-12 lg:pb-20 lg:pt-24">
-    <div data-reveal>
 
-      <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
-        <a href="<?php echo esc_url( $sdn_services ); ?>"
-           data-i18n="svc.common.crumb" data-i18n-href="route.services"
-           class="inline-block whitespace-nowrap transition-colors duration-150 hover:text-accent-2">
-          <?php echo esc_html( $c['crumb'] ); ?>
-        </a>
-        <span aria-hidden="true" class="px-2 text-rule">/</span>
-        <span data-i18n="svc.bookkeeping.name" class="text-paper"><?php echo esc_html( $c['name'] ); ?></span>
-      </p>
-
-      <h1 data-i18n="svc.bookkeeping.h1" class="sdn-measure-sm mt-5 font-display text-[2rem] font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-[2.75rem] lg:text-5xl">
-        <?php echo esc_html( $c['h1'] ); ?>
-      </h1>
-
-      <div class="mt-6 h-1 w-20 bg-accent" aria-hidden="true"></div>
-
-      <p data-i18n="svc.bookkeeping.deck" class="sdn-measure mt-8 text-[1.125rem] leading-[1.65] text-rule">
-        <?php echo esc_html( $c['deck'] ); ?>
-      </p>
-
-      <a href="<?php echo esc_url( $sdn_contact ); ?>"
-         data-i18n="svc.common.cta" data-i18n-href="route.contact"
-         class="sdn-cta mt-9">
-        <?php echo esc_html( $c['cta'] ); ?>
+    <p class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
+      <a href="<?php echo esc_url( $sdn_services ); ?>"
+         data-i18n="svc.common.crumb" data-i18n-href="route.services"
+         class="inline-block whitespace-nowrap transition-colors duration-150 hover:text-accent-2">
+        <?php echo esc_html( $c['crumb'] ); ?>
       </a>
+      <span aria-hidden="true" class="px-2 text-rule">/</span>
+      <span data-i18n="svc.bookkeeping.name" class="text-paper"><?php echo esc_html( $c['name'] ); ?></span>
+    </p>
 
+    <h1 data-i18n="svc.bookkeeping.h1" class="sdn-measure-sm mt-5 font-display text-[2rem] font-bold leading-[1.05] tracking-[-0.02em] text-paper sm:text-[2.75rem] lg:text-5xl">
+      <?php foreach ( $sdn_hero_words as $wi => $word ) : ?><span class="sdn-kinetic-word"><span style="--i:<?php echo (int) $wi; ?>"><?php echo esc_html( $word ); ?></span></span><?php echo ' '; ?><?php endforeach; ?>
+    </h1>
+
+    <div class="sdn-hero-rule mt-6 h-1 bg-accent" aria-hidden="true"></div>
+
+    <p data-i18n="svc.bookkeeping.deck" class="sdn-hero-fade sdn-hero-fade--2 sdn-measure mt-8 text-[1.125rem] leading-[1.65] text-rule">
+      <?php echo esc_html( $c['deck'] ); ?>
+    </p>
+
+    <a href="<?php echo esc_url( $sdn_contact ); ?>"
+       data-i18n="svc.common.cta" data-i18n-href="route.contact"
+       class="sdn-cta sdn-magnetic sdn-hero-fade sdn-hero-fade--3 mt-9">
+      <?php echo esc_html( $c['cta'] ); ?>
+    </a>
+
+    <div class="sdn-scrollcue" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
     </div>
+
   </div>
 </section>
+
+<!-- Cinta en marcha — ver comentario de $sdn_ticker_facts más arriba. -->
+<div class="sdn-ticker" aria-hidden="true">
+  <div class="sdn-ticker__track">
+    <span class="sdn-ticker__item" data-i18n="svc.bookkeeping.name"><?php echo esc_html( $c['name'] ); ?></span>
+    <span class="sdn-ticker__dot">&#9670;</span>
+    <?php for ( $tick_pass = 0; $tick_pass < 2; $tick_pass++ ) : ?>
+      <?php foreach ( $sdn_ticker_facts as $tick_i => $tick_fact ) : ?>
+        <span class="sdn-ticker__item">
+          <span data-i18n="about.facts.<?php echo esc_attr( $tick_i ); ?>.dt"><?php echo esc_html( $tick_fact[0] ); ?></span>
+          <span>&nbsp;·&nbsp;</span>
+          <span data-i18n="about.facts.<?php echo esc_attr( $tick_i ); ?>.dd"><?php echo esc_html( $tick_fact[1] ); ?></span>
+        </span>
+        <span class="sdn-ticker__dot">&#9670;</span>
+      <?php endforeach; ?>
+    <?php endfor; ?>
+  </div>
+</div>
 
 <!-- ══════════════ Etapas 1 – 4 ══════════════
      Rail de texto fijo (sticky en desktop) a la izquierda, columna de
@@ -256,7 +306,7 @@ $sdn_stages = array(
      tocar `.sdn-surface` para las demás secciones del sitio que sí
      dependen de ese recorte, y el recorte de `.sdn-grid` se mueve a
      un envoltorio propio que hace exactamente lo mismo. -->
-<section class="sdn-surface sdn-surface--paper border-b border-rule" style="overflow: visible;">
+<section class="sdn-surface sdn-surface--paper sdn-edge-accent border-b border-rule" style="overflow: visible;">
   <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
     <div class="sdn-grid"></div>
   </div>
@@ -264,18 +314,21 @@ $sdn_stages = array(
   <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-24">
     <div class="lg:grid lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-16">
 
-      <div data-reveal class="lg:sticky lg:top-[calc(var(--sdn-bar-h)+1rem)] lg:self-start">
-        <p data-i18n="svc.common.stages_eyebrow" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
-          <?php echo esc_html( $c['stages_eyebrow'] ); ?>
-        </p>
-        <h2 data-i18n="svc.common.stages_h2" class="mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-[2.25rem]">
+      <div data-reveal-group class="lg:sticky lg:top-[calc(var(--sdn-bar-h)+1rem)] lg:self-start">
+        <div class="sdn-reveal-stagger flex flex-wrap items-center justify-between gap-3">
+          <p data-i18n="svc.common.stages_eyebrow" class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
+            <?php echo esc_html( $c['stages_eyebrow'] ); ?>
+          </p>
+          <span class="sdn-tag" aria-hidden="true">01 – <?php echo esc_html( sprintf( '%02d', count( $sdn_stages ) ) ); ?></span>
+        </div>
+        <h2 data-i18n="svc.common.stages_h2" class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-[2.25rem]">
           <?php echo esc_html( $c['stages_h2'] ); ?>
         </h2>
-        <p data-i18n="svc.common.stages_note" class="sdn-measure-sm mt-5 text-[0.9375rem] leading-relaxed text-muted">
+        <p data-i18n="svc.common.stages_note" class="sdn-reveal-stagger sdn-measure-sm mt-5 text-[0.9375rem] leading-relaxed text-muted">
           <?php echo esc_html( $c['stages_note'] ); ?>
         </p>
 
-        <div class="mt-10 hidden lg:block">
+        <div class="sdn-reveal-stagger mt-10 hidden lg:block">
           <div class="h-px w-full bg-rule-2">
             <div data-sdn-steps-bar
                  class="h-px bg-accent-2 transition-[width] duration-300 ease-out"
@@ -341,24 +394,31 @@ $sdn_stages = array(
      Fila horizontal de texto, no seis tarjetas: es navegación
      lateral, no un segundo menú. El servicio actual se excluye.
      ═════════════════════════════════════════════════════ -->
-<section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
+<section class="sdn-surface sdn-surface--paper-2 sdn-edge-accent border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
+  <div class="sdn-stripe-bg" aria-hidden="true"></div>
 
   <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-12 lg:px-12 lg:py-14">
-    <div data-reveal class="lg:grid lg:grid-cols-[6rem_minmax(0,1fr)] lg:gap-8">
+    <div data-reveal-group>
 
-      <p data-i18n="svc.common.more_l" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted lg:pt-1">
-        <?php echo esc_html( $c['more_l'] ); ?>
-      </p>
+      <div class="sdn-reveal-stagger flex flex-wrap items-center gap-3">
+        <p data-i18n="svc.common.more_l" class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
+          <?php echo esc_html( $c['more_l'] ); ?>
+        </p>
+      </div>
 
-      <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-3 lg:mt-0">
+      <ul class="sdn-reveal-stagger mt-5 flex flex-wrap gap-3">
         <?php foreach ( sdn_services() as $key => $svc ) : ?>
           <?php if ( $key === $sdn_key ) { continue; } ?>
           <li>
             <a href="<?php echo esc_url( home_url( $svc['path'] ) ); ?>"
                data-i18n="svc.<?php echo esc_attr( $key ); ?>.name" data-i18n-href="svc.<?php echo esc_attr( $key ); ?>.href"
-               class="whitespace-nowrap text-[0.9375rem] text-ink-2 underline decoration-rule underline-offset-4 transition-colors duration-150 hover:text-accent-2 hover:decoration-accent">
+               class="sdn-tilt group flex items-center gap-2 whitespace-nowrap rounded-sm border border-rule bg-paper px-4 py-2.5 text-[0.9375rem] text-ink-2 transition-colors duration-150 hover:border-accent hover:text-accent-2">
               <?php echo esc_html( $svc['name'] ); ?>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                   class="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-1" aria-hidden="true">
+                <path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>
+              </svg>
             </a>
           </li>
         <?php endforeach; ?>
@@ -388,7 +448,7 @@ $sdn_stages = array(
 
   <div class="sdn-layer grid lg:grid-cols-2 lg:items-stretch">
 
-    <figure data-reveal>
+    <figure class="sdn-wipe sdn-frame overflow-hidden">
       <?php if ( $sdn_img_faq ) : ?>
         <img src="<?php echo esc_url( $sdn_img_faq['src'] ); ?>"
              <?php if ( $sdn_img_faq['srcset'] ) : ?>srcset="<?php echo esc_attr( $sdn_img_faq['srcset'] ); ?>" sizes="100vw"<?php endif; ?>
@@ -396,28 +456,29 @@ $sdn_stages = array(
              alt="<?php echo esc_attr( $c['faq_alt'] ); ?>"
              width="<?php echo esc_attr( $sdn_img_faq['width'] ); ?>" height="<?php echo esc_attr( $sdn_img_faq['height'] ); ?>"
              loading="lazy" decoding="async"
-             class="aspect-[4/3] h-full w-full object-cover lg:aspect-auto">
+             class="sdn-wipe__img aspect-[4/3] h-full w-full object-cover lg:aspect-auto">
       <?php endif; ?>
     </figure>
 
     <div class="px-6 py-16 lg:flex lg:flex-col lg:justify-center lg:px-16 lg:py-16 xl:px-20">
-      <div data-reveal>
-        <p data-i18n="svc.common.faq_l" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
+      <div data-reveal-group>
+        <p data-i18n="svc.common.faq_l" class="sdn-reveal-stagger sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
           <?php echo esc_html( $c['faq_l'] ); ?>
         </p>
-        <h2 data-i18n="svc.bookkeeping.faq_h2" class="mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-[2.25rem]">
+        <h2 data-i18n="svc.bookkeeping.faq_h2" class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-[2.25rem]">
           <?php echo esc_html( $c['faq_h2'] ); ?>
         </h2>
-        <p data-i18n="svc.bookkeeping.faq_note" class="sdn-measure-sm mt-5 text-[0.9375rem] leading-relaxed text-muted">
+        <p data-i18n="svc.bookkeeping.faq_note" class="sdn-reveal-stagger sdn-measure-sm mt-5 text-[0.9375rem] leading-relaxed text-muted">
           <?php echo esc_html( $c['faq_note'] ); ?>
         </p>
       </div>
 
-      <div data-reveal="80" class="mt-10">
+      <div data-reveal-group class="mt-10 space-y-3">
         <?php foreach ( $c['faqs'] as $i => $faq ) : ?>
-          <details class="sdn-faq group border-b border-rule <?php echo 0 === $i ? 'border-t' : ''; ?>">
-            <summary class="flex cursor-pointer items-start justify-between gap-6 py-5">
-              <span data-i18n="svc.bookkeeping.faq.<?php echo esc_attr( $i ); ?>.q" class="sdn-measure-sm font-display text-[1.0625rem] font-semibold leading-snug text-ink transition-colors duration-150 group-hover:text-accent-2">
+          <details class="sdn-faq2 sdn-reveal-stagger group" style="--faq-tone: <?php echo esc_attr( $sdn_tones[ $i % 3 ] ); ?>;">
+            <summary class="flex cursor-pointer items-start gap-4 py-5">
+              <span class="sdn-faq2__num mt-0.5 shrink-0" aria-hidden="true"><?php echo esc_html( str_pad( (string) ( $i + 1 ), 2, '0', STR_PAD_LEFT ) . ' / ' . str_pad( (string) count( $c['faqs'] ), 2, '0', STR_PAD_LEFT ) ); ?></span>
+              <span data-i18n="svc.bookkeeping.faq.<?php echo esc_attr( $i ); ?>.q" class="sdn-measure-sm flex-1 font-display text-[1.0625rem] font-semibold leading-snug text-ink transition-colors duration-150 group-hover:text-accent-2">
                 <?php echo esc_html( $faq[0] ); ?>
               </span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -425,7 +486,7 @@ $sdn_stages = array(
                 <path d="m6 9 6 6 6-6"/>
               </svg>
             </summary>
-            <p data-i18n="svc.bookkeeping.faq.<?php echo esc_attr( $i ); ?>.a" class="sdn-measure-sm pb-6 text-[1.0625rem] leading-[1.65] text-ink-2">
+            <p data-i18n="svc.bookkeeping.faq.<?php echo esc_attr( $i ); ?>.a" class="sdn-measure-sm py-1 pb-6 pl-[2.25rem] text-[1.0625rem] leading-[1.65] text-ink-2">
               <?php echo esc_html( $faq[1] ); ?>
             </p>
           </details>
@@ -451,9 +512,9 @@ $sdn_stages = array(
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
   <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
-    <div data-reveal class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
+    <div data-reveal-group class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
 
-      <div>
+      <div class="sdn-reveal-stagger">
         <h2 data-i18n="svc.bookkeeping.end_h2" class="sdn-measure-sm font-display text-[1.75rem] font-semibold leading-[1.15] sm:text-[2.25rem]">
           <?php echo esc_html( $c['end_h2'] ); ?>
         </h2>
@@ -462,15 +523,15 @@ $sdn_stages = array(
         </p>
       </div>
 
-      <div class="mt-8 flex flex-wrap items-center gap-3 lg:mt-0 lg:shrink-0">
+      <div class="sdn-reveal-stagger mt-8 flex flex-wrap items-center gap-3 lg:mt-0 lg:shrink-0">
         <a href="<?php echo esc_url( $sdn_contact ); ?>"
            data-i18n="svc.common.cta" data-i18n-href="route.contact"
-           class="sdn-cta">
+           class="sdn-cta sdn-magnetic">
           <?php echo esc_html( $c['cta'] ); ?>
         </a>
         <a href="<?php echo esc_url( $sdn_services ); ?>"
            data-i18n="svc.common.end_alt" data-i18n-href="route.services"
-           class="sdn-cta sdn-cta--ghost">
+           class="sdn-cta sdn-cta--ghost sdn-magnetic">
           <?php echo esc_html( $c['end_alt'] ); ?>
         </a>
       </div>

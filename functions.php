@@ -213,6 +213,7 @@ function sdn_site_data() {
 		'facebook'      => 'https://www.facebook.com/profile.php?id=61592189014190',
 		'instagram'     => 'https://www.instagram.com/solucionesdelnorte_us',
 		'tiktok'        => 'https://www.tiktok.com/@solucionesnorte',
+		'google_business' => 'https://www.google.com/maps/place/Soluciones+del+Norte/@45.5337104,-122.8832421,834m/data=!3m2!1e3!4b1!4m6!3m5!1s0x54950f1375801945:0xd85645635dc4f439!8m2!3d45.5337104!4d-122.8806672',
 		'agency_url'    => 'https://828marketingsolutions.com',
 		'lang'          => sdn_current_lang(),
 	);

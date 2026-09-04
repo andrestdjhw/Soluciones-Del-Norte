@@ -39,8 +39,8 @@ const COPY = {
     labelEmail: "Correo",
     labelOffice: "Oficina",
     labelHours: "Horario",
-    hours: "Lunes a viernes, 10:00–14:00",
-    hoursNote: "Cerrado fines de semana y días festivos.",
+    hours: "Lunes a viernes, 9:00–18:00 · Sábado, 10:00–14:00",
+    hoursNote: "Cerrado domingos y días festivos.",
     directions: "Cómo llegar",
     navLabel: "Enlaces del pie",
     links: [
@@ -62,8 +62,8 @@ const COPY = {
     labelEmail: "Email",
     labelOffice: "Office",
     labelHours: "Hours",
-    hours: "Monday to Friday, 10:00–14:00",
-    hoursNote: "Closed weekends and holidays.",
+    hours: "Monday to Friday, 9:00–18:00 · Saturday, 10:00–14:00",
+    hoursNote: "Closed Sundays and holidays.",
     directions: "Getting here",
     navLabel: "Footer links",
     // Sin páginas /en todavía (Pendiente 01 en functions.php): estos

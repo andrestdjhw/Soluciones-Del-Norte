@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
 import {
   PhoneIcon, MailIcon, PinIcon, ChevronIcon, ArrowIcon,
-  FacebookIcon, InstagramIcon, TikTokIcon,
+  FacebookIcon, InstagramIcon, TikTokIcon, GoogleIcon,
 } from "./icons"
 import LanguageToggle from "./LanguageToggle"
 import { useLang } from "./langState"
@@ -25,6 +25,8 @@ const DEFAULTS = {
   facebook: "https://www.facebook.com/profile.php?id=61592189014190",
   instagram: "https://www.instagram.com/solucionesdelnorte_us",
   tiktok: "https://www.tiktok.com/@solucionesnorte",
+  googleBusiness:
+    "https://www.google.com/maps/place/Soluciones+del+Norte/@45.5337104,-122.8832421,834m/data=!3m2!1e3!4b1!4m6!3m5!1s0x54950f1375801945:0xd85645635dc4f439!8m2!3d45.5337104!4d-122.8806672",
   lang: "es",
 }
 
@@ -47,7 +49,7 @@ const COPY = {
     openMenu: "Menú",
     closeMenu: "Cerrar",
     logoAlt: "Soluciones del Norte — inicio",
-    hoursShort: "Lun a Vie, 10:00–14:00",
+    hoursShort: "Lun a Vie 9:00–18:00 · Sáb 10:00–14:00",
     social: "Redes sociales",
   },
   en: {
@@ -68,7 +70,7 @@ const COPY = {
     openMenu: "Menu",
     closeMenu: "Close",
     logoAlt: "Soluciones del Norte — home",
-    hoursShort: "Mon to Fri, 10:00–14:00",
+    hoursShort: "Mon–Fri 9:00–18:00 · Sat 10:00–14:00",
     social: "Social media",
   },
 }
@@ -80,7 +82,7 @@ const SERVICES = {
     { href: "/servicios/contabilidad", name: "Contabilidad", desc: "Libros al día y cierre mensual." },
     { href: "/servicios/impuestos", name: "Impuestos", desc: "Declaraciones personales y de negocio." },
     { href: "/servicios/notaria", name: "Notaría y documentos", desc: "Certificación con cita en Hillsboro." },
-    { href: "/servicios/tiempo-y-asistencia", name: "Tiempo y asistencia", desc: "Horas ordenadas antes de la corrida." },
+    { href: "/servicios/tiempo-y-asistencia", name: "Tiempo y asistencia", desc: "Horas ordenadas antes del ciclo de nómina." },
     { href: "/servicios/auditorias-de-nomina", name: "Auditorías de nómina", desc: "Revisión de periodos anteriores." },
   ],
   /* Todavía no hay páginas de WordPress con prefijo /en (falta
@@ -98,7 +100,7 @@ const SERVICES = {
     { href: "/servicios/contabilidad", name: "Bookkeeping", desc: "Books kept current, monthly close." },
     { href: "/servicios/impuestos", name: "Taxes", desc: "Personal and business returns." },
     { href: "/servicios/notaria", name: "Notary and documents", desc: "Certification by appointment in Hillsboro." },
-    { href: "/servicios/tiempo-y-asistencia", name: "Time and attendance", desc: "Hours sorted before the run." },
+    { href: "/servicios/tiempo-y-asistencia", name: "Time and attendance", desc: "Hours sorted before the payroll run." },
     { href: "/servicios/auditorias-de-nomina", name: "Payroll audits", desc: "Review of prior periods." },
   ],
 }
@@ -274,6 +276,7 @@ export default function Navbar(props) {
                 { href: site.facebook, Icon: FacebookIcon, name: "Facebook" },
                 { href: site.instagram, Icon: InstagramIcon, name: "Instagram" },
                 { href: site.tiktok, Icon: TikTokIcon, name: "TikTok" },
+                { href: site.googleBusiness, Icon: GoogleIcon, name: "Google" },
               ].map(({ href, Icon, name }) => (
                 <a
                   key={name}
@@ -336,7 +339,7 @@ export default function Navbar(props) {
 
               <a
                 href={routes.contact}
-                className="hidden sdn-cta sdn-cta--sm md:inline-block"
+                className="!hidden sdn-cta sdn-cta--sm md:!inline-block"
               >
                 {t.cta}
               </a>

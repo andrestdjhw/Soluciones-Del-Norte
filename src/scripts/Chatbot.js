@@ -17,8 +17,13 @@ const DEFAULTS = {
   lang: "es",
 }
 
-/* Horario de oficina en la zona de la oficina, no en la del visitante. */
-const OFFICE = { tz: "America/Los_Angeles", open: 10, close: 14 }
+/* Horario de oficina en la zona de la oficina, no en la del visitante.
+   Lunes a viernes 9:00–18:00, sábado 10:00–14:00, domingo cerrado. */
+const OFFICE = {
+  tz: "America/Los_Angeles",
+  weekday: { open: 9, close: 18 },
+  saturday: { open: 10, close: 14 },
+}
 
 function isOfficeOpen(now = new Date()) {
   try {
@@ -30,10 +35,17 @@ function isOfficeOpen(now = new Date()) {
     }).formatToParts(now)
 
     const weekday = parts.find((p) => p.type === "weekday")?.value
-    const hour = Number(parts.find((p) => p.type === "hour")?.value)
+    let hour = Number(parts.find((p) => p.type === "hour")?.value)
+    if (hour === 24) hour = 0 // Intl puede devolver "24" a la medianoche
 
     const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri"]
-    return weekdays.includes(weekday) && hour >= OFFICE.open && hour < OFFICE.close
+    if (weekdays.includes(weekday)) {
+      return hour >= OFFICE.weekday.open && hour < OFFICE.weekday.close
+    }
+    if (weekday === "Sat") {
+      return hour >= OFFICE.saturday.open && hour < OFFICE.saturday.close
+    }
+    return false
   } catch {
     return true // si Intl falla, no bloqueamos nada
   }
@@ -49,7 +61,7 @@ const COPY = {
     open: "Abierto ahora",
     closed: "Cerrado ahora",
     closedNote: "Estamos cerrados. Deja tu mensaje y contestamos el siguiente día hábil.",
-    hours: "Lun a Vie, 10:00–14:00 (hora del Pacífico)",
+    hours: "Lun a Vie 9:00–18:00 · Sáb 10:00–14:00 (hora del Pacífico)",
     call: "Llamar",
     write: "Escribir un mensaje",
     restart: "Empezar de nuevo",
@@ -66,7 +78,7 @@ const COPY = {
     open: "Open now",
     closed: "Closed now",
     closedNote: "We're closed. Leave a message and we'll reply the next business day.",
-    hours: "Mon to Fri, 10:00–14:00 (Pacific time)",
+    hours: "Mon–Fri 9:00–18:00 · Sat 10:00–14:00 (Pacific time)",
     call: "Call",
     write: "Send a message",
     restart: "Start over",

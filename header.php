@@ -25,6 +25,7 @@
       data-facebook="<?php echo esc_attr( $sdn['facebook'] ); ?>"
       data-instagram="<?php echo esc_attr( $sdn['instagram'] ); ?>"
       data-tiktok="<?php echo esc_attr( $sdn['tiktok'] ); ?>"
+      data-google-business="<?php echo esc_attr( $sdn['google_business'] ); ?>"
       data-lang="<?php echo esc_attr( $sdn['lang'] ); ?>"
     ></div>
 
