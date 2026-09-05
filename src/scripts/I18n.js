@@ -90,7 +90,7 @@ const dict = {
     "home.cert.p1": "Los contratos estatales y municipales exigen reportes de nómina certificada. No es la misma nómina con otro formato: cambia lo que hay que declarar, con qué frecuencia y ante quién.",
     "home.cert.p2": "Un reporte incompleto puede retener tu pago hasta que se corrija. Nosotros los preparamos y los entregamos en el ciclo que el proyecto exige.",
     "home.cert.cta": "Ver nómina certificada",
-    "home.cert.alt": "Cuadrilla en una obra pública de Oregon",
+    "home.cert.alt": "Equipo de Soluciones del Norte revisando los valores de la empresa en una reunión",
 
     "home.how.eyebrow": "Cómo empieza",
     "home.how.h2": "Tres pasos hasta tu primera nómina.",
@@ -112,13 +112,6 @@ const dict = {
     "home.lang.h2": "El idioma no es un servicio adicional.",
     "home.lang.p": "Una carta del IRS o del Departamento de Ingresos no se entiende mejor porque alguien te la traduzca por teléfono. Te explicamos qué dice, qué te están pidiendo y qué pasa si no respondes — en el idioma en el que tomas decisiones.",
     "home.lang.alt": "Equipo de Soluciones del Norte en la oficina de Hillsboro",
-
-    "home.ops.phone": "Teléfono",
-    "home.ops.email": "Correo",
-    "home.ops.office": "Oficina",
-    "home.ops.hours": "Horario",
-    "home.ops.hours_v": "Lunes a viernes, 9:00–18:00 · Sábado, 10:00–14:00",
-    "home.ops.hours_n": "Cerrado domingos y días festivos",
 
     "home.faq.l": "Preguntas",
     "home.faq.h2": "Lo que se pregunta antes de la primera llamada.",
@@ -561,7 +554,7 @@ const dict = {
     "home.cert.p1": "State and city contracts require certified payroll reports. It isn’t the same payroll in a different format: what you report, how often, and to whom all change.",
     "home.cert.p2": "An incomplete report can hold your payment until it’s fixed. We prepare and file them on the cycle the project requires.",
     "home.cert.cta": "See certified payroll",
-    "home.cert.alt": "Crew on a public works site in Oregon",
+    "home.cert.alt": "Soluciones del Norte team reviewing the company’s values in a meeting",
 
     "home.how.eyebrow": "How it starts",
     "home.how.h2": "Three steps to your first payroll.",
@@ -583,13 +576,6 @@ const dict = {
     "home.lang.h2": "Language isn’t an add-on.",
     "home.lang.p": "A letter from the IRS or the Department of Revenue doesn’t get clearer because someone translates it over the phone. We explain what it says, what they’re asking for and what happens if you don’t answer — in the language you make decisions in.",
     "home.lang.alt": "Soluciones del Norte team at the Hillsboro office",
-
-    "home.ops.phone": "Phone",
-    "home.ops.email": "Email",
-    "home.ops.office": "Office",
-    "home.ops.hours": "Hours",
-    "home.ops.hours_v": "Monday to Friday, 9:00–18:00 · Saturday, 10:00–14:00",
-    "home.ops.hours_n": "Closed Sundays and holidays",
 
     "home.faq.l": "FAQ",
     "home.faq.h2": "What people ask before the first call.",

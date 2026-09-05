@@ -26,7 +26,7 @@ $sdn_lang = $sdn['lang'];
 $is_en    = ( 'en' === $sdn_lang );
 
 /* ── Imágenes ────────────────────────────────────────────── */
-$sdn_img_certified_url = content_url( '/uploads/2026/08/CuadrillaOregon.webp' );
+$sdn_img_certified_url = content_url( '/uploads/2026/09/NominaSeccionHome.png' );
 // Si algún día el archivo cambia de nombre o sale de la biblioteca,
 // cae al original en vez de romper la figura.
 $sdn_img_certified     = sdn_attachment_image( $sdn_img_certified_url ) ?: array(
@@ -101,25 +101,26 @@ $sdn_list = array_values( sdn_services() );
 $sdn_keys = array_keys( sdn_services() );
 
 /* ── Video de fondo — hero y bloque de cierre ───────────────
-   Dos archivos distintos a propósito: el hero usa el video de marca
-   (el mismo que graba la cara de la empresa, "About_Hero_SDN.mp4" —
-   el nombre viene de cuando solo iba a vivir en Nosotros, pero es el
-   que mejor abre la home) y el cierre se queda con la textura
+   Dos archivos distintos a propósito: el hero usa una toma de Portland
+   (atardecer en el Pacífico Noroeste — ubica la marca en la región
+   desde el primer segundo) y el cierre se queda con la textura
    abstracta, para que la banda final no repita el primer plano.
 
-   Ojo con la mayúscula: los archivos se subieron con mayúsculas y el
-   servidor de producción sí distingue mayúsculas de minúsculas.
+   Ojo con la mayúscula: los demás archivos de video del tema se
+   subieron con mayúsculas y el servidor de producción sí distingue
+   mayúsculas de minúsculas — este en particular va en minúsculas,
+   tal cual se subió.
 
    El póster es el primer fotograma: es lo que ve quien pide movimiento
    reducido y lo que tapa el hueco mientras el MP4 carga. Va vacío
    hasta que exista el archivo — con la cadena vacía el atributo no se
    imprime y no hay 404. Se genera con:
-     ffmpeg -i About_Hero_SDN.mp4 -vf "select=eq(n\,30)" \
-            -vframes 1 -q:v 80 about-hero-poster.webp
+     ffmpeg -i portland-oregon-usa-beautiful-sunset-pacific-n-2026-01-21-18-12-37-utc-1.mp4 \
+            -vf "select=eq(n\,30)" -vframes 1 -q:v 80 portland-hero-poster.webp
    y luego se devuelve la línea comentada de abajo. */
-$sdn_video_hero    = content_url( '/uploads/2026/08/About_Hero_SDN.mp4' );
+$sdn_video_hero    = content_url( '/uploads/2026/09/portland-oregon-usa-beautiful-sunset-pacific-n-2026-01-21-18-12-37-utc-1.mp4' );
 $sdn_video_hero_ps = '';
-// $sdn_video_hero_ps = content_url( '/uploads/2026/08/about-hero-poster.webp' );
+// $sdn_video_hero_ps = content_url( '/uploads/2026/09/portland-hero-poster.webp' );
 
 $sdn_video_bg     = content_url( '/uploads/2026/08/Abstract_blue_dark.mp4' );
 $sdn_video_poster = '';
@@ -173,7 +174,7 @@ $c = $is_en ? array(
 	'cert_p1'        => 'State and city contracts require certified payroll reports. It isn’t the same payroll in a different format: what you report, how often, and to whom all change.',
 	'cert_p2'        => 'An incomplete report can hold your payment until it’s fixed. We prepare and file them on the cycle the project requires.',
 	'cert_cta'       => 'See certified payroll',
-	'cert_alt'       => 'Crew on a public works site in Oregon',
+	'cert_alt'       => 'Soluciones del Norte team reviewing the company’s values in a meeting',
 
 	/* 04 · Cómo empieza */
 	'how_eyebrow'    => 'How it starts',
@@ -198,14 +199,6 @@ $c = $is_en ? array(
 	'lang_h2'        => 'Language isn’t an add-on.',
 	'lang_p'         => 'A letter from the IRS or the Department of Revenue doesn’t get clearer because someone translates it over the phone. We explain what it says, what they’re asking for and what happens if you don’t answer — in the language you make decisions in.',
 	'lang_alt'       => 'Soluciones del Norte team at the Hillsboro office',
-
-	/* 07 · Datos de operación */
-	'ops_phone'      => 'Phone',
-	'ops_email'      => 'Email',
-	'ops_office'     => 'Office',
-	'ops_hours'      => 'Hours',
-	'ops_hours_v'    => 'Monday to Friday, 9:00–18:00 · Saturday, 10:00–14:00',
-	'ops_hours_n'    => 'Closed Sundays and holidays',
 
 	/* Preguntas frecuentes — versión general, no atada a un servicio.
 	   Misma sección (copy + markup) que about-template.php, después de
@@ -241,7 +234,7 @@ $c = $is_en ? array(
 		),
 	),
 
-	/* 08 · Cierre */
+	/* 07 · Cierre */
 	'end_h2'         => 'How many employees do you have, and in which states?',
 	'end_deck'       => 'With those two answers we can already tell you what you need. Write to us and we’ll set up the intake call.',
 	'end_note'       => 'We reply during office hours, Monday to Friday.',
@@ -291,7 +284,7 @@ $c = $is_en ? array(
 	'cert_p1'        => 'Los contratos estatales y municipales exigen reportes de nómina certificada. No es la misma nómina con otro formato: cambia lo que hay que declarar, con qué frecuencia y ante quién.',
 	'cert_p2'        => 'Un reporte incompleto puede retener tu pago hasta que se corrija. Nosotros los preparamos y los entregamos en el ciclo que el proyecto exige.',
 	'cert_cta'       => 'Ver nómina certificada',
-	'cert_alt'       => 'Cuadrilla en una obra pública de Oregon',
+	'cert_alt'       => 'Equipo de Soluciones del Norte revisando los valores de la empresa en una reunión',
 
 	/* 04 · Cómo empieza */
 	'how_eyebrow'    => 'Cómo empieza',
@@ -316,14 +309,6 @@ $c = $is_en ? array(
 	'lang_h2'        => 'El idioma no es un servicio adicional.',
 	'lang_p'         => 'Una carta del IRS o del Departamento de Ingresos no se entiende mejor porque alguien te la traduzca por teléfono. Te explicamos qué dice, qué te están pidiendo y qué pasa si no respondes — en el idioma en el que tomas decisiones.',
 	'lang_alt'       => 'Equipo de Soluciones del Norte en la oficina de Hillsboro',
-
-	/* 07 · Datos de operación */
-	'ops_phone'      => 'Teléfono',
-	'ops_email'      => 'Correo',
-	'ops_office'     => 'Oficina',
-	'ops_hours'      => 'Horario',
-	'ops_hours_v'    => 'Lunes a viernes, 9:00–18:00 · Sábado, 10:00–14:00',
-	'ops_hours_n'    => 'Cerrado domingos y días festivos',
 
 	'faq_l'     => 'Preguntas',
 	'faq_h2'    => 'Lo que se pregunta antes de la primera llamada.',
@@ -355,7 +340,7 @@ $c = $is_en ? array(
 		),
 	),
 
-	/* 08 · Cierre */
+	/* 07 · Cierre */
 	'end_h2'         => '¿Cuántos empleados tienes y en qué estados?',
 	'end_deck'       => 'Con esas dos respuestas ya podemos decirte qué necesitas. Escríbenos y coordinamos la consulta inicial.',
 	'end_note'       => 'Respondemos en horario de oficina, de lunes a viernes.',
@@ -397,7 +382,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 pb-24 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:pb-32 lg:pt-24">
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 pb-24 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:pb-32 lg:pt-24">
 
     <div>
       <p class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
@@ -437,10 +422,10 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
          data-density="compact"
          data-persistent="true"
          data-lang="<?php echo esc_attr( $sdn_lang ); ?>">
-      <div class="sdn-frame rounded-sm border border-paper bg-paper/75 p-6 shadow-[0_20px_50px_rgba(29,24,22,0.25)] backdrop-blur-md">
-        <p class="font-mono text-[0.9375rem] leading-relaxed text-ink">
-          <a href="<?php echo esc_url( $sdn_tel ); ?>" class="tabular-nums underline decoration-rule underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['phone1'] ); ?></a><br>
-          <a href="mailto:<?php echo esc_attr( $sdn['email'] ); ?>" class="break-all underline decoration-rule underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['email'] ); ?></a>
+      <div class="sdn-frame rounded-sm border border-paper/15 bg-deep/70 p-6 shadow-[0_20px_50px_rgba(8,10,20,0.45)] backdrop-blur-md">
+        <p class="font-mono text-[0.9375rem] leading-relaxed text-paper">
+          <a href="<?php echo esc_url( $sdn_tel ); ?>" class="tabular-nums underline decoration-paper/30 underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['phone1'] ); ?></a><br>
+          <a href="mailto:<?php echo esc_attr( $sdn['email'] ); ?>" class="break-all underline decoration-paper/30 underline-offset-4 hover:decoration-accent"><?php echo esc_html( $sdn['email'] ); ?></a>
         </p>
       </div>
     </div>
@@ -478,7 +463,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-20 lg:px-12 lg:py-28">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-20 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">02</span>
 
@@ -487,7 +472,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
         <p class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted" data-i18n="home.svc.eyebrow">
           <?php echo esc_html( $c['svc_eyebrow'] ); ?>
         </p>
-        <span class="sdn-tag" aria-hidden="true">02 / 08</span>
+        <span class="sdn-tag" aria-hidden="true">02 / 07</span>
       </div>
       <h2 class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl" data-i18n="home.svc.h2">
         <?php echo esc_html( $c['svc_h2'] ); ?>
@@ -495,30 +480,6 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
       <p class="sdn-reveal-stagger mt-5 leading-relaxed text-ink-2" data-i18n="home.svc.deck">
         <?php echo esc_html( $c['svc_deck'] ); ?>
       </p>
-    </div>
-
-    <div class="sdn-reveal-up sdn-stat-row sdn-frame mt-10 grid sm:grid-cols-3">
-      <div class="sdn-stat-card">
-        <span class="sdn-stat-card__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/><rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>
-        </span>
-        <div class="sdn-stat-card__num"><span class="sdn-count" data-count-to="<?php echo (int) count( $sdn_list ); ?>">0</span></div>
-        <p class="sdn-stat-card__label" data-i18n="home.stats.services"><?php echo esc_html( $c['stats_services'] ); ?></p>
-      </div>
-      <div class="sdn-stat-card">
-        <span class="sdn-stat-card__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        </span>
-        <div class="sdn-stat-card__num"><span class="sdn-count" data-count-to="2">0</span></div>
-        <p class="sdn-stat-card__label" data-i18n="home.stats.states"><?php echo esc_html( $c['stats_states'] ); ?></p>
-      </div>
-      <div class="sdn-stat-card">
-        <span class="sdn-stat-card__icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 12.2c0 4-3.8 7.2-8.5 7.2a9.8 9.8 0 0 1-2.6-.35L4.5 20.5l1.35-3.9A6.9 6.9 0 0 1 3.5 12.2C3.5 8.2 7.3 5 12 5s8.5 3.2 8.5 7.2Z"/></svg>
-        </span>
-        <div class="sdn-stat-card__num"><span class="sdn-count" data-count-to="2">0</span></div>
-        <p class="sdn-stat-card__label" data-i18n="home.stats.langs"><?php echo esc_html( $c['stats_langs'] ); ?></p>
-      </div>
     </div>
 
     <div class="sdn-reveal-up mt-14 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
@@ -530,7 +491,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
       </p>
     </div>
 
-    <div class="sdn-reveal-scale sdn-marquee mt-4">
+    <div class="sdn-reveal-scale sdn-marquee sdn-marquee--no-fade sdn-marquee--full-bleed mt-4">
       <ul class="sdn-marquee__track">
 
         <?php
@@ -614,13 +575,13 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 
   <div class="sdn-layer grid lg:grid-cols-2 lg:items-stretch">
 
-    <div data-reveal-group class="relative px-6 py-20 lg:flex lg:flex-col lg:justify-center lg:px-16 lg:py-16 xl:px-20">
+    <div data-reveal-group class="relative px-3 py-20 lg:flex lg:flex-col lg:justify-center lg:px-9 lg:py-16 xl:px-12">
       <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">03</span>
       <div class="sdn-reveal-stagger flex flex-wrap items-center justify-between gap-3">
         <p class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted" data-i18n="home.lang.eyebrow">
           <?php echo esc_html( $c['lang_eyebrow'] ); ?>
         </p>
-        <span class="sdn-tag" aria-hidden="true">03 / 08</span>
+        <span class="sdn-tag" aria-hidden="true">03 / 07</span>
       </div>
       <h2 class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl" data-i18n="home.lang.h2">
         <?php echo esc_html( $c['lang_h2'] ); ?>
@@ -649,41 +610,69 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
   </div>
 </section>
 
-<!-- ══════════════ 04 · CÓMO EMPIEZA — texto izquierda / pasos derecha ══════════════ -->
-<section class="sdn-surface sdn-surface--paper border-b border-rule">
-  <div class="sdn-grid" aria-hidden="true"></div>
+<!-- ══════════════ 04 · CÓMO EMPIEZA — texto izquierda / pasos derecha ══════════════
+     Mismo mecanismo de "paso activo" que las páginas de servicio
+     (Steps.js): la columna de texto queda fija al hacer scroll, con
+     una barra de progreso y un contador; el paso de la derecha que
+     cruza el centro de la ventana se resalta (número en acento, línea
+     que se rellena) y cada uno entra con su propio data-reveal
+     escalonado — no un fundido en bloque.
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+     `overflow: visible` en la sección y el recorte de `.sdn-grid`
+     movido a su propio envoltorio: el mismo ajuste que usan esas
+     páginas para que `lg:sticky` no quede cortado por el
+     `overflow: hidden` de `.sdn-surface`. -->
+<section class="sdn-surface sdn-surface--paper border-b border-rule" style="overflow: visible;">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+    <div class="sdn-grid"></div>
+  </div>
+
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--bl" aria-hidden="true">04</span>
 
-    <div data-reveal-group class="lg:pt-2">
-      <div class="sdn-reveal-stagger sdn-panel-accent">
+    <div data-reveal class="lg:sticky lg:top-[calc(var(--sdn-bar-h)+1rem)] lg:self-start lg:pt-2">
+      <div class="sdn-panel-accent">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <p class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted" data-i18n="home.how.eyebrow">
             <?php echo esc_html( $c['how_eyebrow'] ); ?>
           </p>
-          <span class="sdn-tag" aria-hidden="true">04 / 08</span>
+          <span class="sdn-tag" aria-hidden="true">04 / 07</span>
         </div>
         <h2 class="mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl" data-i18n="home.how.h2">
           <?php echo esc_html( $c['how_h2'] ); ?>
         </h2>
       </div>
 
-      <div class="sdn-reveal-stagger mt-8 hidden lg:block">
+      <div class="mt-10 hidden lg:block">
+        <div class="h-px w-full bg-rule-2">
+          <div data-sdn-steps-bar
+               class="h-px bg-accent-2 transition-[width] duration-300 ease-out"
+               style="width: <?php echo esc_attr( round( 100 / count( $c['how_steps'] ), 4 ) ); ?>%"></div>
+        </div>
+        <p class="mt-3 font-mono text-[0.75rem] tabular-nums text-muted">
+          <span data-sdn-steps-current class="text-accent-2">01</span> / <?php echo esc_html( sprintf( '%02d', count( $c['how_steps'] ) ) ); ?>
+        </p>
+      </div>
+
+      <div class="mt-8 hidden lg:block">
         <span class="sdn-poster-tile sdn-poster-tile--deep sdn-poster-tile--rotate-right" aria-hidden="true">04</span>
       </div>
     </div>
 
-    <ol data-reveal-group class="space-y-10">
+    <ol data-sdn-steps class="space-y-10">
       <?php foreach ( $c['how_steps'] as $step_i => $step ) : ?>
-        <li class="sdn-reveal-stagger relative grid grid-cols-[3.5rem_minmax(0,1fr)] gap-5 lg:grid-cols-[5rem_minmax(0,1fr)] lg:gap-6">
+        <li data-reveal="<?php echo esc_attr( $step_i * 80 ); ?>" data-sdn-step
+            class="relative grid grid-cols-[3.5rem_minmax(0,1fr)] gap-5 lg:grid-cols-[5rem_minmax(0,1fr)] lg:gap-6">
           <?php if ( $step_i > 0 ) : ?>
-            <span class="sdn-step-line absolute left-[1.75rem] top-[-2.5rem] h-10 w-px bg-rule lg:left-[2.5rem]" aria-hidden="true"></span>
+            <span aria-hidden="true" data-sdn-step-line data-active="false"
+                  class="absolute left-[1.75rem] top-[-2.5rem] h-10 w-px bg-rule transition-colors duration-300 data-[active=true]:bg-accent-2 lg:left-[2.5rem]"></span>
           <?php endif; ?>
           <div>
             <span class="sdn-step-label" data-i18n="home.how.step_label"><?php echo esc_html( $c['step_label'] ); ?></span>
-            <span aria-hidden="true" class="sdn-step-num sdn-count font-mono text-[2.5rem] font-light leading-none text-rule lg:text-[3.25rem]" data-count-to="<?php echo (int) ( $step_i + 1 ); ?>">0</span>
+            <span aria-hidden="true" data-sdn-step-num data-active="<?php echo 0 === $step_i ? 'true' : 'false'; ?>"
+                  class="sdn-count origin-left font-mono text-[2.5rem] font-light leading-none text-rule transition-[color,transform] duration-300 ease-out data-[active=true]:scale-110 data-[active=true]:text-accent-2 lg:text-[3.25rem]"
+                  data-count-to="<?php echo (int) ( $step_i + 1 ); ?>">0</span>
           </div>
           <div class="min-w-0">
             <h3 data-i18n="home.how.<?php echo esc_attr( $step_i ); ?>.title" class="font-display text-[1.125rem] font-semibold text-ink"><?php echo esc_html( $step[1] ); ?></h3>
@@ -700,7 +689,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">05</span>
 
@@ -709,7 +698,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
         <p class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted" data-i18n="home.cov.eyebrow">
           <?php echo esc_html( $c['cov_eyebrow'] ); ?>
         </p>
-        <span class="sdn-tag" aria-hidden="true">05 / 08</span>
+        <span class="sdn-tag" aria-hidden="true">05 / 07</span>
       </div>
       <h2 class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl" data-i18n="home.cov.h2">
         <?php echo esc_html( $c['cov_h2'] ); ?>
@@ -767,13 +756,13 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 
   <div class="sdn-layer grid lg:grid-cols-2 lg:items-stretch">
 
-    <div data-reveal-group class="relative px-6 py-20 lg:order-2 lg:flex lg:flex-col lg:justify-center lg:px-16 lg:py-16 xl:px-20">
+    <div data-reveal-group class="relative px-3 py-20 lg:order-2 lg:flex lg:flex-col lg:justify-center lg:px-9 lg:py-16 xl:px-12">
       <span class="sdn-ghost-num sdn-ghost-num--br" aria-hidden="true">06</span>
       <div class="sdn-reveal-stagger flex flex-wrap items-center justify-between gap-3">
         <p class="sdn-eyebrow font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent-2" data-i18n="home.cert.eyebrow">
           <?php echo esc_html( $c['cert_eyebrow'] ); ?>
         </p>
-        <span class="sdn-tag" aria-hidden="true">06 / 08</span>
+        <span class="sdn-tag" aria-hidden="true">06 / 07</span>
       </div>
       <h2 class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-4xl" data-i18n="home.cert.h2">
         <?php echo esc_html( $c['cert_h2'] ); ?>
@@ -804,66 +793,6 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
   </div>
 </section>
 
-<!-- ══════════════ 07 · DATOS DE OPERACIÓN — banda a ancho completo ══════════════
-     Retícula hexagonal (.sdn-grid) sobre Space Indigo. El
-     contenido va en su propia capa para quedar siempre por encima.
-     ═══════════════════════════════════════════════════════════════ -->
-<section class="sdn-surface sdn-edge-accent text-paper">
-  <div class="sdn-grid" aria-hidden="true"></div>
-  <div class="sdn-stripe-bg" aria-hidden="true"></div>
-
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-14 lg:px-12 lg:py-16">
-
-    <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">07</span>
-
-    <div class="sdn-reveal-up mb-8 flex justify-end">
-      <span class="sdn-tag" aria-hidden="true">07 / 08</span>
-    </div>
-
-    <div data-reveal-group class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-
-      <div class="sdn-reveal-stagger min-w-0">
-        <span class="sdn-ops-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6L16 12l4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3.5 5.2 2 2 0 0 1 5.5 3Z"/></svg>
-        </span>
-        <p data-i18n="home.ops.phone" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule"><?php echo esc_html( $c['ops_phone'] ); ?></p>
-        <p class="mt-3 space-y-1 font-mono text-[0.9375rem]">
-          <a href="<?php echo esc_url( $sdn_tel ); ?>" class="block tabular-nums hover:text-accent"><?php echo esc_html( $sdn['phone1'] ); ?></a>
-          <a href="<?php echo esc_url( $sdn_tel2 ); ?>" class="block tabular-nums hover:text-accent"><?php echo esc_html( $sdn['phone2'] ); ?></a>
-        </p>
-      </div>
-
-      <div class="sdn-reveal-stagger min-w-0 lg:border-l lg:border-dashed lg:border-paper/20 lg:pl-8">
-        <span class="sdn-ops-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="1.5"/><path d="m3 6 9 6.5L21 6"/></svg>
-        </span>
-        <p data-i18n="home.ops.email" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule"><?php echo esc_html( $c['ops_email'] ); ?></p>
-        <p class="mt-3 font-mono text-[0.9375rem]">
-          <a href="mailto:<?php echo esc_attr( $sdn['email'] ); ?>" class="break-all hover:text-accent"><?php echo esc_html( $sdn['email'] ); ?></a>
-        </p>
-      </div>
-
-      <div class="sdn-reveal-stagger min-w-0 lg:border-l lg:border-dashed lg:border-paper/20 lg:pl-8">
-        <span class="sdn-ops-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        </span>
-        <p data-i18n="home.ops.office" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule"><?php echo esc_html( $c['ops_office'] ); ?></p>
-        <address class="mt-3 font-mono text-[0.9375rem] not-italic leading-relaxed"><?php echo esc_html( $sdn['address'] ); ?></address>
-      </div>
-
-      <div class="sdn-reveal-stagger min-w-0 lg:border-l lg:border-dashed lg:border-paper/20 lg:pl-8">
-        <span class="sdn-ops-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
-        </span>
-        <p data-i18n="home.ops.hours" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule"><?php echo esc_html( $c['ops_hours'] ); ?></p>
-        <p data-i18n="home.ops.hours_v" class="mt-3 font-mono text-[0.9375rem] tabular-nums leading-relaxed"><?php echo esc_html( $c['ops_hours_v'] ); ?></p>
-        <p data-i18n="home.ops.hours_n" class="mt-1 font-mono text-[0.8125rem] leading-relaxed text-rule"><?php echo esc_html( $c['ops_hours_n'] ); ?></p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 <!-- ══════════════ Preguntas frecuentes ══════════════
      Sigue siendo <details> nativo — se abre y cierra sin JavaScript y
      sigue siendo utilizable si el bundle no carga. La versión general,
@@ -873,7 +802,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
     <div class="lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
 
       <div data-reveal-group class="lg:pt-1">
@@ -915,7 +844,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
   </div>
 </section>
 
-<!-- ══════════════ 08 · CIERRE — texto izquierda / formulario derecha ══════════════
+<!-- ══════════════ 07 · CIERRE — texto izquierda / formulario derecha ══════════════
      Fondo en video sobre Space Indigo. El color de la superficie está
      debajo del <video>, así que el contraste del texto no depende de
      que el MP4 cargue: si falla, si tarda, o si el visitante pide
@@ -939,13 +868,13 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
-    <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">08</span>
+    <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">07</span>
 
     <div data-reveal-group class="lg:pt-2">
       <div class="sdn-reveal-stagger flex justify-end">
-        <span class="sdn-tag" aria-hidden="true">08 / 08</span>
+        <span class="sdn-tag" aria-hidden="true">07 / 07</span>
       </div>
       <h2 class="sdn-reveal-stagger mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] sm:text-4xl" data-i18n="home.end.h2">
         <?php echo esc_html( $c['end_h2'] ); ?>

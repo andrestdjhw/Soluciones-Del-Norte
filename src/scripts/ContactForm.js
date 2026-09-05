@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useId } from "react"
-import { PhoneIcon, MailIcon, ArrowIcon } from "./icons"
+import { PhoneIcon, MailIcon, ArrowIcon, ChevronIcon } from "./icons"
 import { useLang } from "./langState"
 
 /* ─────────────────────────────────────────────────────────────
@@ -39,6 +39,7 @@ const COPY = {
     email: "Correo",
     employees: "Número de empleados",
     statesLegend: "Estados donde operas",
+    statesPlaceholder: "Selecciona un estado",
     stateOR: "Oregon",
     stateWA: "Washington",
     stateBoth: "Ambos",
@@ -66,6 +67,7 @@ const COPY = {
     email: "Email",
     employees: "Number of employees",
     statesLegend: "States you operate in",
+    statesPlaceholder: "Select a state",
     stateOR: "Oregon",
     stateWA: "Washington",
     stateBoth: "Both",
@@ -144,42 +146,80 @@ async function verifyRecaptcha(verifyUrl, token) {
 
 const LABEL_CLS =
   "block font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted"
+const LABEL_CLS_DARK =
+  "block font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-paper/60"
 
 /**
- * Campo de texto. Vive a nivel de módulo a propósito: si se declara dentro
- * de ContactForm, React lo ve como un tipo distinto en cada render, desmonta
- * el input y el foco se pierde a cada tecla.
+ * Campo de texto (o desplegable, con type="select" + options). Vive a nivel
+ * de módulo a propósito: si se declara dentro de ContactForm, React lo ve
+ * como un tipo distinto en cada render, desmonta el input y el foco se
+ * pierde a cada tecla.
+ *
+ * `dark` = variante sobre el cristal esmerilado oscuro del hero (compact):
+ * mismo layout, paleta invertida (texto claro, control translúcido).
  */
-function Field({ uid, name, label, value, error, onChange, pad, type = "text", inputMode, autoComplete, hint }) {
+function Field({ uid, name, label, value, error, onChange, pad, type = "text", inputMode, autoComplete, hint, dark, options }) {
   const fid = `${uid}-${name}`
   const describedBy = error ? `${fid}-err` : hint ? `${fid}-hint` : undefined
+  const isSelect = type === "select"
+
+  const controlCls = `mt-1.5 block w-full rounded-sm border ${pad} ${
+    isSelect ? "appearance-none pr-9" : ""
+  } font-body text-[0.9375rem] transition-colors duration-150 ${
+    dark
+      ? `bg-paper/10 text-paper placeholder:text-paper/40 ${error ? "border-accent" : "border-paper/20 hover:border-paper/40"}`
+      : `bg-paper text-ink placeholder:text-neutral ${error ? "border-accent-2" : "border-rule hover:border-rule-2"}`
+  }`
 
   return (
     <div className="min-w-0">
-      <label htmlFor={fid} className={LABEL_CLS}>
+      <label htmlFor={fid} className={dark ? LABEL_CLS_DARK : LABEL_CLS}>
         {label}
       </label>
-      <input
-        id={fid}
-        name={name}
-        type={type}
-        inputMode={inputMode}
-        autoComplete={autoComplete}
-        value={value}
-        onChange={onChange}
-        aria-invalid={error ? "true" : undefined}
-        aria-describedby={describedBy}
-        className={`mt-1.5 block w-full rounded-sm border bg-paper ${pad} font-body text-[0.9375rem] text-ink placeholder:text-neutral transition-colors duration-150 ${
-          error ? "border-accent-2" : "border-rule hover:border-rule-2"
-        }`}
-      />
+      <div className={isSelect ? "relative" : undefined}>
+        {isSelect ? (
+          <select
+            id={fid}
+            name={name}
+            value={value}
+            onChange={onChange}
+            aria-invalid={error ? "true" : undefined}
+            aria-describedby={describedBy}
+            className={controlCls}
+          >
+            {options.map((opt) => (
+              <option key={opt.value} value={opt.value} disabled={opt.value === ""}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            id={fid}
+            name={name}
+            type={type}
+            inputMode={inputMode}
+            autoComplete={autoComplete}
+            value={value}
+            onChange={onChange}
+            aria-invalid={error ? "true" : undefined}
+            aria-describedby={describedBy}
+            className={controlCls}
+          />
+        )}
+        {isSelect && (
+          <ChevronIcon
+            className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 ${dark ? "text-paper/50" : "text-muted"}`}
+          />
+        )}
+      </div>
       {hint && !error && (
-        <p id={`${fid}-hint`} className="mt-1.5 text-[0.75rem] text-muted">
+        <p id={`${fid}-hint`} className={`mt-1.5 text-[0.75rem] ${dark ? "text-paper/50" : "text-muted"}`}>
           {hint}
         </p>
       )}
       {error && (
-        <p id={`${fid}-err`} className="mt-1.5 text-[0.75rem] text-accent-2">
+        <p id={`${fid}-err`} className={`mt-1.5 text-[0.75rem] ${dark ? "text-accent" : "text-accent-2"}`}>
           {error}
         </p>
       )}
@@ -201,6 +241,9 @@ export default function ContactForm(props) {
   const lang = useLang(props.lang)
   const t = COPY[lang]
   const compact = props.density === "compact"
+  // La variante compact es la del hero, ahora sobre cristal esmerilado
+  // oscuro (ver cardCls) — mismo layout, paleta de texto invertida.
+  const dark = compact
 
   const cfg = (typeof window !== "undefined" && window.sdnConfig) || {}
   const ejs = { ...(cfg.emailjs || {}), ...props }
@@ -311,11 +354,12 @@ export default function ContactForm(props) {
   const gap = compact ? "space-y-4" : "space-y-5"
 
   /* La versión "compact" solo la usa el hero de home, que ahora tiene
-     video de fondo: un cristal esmerilado deja asomar el video detrás
-     sin sacrificar legibilidad (el fondo sigue siendo blanco, solo
-     que translúcido — el texto y los campos no cambian de color). */
+     video de fondo: un cristal esmerilado oscuro (Space Indigo translúcido,
+     como en la referencia everridgeus.com) deja asomar el video detrás sin
+     sacrificar legibilidad — texto y controles pasan a la paleta clara
+     (ver `dark` en Field y en los bloques de abajo). */
   const cardCls = compact
-    ? "rounded-sm border border-paper bg-paper/75 shadow-[0_20px_50px_rgba(29,24,22,0.25)] backdrop-blur-md"
+    ? "rounded-sm border border-paper/15 bg-deep/70 shadow-[0_20px_50px_rgba(8,10,20,0.45)] backdrop-blur-md"
     : "sdn-frame rounded-sm border border-rule bg-paper-2"
 
   /* ── Estado: enviado ─────────────────────────────────────── */
@@ -327,12 +371,12 @@ export default function ContactForm(props) {
         aria-live="polite"
       >
         <div className="h-1 w-12 bg-accent" aria-hidden="true" />
-        <p className="mt-5 font-display text-xl font-semibold text-ink">{t.successTitle}</p>
-        <p className="sdn-measure mt-2 text-[0.9375rem] leading-relaxed text-ink-2">{t.success}</p>
+        <p className={`mt-5 font-display text-xl font-semibold ${dark ? "text-paper" : "text-ink"}`}>{t.successTitle}</p>
+        <p className={`sdn-measure mt-2 text-[0.9375rem] leading-relaxed ${dark ? "text-paper/80" : "text-ink-2"}`}>{t.success}</p>
         <button
           type="button"
           onClick={restart}
-          className="mt-6 inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-accent-2 hover:text-accent"
+          className={`mt-6 inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] ${dark ? "text-accent hover:text-paper" : "text-accent-2 hover:text-accent"}`}
         >
           {t.successAgain}
           <ArrowIcon className="h-3.5 w-3.5" />
@@ -361,65 +405,40 @@ export default function ContactForm(props) {
         </div>
 
         <div className={compact ? "grid gap-4 sm:grid-cols-2" : "grid gap-5 sm:grid-cols-2"}>
-          <Field uid={uid} name="name" label={t.name} autoComplete="name"
+          <Field uid={uid} name="name" label={t.name} autoComplete="name" dark={dark}
                  value={values.name} error={errors.name} onChange={set("name")} pad={pad} />
-          <Field uid={uid} name="phone" label={t.phone} type="tel" inputMode="tel" autoComplete="tel"
+          <Field uid={uid} name="phone" label={t.phone} type="tel" inputMode="tel" autoComplete="tel" dark={dark}
                  value={values.phone} error={errors.phone} onChange={set("phone")} pad={pad} />
         </div>
 
-        <Field uid={uid} name="email" label={t.email} type="email" inputMode="email" autoComplete="email"
+        <Field uid={uid} name="email" label={t.email} type="email" inputMode="email" autoComplete="email" dark={dark}
                value={values.email} error={errors.email} onChange={set("email")} pad={pad} />
 
         <div className={compact ? "grid gap-4 sm:grid-cols-2" : "grid gap-5 sm:grid-cols-2"}>
-          <Field uid={uid} name="employees" label={t.employees} inputMode="numeric"
+          <Field uid={uid} name="employees" label={t.employees} inputMode="numeric" dark={dark}
                  value={values.employees} error={errors.employees} onChange={set("employees")} pad={pad} />
 
-          {/* Estados: tres opciones, no un desplegable — se ven de un vistazo */}
-          <fieldset className="min-w-0">
-            <legend className={LABEL_CLS}>{t.statesLegend}</legend>
-            <div className="mt-1.5 grid grid-cols-3 gap-2">
-              {[
-                { value: "Oregon", label: t.stateOR },
-                { value: "Washington", label: t.stateWA },
-                { value: "Ambos", label: t.stateBoth },
-              ].map((opt) => {
-                const checked = values.states === opt.value
-                return (
-                  <label
-                    key={opt.value}
-                    className={`flex cursor-pointer items-center justify-center rounded-sm border px-2 py-2.5 text-center text-[0.8125rem] transition-colors duration-150 ${
-                      checked
-                        ? "border-accent bg-accent-2 text-paper"
-                        : errors.states
-                          ? "border-accent-2 bg-paper text-ink hover:bg-paper-3"
-                          : "border-rule bg-paper text-ink hover:bg-paper-3"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name={`${uid}-states`}
-                      value={opt.value}
-                      checked={checked}
-                      onChange={set("states")}
-                      aria-invalid={errors.states ? "true" : undefined}
-                      aria-describedby={errors.states ? `${uid}-states-err` : undefined}
-                      className="sr-only"
-                    />
-                    {opt.label}
-                  </label>
-                )
-              })}
-            </div>
-            {errors.states && (
-              <p id={`${uid}-states-err`} className="mt-1.5 text-[0.75rem] text-accent-2">
-                {errors.states}
-              </p>
-            )}
-          </fieldset>
+          <Field
+            uid={uid}
+            name="states"
+            label={t.statesLegend}
+            type="select"
+            dark={dark}
+            value={values.states}
+            error={errors.states}
+            onChange={set("states")}
+            pad={pad}
+            options={[
+              { value: "", label: t.statesPlaceholder },
+              { value: "Oregon", label: t.stateOR },
+              { value: "Washington", label: t.stateWA },
+              { value: "Ambos", label: t.stateBoth },
+            ]}
+          />
         </div>
 
         <div>
-          <label htmlFor={`${uid}-message`} className={LABEL_CLS}>
+          <label htmlFor={`${uid}-message`} className={dark ? LABEL_CLS_DARK : LABEL_CLS}>
             {t.message}
           </label>
           <textarea
@@ -429,9 +448,13 @@ export default function ContactForm(props) {
             value={values.message}
             onChange={set("message")}
             aria-describedby={`${uid}-message-hint`}
-            className={`mt-1.5 block w-full resize-y rounded-sm border border-rule bg-paper ${pad} font-body text-[0.9375rem] text-ink transition-colors duration-150 hover:border-rule-2`}
+            className={`mt-1.5 block w-full resize-y rounded-sm border ${pad} font-body text-[0.9375rem] transition-colors duration-150 ${
+              dark
+                ? "border-paper/20 bg-paper/10 text-paper hover:border-paper/40"
+                : "border-rule bg-paper text-ink hover:border-rule-2"
+            }`}
           />
-          <p id={`${uid}-message-hint`} className="mt-1.5 text-[0.75rem] text-muted">
+          <p id={`${uid}-message-hint`} className={`mt-1.5 text-[0.75rem] ${dark ? "text-paper/50" : "text-muted"}`}>
             {t.messageHint}
           </p>
         </div>
@@ -468,7 +491,7 @@ export default function ContactForm(props) {
           </div>
         )}
 
-        <p className="text-[0.75rem] leading-snug text-muted">{t.legal}</p>
+        <p className={`text-[0.75rem] leading-snug ${dark ? "text-paper/50" : "text-muted"}`}>{t.legal}</p>
       </form>
     </div>
   )

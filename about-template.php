@@ -252,7 +252,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
   <div class="sdn-hero-slab" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(circle at 8% 10%, color-mix(in oklab, var(--color-accent) 16%, transparent), transparent 38%);"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-24">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-24">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">01</span>
 
@@ -373,7 +373,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
      ═══════════════════════════════════════════════════════════════ -->
 <section class="relative overflow-hidden border-b border-rule">
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-14 lg:px-12 lg:py-16">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-14 lg:px-6 lg:py-16">
 
     <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">02</span>
 
@@ -471,7 +471,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
 <section class="relative border-b border-rule">
   <div class="grid lg:grid-cols-2 lg:items-stretch">
 
-    <div data-reveal-group class="relative px-6 py-16 lg:flex lg:flex-col lg:justify-center lg:px-16 lg:py-16 xl:px-20">
+    <div data-reveal-group class="relative px-3 py-16 lg:flex lg:flex-col lg:justify-center lg:px-9 lg:py-16 xl:px-12">
       <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">03</span>
       <span class="sdn-tag sdn-reveal-stagger mb-6 self-start" aria-hidden="true">03 / 07</span>
 
@@ -532,7 +532,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">04</span>
 
@@ -604,7 +604,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">?</span>
 
@@ -658,7 +658,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
      formato. -->
 <section class="sdn-surface sdn-surface--paper-2 sdn-edge-accent border-b border-rule">
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
 
     <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">06</span>
 
@@ -714,7 +714,7 @@ $sdn_tones = array( 'var(--color-accent)', 'var(--color-deep)', 'var(--color-acc
     muted loop playsinline preload="none"
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
 
     <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">07</span>
 

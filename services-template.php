@@ -286,7 +286,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 pb-14 pt-16 lg:px-12 lg:pb-16 lg:pt-24">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
     <div data-reveal>
 
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -330,7 +330,7 @@ $sdn_video_poster = '';
 
   <div class="sdn-layer mx-auto max-w-[1200px] py-14 lg:py-16">
 
-    <div data-reveal class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-6 lg:px-12">
+    <div data-reveal class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-3 lg:px-6">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
         <?php echo esc_html( $c['rail_l'] ); ?>
       </p>
@@ -415,7 +415,7 @@ $sdn_video_poster = '';
 
   <div class="sdn-layer mx-auto max-w-[1200px] py-16 lg:py-20">
 
-    <div data-reveal class="px-6 lg:px-12">
+    <div data-reveal class="px-3 lg:px-6">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
         <?php echo esc_html( $c['tst_l'] ); ?>
       </p>
@@ -427,7 +427,7 @@ $sdn_video_poster = '';
     <ul data-reveal="80"
         tabindex="0"
         aria-label="<?php echo esc_attr( $c['tst_h2'] ); ?>"
-        class="sdn-rail mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-6 lg:px-12">
+        class="sdn-rail mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto px-3 pb-6 lg:px-6">
       <?php foreach ( $sdn_testimonials as $t ) : ?>
         <li class="w-[85%] shrink-0 snap-start sm:w-[60%] lg:w-[32%]">
           <figure class="flex h-full flex-col rounded-sm border border-rule bg-paper-2 p-7">
@@ -453,7 +453,7 @@ $sdn_video_poster = '';
     </ul>
 
     <?php if ( count( $sdn_testimonials ) > 1 ) : ?>
-      <p aria-hidden="true" class="px-6 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted lg:px-12">
+      <p aria-hidden="true" class="px-3 font-mono text-[0.6875rem] uppercase tracking-[0.12em] text-muted lg:px-6">
         <?php echo esc_html( $c['tst_hint'] ); ?>
       </p>
     <?php endif; ?>
@@ -470,7 +470,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
     <div class="lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
 
       <div data-reveal class="lg:pt-1">
@@ -524,7 +524,7 @@ $sdn_video_poster = '';
 
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-20 lg:grid-cols-2 lg:gap-16 lg:px-12 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
       <h2 class="font-display text-[1.75rem] font-semibold leading-[1.15] sm:text-4xl">

@@ -4,7 +4,7 @@
 /* ─────────────────────────────────────────────────────────────
    Soluciones del Norte · sistema de diseño
    Hallmark · ruta custom (tuned) · modern-minimal
-   ejes: light / grotesk-sans / cool 231°
+   ejes: light / serif editorial (IBM Plex Serif) / cool 231°
    Ningún color ni font-family fuera de este bloque.
    ───────────────────────────────────────────────────────────── */
 
@@ -38,9 +38,9 @@
   --color-brand-cerulean: #1581AA;
 
   /* Tipografía */
-  --font-display: "Space Grotesk", ui-sans-serif, sans-serif;
-  --font-body:    "IBM Plex Sans", ui-sans-serif, sans-serif;
-  --font-mono:    "IBM Plex Mono", ui-monospace, monospace;
+  --font-display: "IBM Plex Serif", ui-serif, Georgia, serif;
+  --font-body:    "IBM Plex Serif", ui-serif, Georgia, serif;
+  --font-mono:    "Electrolize", ui-sans-serif, sans-serif;
 
   /* Alturas de la cabecera — leídas también desde JS */
   --sdn-topbar-h: 2.25rem;
@@ -487,6 +487,21 @@ body[data-sdn-lock="true"] {
     #000 calc(100% - 3rem),
     transparent 100%
   );
+}
+
+/* Variantes pedidas para la sección de servicios de home: sin
+   difuminado (corte limpio en el borde, no desvanecido) y a todo el
+   ancho de la ventana en vez de encajonada en los 1200px del
+   contenido — así caben más tarjetas de un vistazo. El resto de la
+   sección (título, texto) se queda dentro del contenedor angosto; solo
+   el riel se sale. */
+.sdn-marquee--no-fade {
+  mask-image: none;
+}
+
+.sdn-marquee--full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
 }
 
 .sdn-marquee__track {
@@ -1089,18 +1104,6 @@ body[data-sdn-lock="true"] {
 }
 .sdn-marquee a:hover::after { transform: scaleX(1); }
 
-/* ── Número de paso — sección "Cómo empieza" ──────────────────
-   El contador de Reveal.js escribe el valor; esto le da presencia y
-   lo tiñe de acento cuando su fila ya entró. */
-.sdn-step-num { font-variant-numeric: tabular-nums; transition: color 400ms ease; }
-.sdn-reveal-stagger.is-visible .sdn-step-num { color: var(--color-accent-2); }
-.sdn-step-line {
-  transform-origin: top;
-  transform: scaleY(0);
-  transition: transform 700ms var(--sdn-e) 250ms;
-}
-.sdn-step-line.is-visible { transform: scaleY(1); }
-
 /* ── FAQ con número y acento por pregunta ──────────────────────
    Sigue siendo <details> nativo — se abre y cierra sin JavaScript.
    Solo se le suma el número, la barra de acento al abrir y la
@@ -1677,6 +1680,4 @@ body[data-sdn-lock="true"] {
   [data-sdn-parallax] { transform: none !important; }
 
   .sdn-magnetic, .sdn-tilt { transition: none !important; }
-
-  .sdn-step-line { transform: scaleY(1) !important; }
 }

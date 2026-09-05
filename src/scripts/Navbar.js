@@ -240,7 +240,7 @@ export default function Navbar(props) {
           className="sdn-topbar bg-deep text-paper"
           aria-hidden={topbarCollapsed ? "true" : "false"}
         >
-          <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-12">
+          <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between gap-4 px-3 lg:px-6">
             {/* Izquierda · teléfono y correo */}
             <div className="flex min-w-0 items-center gap-4 font-mono text-[0.75rem] tracking-wide">
               <a
@@ -297,7 +297,7 @@ export default function Navbar(props) {
         {/* El relieve vive en index.css (.sdn-bar): degradado, bisel y
             sombra proyectada. Aquí solo se marca si está despegada del tope. */}
         <div className={`sdn-bar ${detached ? "is-stuck" : ""}`}>
-          <div className="mx-auto flex h-[var(--sdn-bar-h)] max-w-[1200px] items-center justify-between gap-6 px-6 lg:px-12">
+          <div className="mx-auto flex h-[var(--sdn-bar-h)] max-w-[1200px] items-center justify-between gap-6 px-3 lg:px-6">
             {/* Logotipo */}
             <a href={routes.home} className="flex shrink-0 items-center" onClick={closeAll}>
               <img
@@ -383,7 +383,7 @@ export default function Navbar(props) {
               megaOpen ? "opacity-100 translate-y-0" : "pointer-events-none -translate-y-2 opacity-0"
             }`}
           >
-            <div className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 px-6 py-10 lg:px-12">
+            <div className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 px-3 py-10 lg:px-6">
               <div>
                 <p className="mb-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
                   {t.panelTitle}
@@ -452,7 +452,7 @@ export default function Navbar(props) {
           hidden={!mobileOpen}
           className="h-[calc(100svh-var(--sdn-bar-h))] overflow-y-auto border-b border-rule bg-paper lg:hidden"
         >
-          <nav aria-label={t.services} className="px-6 py-6">
+          <nav aria-label={t.services} className="px-3 py-6">
             <a href={routes.home} onClick={closeAll} className="block border-b border-rule-2 py-4 font-display text-lg font-semibold text-ink">
               {t.home}
             </a>

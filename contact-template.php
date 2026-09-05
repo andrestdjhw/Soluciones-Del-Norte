@@ -121,7 +121,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
   <?php endif; ?>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 pb-14 pt-16 lg:px-12 lg:pb-16 lg:pt-24">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
 
     <p data-i18n="contact.eyebrow" class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
       <?php echo esc_html( $c['eyebrow'] ); ?>
@@ -154,7 +154,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-fixed-field" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-6 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-6 lg:py-20">
 
     <!-- Columna de datos — cada renglón sobre su propia ficha opaca:
          el fondo fijo de la sección (.sdn-fixed-field) sigue ahí, pero
@@ -280,7 +280,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
 <section class="sdn-surface sdn-surface--paper-2 sdn-edge-accent">
   <div class="sdn-grid" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(circle at 90% 100%, color-mix(in oklab, var(--color-accent) 14%, transparent), transparent 45%);"></div>
-  <div class="sdn-layer mx-auto max-w-[1200px] px-6 py-16 lg:px-12 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
     <div data-reveal-group>
       <h2 data-i18n="contact.directions" class="sdn-reveal-stagger font-display text-[1.5rem] font-semibold leading-tight text-ink sm:text-[1.75rem]">
         <?php echo esc_html( $c['directions'] ); ?>

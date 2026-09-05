@@ -18,10 +18,10 @@ function sdn_asset_version( $relative_path ) {
 }
 
 function sdn_load_assets() {
-	// Space Grotesk (display) · IBM Plex Sans (cuerpo) · IBM Plex Mono (cifras)
+	// IBM Plex Serif (display + cuerpo) · Electrolize (etiquetas mono)
 	wp_enqueue_style(
 		'sdn-fonts',
-		'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Electrolize&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
