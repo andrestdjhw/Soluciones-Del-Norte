@@ -12,6 +12,7 @@
       data-facebook="<?php echo esc_attr( $sdn['facebook'] ); ?>"
       data-instagram="<?php echo esc_attr( $sdn['instagram'] ); ?>"
       data-tiktok="<?php echo esc_attr( $sdn['tiktok'] ); ?>"
+      data-google-business="<?php echo esc_attr( $sdn['google_business'] ); ?>"
       data-agency-url="<?php echo esc_attr( $sdn['agency_url'] ); ?>"
       data-lang="<?php echo esc_attr( $sdn['lang'] ); ?>"
     ></div>

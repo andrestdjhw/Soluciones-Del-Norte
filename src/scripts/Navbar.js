@@ -15,18 +15,18 @@ import { useLang } from "./langState"
 const DEFAULTS = {
   home: "/",
   logo: "/wp-content/uploads/2026/08/soluciones-dle-norte-horizontal.png",
-  phone1: "971-477-8337",
-  phone2: "971-471-2600",
-  email: "Admin@solucionesnorte.com",
+  phone1: "503-608-0667",
+  phone2: "503-442-7861",
+  email: "delmys@solucionesnorte.com",
   address: "1915 NE Stucki Ave, Suite 400, Hillsboro, OR 97006",
   addressShort: "Hillsboro, OR",
   mapUrl:
-    "https://maps.google.com/?q=1915%20NE%20Stucki%20Ave%20Suite%20400%20Hillsboro%20OR%2097006",
+    "https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111",
   facebook: "https://www.facebook.com/profile.php?id=61592189014190",
   instagram: "https://www.instagram.com/solucionesdelnorte_us",
   tiktok: "https://www.tiktok.com/@solucionesnorte",
   googleBusiness:
-    "https://www.google.com/maps/place/Soluciones+del+Norte/@45.5337104,-122.8832421,834m/data=!3m2!1e3!4b1!4m6!3m5!1s0x54950f1375801945:0xd85645635dc4f439!8m2!3d45.5337104!4d-122.8806672",
+    "https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111",
   lang: "es",
 }
 
@@ -240,7 +240,7 @@ export default function Navbar(props) {
           className="sdn-topbar bg-deep text-paper"
           aria-hidden={topbarCollapsed ? "true" : "false"}
         >
-          <div className="mx-auto flex h-full max-w-[1200px] items-center justify-between gap-4 px-3 lg:px-6">
+          <div className="mx-auto flex h-full max-w-[1400px] items-center justify-between gap-4 px-3 lg:px-6">
             {/* Izquierda · teléfono y correo */}
             <div className="flex min-w-0 items-center gap-4 font-mono text-[0.75rem] tracking-wide">
               <a
@@ -297,7 +297,7 @@ export default function Navbar(props) {
         {/* El relieve vive en index.css (.sdn-bar): degradado, bisel y
             sombra proyectada. Aquí solo se marca si está despegada del tope. */}
         <div className={`sdn-bar ${detached ? "is-stuck" : ""}`}>
-          <div className="mx-auto flex h-[var(--sdn-bar-h)] max-w-[1200px] items-center justify-between gap-6 px-3 lg:px-6">
+          <div className="mx-auto flex h-[var(--sdn-bar-h)] max-w-[1400px] items-center justify-between gap-6 px-3 lg:px-6">
             {/* Logotipo */}
             <a href={routes.home} className="flex shrink-0 items-center" onClick={closeAll}>
               <img
@@ -383,7 +383,7 @@ export default function Navbar(props) {
               megaOpen ? "opacity-100 translate-y-0" : "pointer-events-none -translate-y-2 opacity-0"
             }`}
           >
-            <div className="mx-auto grid max-w-[1200px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 px-3 py-10 lg:px-6">
+            <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-12 px-3 py-10 lg:px-6">
               <div>
                 <p className="mb-5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
                   {t.panelTitle}

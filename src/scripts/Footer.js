@@ -1,7 +1,7 @@
 import React from "react"
 import {
   PhoneIcon, MailIcon, PinIcon, ArrowIcon,
-  FacebookIcon, InstagramIcon, TikTokIcon,
+  FacebookIcon, InstagramIcon, TikTokIcon, GoogleIcon,
 } from "./icons"
 import { useLang } from "./langState"
 
@@ -16,15 +16,17 @@ import { useLang } from "./langState"
 
 const DEFAULTS = {
   logoWhite: "/wp-content/uploads/2026/08/logo-blanco.png",
-  phone1: "971-477-8337",
-  phone2: "971-471-2600",
-  email: "Admin@solucionesnorte.com",
+  phone1: "503-608-0667",
+  phone2: "503-442-7861",
+  email: "delmys@solucionesnorte.com",
   address: "1915 NE Stucki Ave, Suite 400, Hillsboro, OR 97006",
   mapUrl:
-    "https://maps.google.com/?q=1915%20NE%20Stucki%20Ave%20Suite%20400%20Hillsboro%20OR%2097006",
+    "https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111",
   facebook: "https://www.facebook.com/profile.php?id=61592189014190",
   instagram: "https://www.instagram.com/solucionesdelnorte_us",
   tiktok: "https://www.tiktok.com/@solucionesnorte",
+  googleBusiness:
+    "https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111",
   agencyUrl: "https://828marketingsolutions.com",
   lang: "es",
 }
@@ -114,7 +116,7 @@ export default function Footer(props) {
       </div>
       <div className="sdn-veil" aria-hidden="true" />
 
-      <div className="sdn-layer mx-auto max-w-[1200px] px-3 lg:px-6">
+      <div className="sdn-layer mx-auto max-w-[1400px] px-3 lg:px-6">
         {/* ── Banda principal ─────────────────────────────── */}
         <div className="grid gap-12 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20 lg:py-16">
           {/* Mástil: marca + tagline + redes */}
@@ -136,13 +138,14 @@ export default function Footer(props) {
                 { href: site.facebook, Icon: FacebookIcon, name: "Facebook" },
                 { href: site.instagram, Icon: InstagramIcon, name: "Instagram" },
                 { href: site.tiktok, Icon: TikTokIcon, name: "TikTok" },
+                { href: site.googleBusiness, Icon: GoogleIcon, name: "Google" },
               ].map(({ href, Icon, name }) => (
                 <a
                   key={name}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-sm border border-paper/20 text-rule transition-colors duration-150 hover:border-paper hover:bg-paper hover:text-accent-2"
+                  className="sdn-social-bounce flex h-10 w-10 items-center justify-center rounded-sm border border-paper/20 text-rule hover:border-paper hover:bg-paper hover:text-accent-2"
                 >
                   <Icon className="h-4 w-4" />
                   <span className="sr-only">{name}</span>

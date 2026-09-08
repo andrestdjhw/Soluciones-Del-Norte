@@ -249,8 +249,8 @@ export default function ContactForm(props) {
   const ejs = { ...(cfg.emailjs || {}), ...props }
   const recaptcha = cfg.recaptcha || {}
   const contact = {
-    phone: props.phone || cfg.phone || "971-477-8337",
-    email: props.email || cfg.email || "Admin@solucionesnorte.com",
+    phone: props.phone || cfg.phone || "503-608-0667",
+    email: props.email || cfg.email || "delmys@solucionesnorte.com",
   }
 
   const uid = useId()

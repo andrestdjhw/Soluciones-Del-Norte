@@ -200,6 +200,13 @@ $c = $is_en ? array(
 	'lang_p'         => 'A letter from the IRS or the Department of Revenue doesn’t get clearer because someone translates it over the phone. We explain what it says, what they’re asking for and what happens if you don’t answer — in the language you make decisions in.',
 	'lang_alt'       => 'Soluciones del Norte team at the Hillsboro office',
 
+	/* Reseñas — widget de Google vía Trustindex (shortcode). El botón
+	   manda al mismo perfil de Google Business que usa el resto del
+	   sitio (topbar, cobertura), sin datos nuevos que mantener. */
+	'reviews_eyebrow' => 'Reviews',
+	'reviews_h2'       => 'What clients say after working with us.',
+	'reviews_cta'      => 'Leave a review on Google',
+
 	/* Preguntas frecuentes — versión general, no atada a un servicio.
 	   Misma sección (copy + markup) que about-template.php, después de
 	   Valores. Cada archivo es autocontenido, así que el bloque vive
@@ -310,6 +317,10 @@ $c = $is_en ? array(
 	'lang_p'         => 'Una carta del IRS o del Departamento de Ingresos no se entiende mejor porque alguien te la traduzca por teléfono. Te explicamos qué dice, qué te están pidiendo y qué pasa si no respondes — en el idioma en el que tomas decisiones.',
 	'lang_alt'       => 'Equipo de Soluciones del Norte en la oficina de Hillsboro',
 
+	'reviews_eyebrow' => 'Reseñas',
+	'reviews_h2'       => 'Lo que dicen los clientes después de trabajar con nosotros.',
+	'reviews_cta'      => 'Dejar una reseña en Google',
+
 	'faq_l'     => 'Preguntas',
 	'faq_h2'    => 'Lo que se pregunta antes de la primera llamada.',
 	'faq_note'  => 'Si la tuya no está aquí, hazla en la consulta inicial — para eso es.',
@@ -353,6 +364,12 @@ $sdn_services = sdn_route( 'services' );
 $sdn_tel      = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone1'] );
 $sdn_tel2     = 'tel:+1' . preg_replace( '/\D/', '', $sdn['phone2'] );
 
+/* Enlace directo a "escribir una reseña" en la ficha de Google —
+   distinto del $sdn['google_business'] genérico que usa el topbar:
+   este trae el parámetro `!9m1!1b1` que abre el diálogo de reseña
+   en vez de solo la ficha. */
+$sdn_review_url = 'https://www.google.com/maps/place/Soluciones+del+Norte/@45.5337104,-122.8806672,834m/data=!3m1!1e3!4m8!3m7!1s0x54950f1375801945:0xd85645635dc4f439!8m2!3d45.5337104!4d-122.8806672!9m1!1b1!16s%2Fg%2F11zfj98j8j?hl=en-US&entry=ttu&g_ep=EgoyMDI2MDkwMi4wIKXMDSoASAFQAw%3D%3D';
+
 /* Palabras del titular del hero, para el revelado cinético en CSS
    puro (sin JavaScript ni scroll: solo juega una vez, al cargar). */
 $sdn_hero_words = explode( ' ', $c['hero_h1'] );
@@ -382,7 +399,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 pb-24 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:pb-32 lg:pt-24">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 pb-24 pt-16 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:pb-32 lg:pt-24">
 
     <div>
       <p class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
@@ -463,7 +480,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-20 lg:px-6 lg:py-28">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-20 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">02</span>
 
@@ -627,7 +644,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
     <div class="sdn-grid"></div>
   </div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--bl" aria-hidden="true">04</span>
 
@@ -689,7 +706,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--tr" aria-hidden="true">05</span>
 
@@ -793,6 +810,43 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
   </div>
 </section>
 
+<!-- ══════════════ Reseñas — widget de Google vía Trustindex ══════════════
+     El shortcode [trustindex no-registration=google] lo resuelve el
+     plugin "Reviews plugin for Google" (Trustindex): trae directo las
+     reseñas de la ficha de Google Business, sin cuenta ni API key que
+     mantener aparte. El botón de abajo manda al mismo perfil que ya
+     usa el resto del sitio (topbar, sección de cobertura).
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
+  <div class="sdn-grid" aria-hidden="true"></div>
+
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
+
+    <div data-reveal class="flex flex-wrap items-end justify-between gap-6">
+      <div>
+        <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted" data-i18n="home.reviews.eyebrow">
+          <?php echo esc_html( $c['reviews_eyebrow'] ); ?>
+        </p>
+        <h2 class="sdn-measure mt-4 font-display text-[1.75rem] font-semibold leading-[1.15] text-ink sm:text-[2.25rem]" data-i18n="home.reviews.h2">
+          <?php echo esc_html( $c['reviews_h2'] ); ?>
+        </h2>
+      </div>
+
+      <a href="<?php echo esc_url( $sdn_review_url ); ?>"
+         target="_blank" rel="noopener noreferrer"
+         class="sdn-cta sdn-cta--ghost-ink sdn-magnetic shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-7 -7 38 38" fill="currentColor" aria-hidden="true" focusable="false" class="mr-2 inline-block h-4 w-4 align-[-2px]"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+        <span data-i18n="home.reviews.cta"><?php echo esc_html( $c['reviews_cta'] ); ?></span>
+      </a>
+    </div>
+
+    <div data-reveal="80" class="mt-10">
+      <?php echo do_shortcode( '[trustindex no-registration=google]' ); ?>
+    </div>
+
+  </div>
+</section>
+
 <!-- ══════════════ Preguntas frecuentes ══════════════
      Sigue siendo <details> nativo — se abre y cierra sin JavaScript y
      sigue siendo utilizable si el bundle no carga. La versión general,
@@ -802,7 +856,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
     <div class="lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
 
       <div data-reveal-group class="lg:pt-1">
@@ -868,7 +922,7 @@ $sdn_hero_words = explode( ' ', $c['hero_h1'] );
 
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <span class="sdn-ghost-num sdn-ghost-num--tl" aria-hidden="true">07</span>
 

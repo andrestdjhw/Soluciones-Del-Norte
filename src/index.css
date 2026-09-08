@@ -40,10 +40,10 @@
   /* Tipografía */
   --font-display: "IBM Plex Serif", ui-serif, Georgia, serif;
   --font-body:    "IBM Plex Serif", ui-serif, Georgia, serif;
-  --font-mono:    "Electrolize", ui-sans-serif, sans-serif;
+  --font-mono:    "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Alturas de la cabecera — leídas también desde JS */
-  --sdn-topbar-h: 2.25rem;
+  --sdn-topbar-h: 2.5rem;
   --sdn-bar-h:    4.5rem;
 }
 
@@ -911,6 +911,19 @@ body[data-sdn-lock="true"] {
 /* ── Tarjeta con inclinación 3D suave al mover el cursor ────── */
 .sdn-tilt { transform-style: preserve-3d; transition: transform 350ms var(--sdn-e); will-change: transform; }
 
+/* ── Íconos sociales del footer — rebote con overshoot ────────
+   Misma curva "back out" que .sdn-value-card: sube un poco más de
+   lo que va a quedarse y vuelve, para que se sienta como un
+   resorte y no como el ease-out estándar del resto del sitio. */
+.sdn-social-bounce {
+  transition: transform 420ms var(--sdn-e-spring), border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  will-change: transform;
+}
+.sdn-social-bounce:hover,
+.sdn-social-bounce:focus-visible {
+  transform: translateY(-3px) scale(1.12) rotate(-6deg);
+}
+
 /* ── Parallax decorativo ligado al scroll (fotos, cifras) ───── */
 [data-sdn-parallax] { will-change: transform; }
 
@@ -1679,5 +1692,6 @@ body[data-sdn-lock="true"] {
 
   [data-sdn-parallax] { transform: none !important; }
 
-  .sdn-magnetic, .sdn-tilt { transition: none !important; }
+  .sdn-magnetic, .sdn-tilt, .sdn-social-bounce { transition: none !important; }
+  .sdn-social-bounce:hover, .sdn-social-bounce:focus-visible { transform: none !important; }
 }

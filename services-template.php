@@ -286,7 +286,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
     <div data-reveal>
 
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -328,7 +328,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper-2 border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] py-14 lg:py-16">
+  <div class="sdn-layer mx-auto max-w-[1400px] py-14 lg:py-16">
 
     <div data-reveal class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-3 lg:px-6">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -413,7 +413,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] py-16 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1400px] py-16 lg:py-20">
 
     <div data-reveal class="px-3 lg:px-6">
       <p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted">
@@ -470,7 +470,7 @@ $sdn_video_poster = '';
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-grid" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
     <div class="lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
 
       <div data-reveal class="lg:pt-1">
@@ -524,7 +524,7 @@ $sdn_video_poster = '';
 
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 py-20 lg:grid-cols-2 lg:gap-16 lg:px-6 lg:py-28">
 
     <div data-reveal class="lg:pt-2">
       <h2 class="font-display text-[1.75rem] font-semibold leading-[1.15] sm:text-4xl">

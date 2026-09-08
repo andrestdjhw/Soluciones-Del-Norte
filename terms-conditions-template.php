@@ -180,7 +180,7 @@ $sdn_sections = $is_en ? array(
 
 <!-- ══════════════ Entrada ══════════════ -->
 <section class="border-b border-rule">
-  <div class="mx-auto max-w-[1200px] px-3 pb-16 pt-16 lg:px-6 lg:pb-20 lg:pt-24">
+  <div class="mx-auto max-w-[1400px] px-3 pb-16 pt-16 lg:px-6 lg:pb-20 lg:pt-24">
     <div data-reveal class="lg:grid lg:grid-cols-[10rem_minmax(0,1fr)] lg:gap-12">
 
       <p data-i18n="terms.eyebrow" class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted lg:pt-3">
@@ -210,7 +210,7 @@ $sdn_sections = $is_en ? array(
      Mismo patrón que about-template.php y el aviso de privacidad.
      ═══════════════════════════════════════════════════════════════ -->
 <section class="border-b border-rule">
-  <div class="mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
+  <div class="mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
 
     <?php foreach ( $sdn_sections as $i => $s ) : ?>
       <article data-reveal="<?php echo esc_attr( min( $i * 40, 400 ) ); ?>"
@@ -241,7 +241,7 @@ $sdn_sections = $is_en ? array(
      si confía. El cierre de venta sobraría.
      ═══════════════════════════════════════════════════════════ -->
 <section class="bg-paper-2">
-  <div class="mx-auto max-w-[1200px] px-3 py-14 lg:px-6 lg:py-16">
+  <div class="mx-auto max-w-[1400px] px-3 py-14 lg:px-6 lg:py-16">
     <div data-reveal class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
 
       <div>

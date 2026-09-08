@@ -226,7 +226,7 @@ $sdn_ticker_facts = $is_en ? array(
   <?php endif; ?>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 pb-16 pt-16 lg:px-6 lg:pb-20 lg:pt-24">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 pb-16 pt-16 lg:px-6 lg:pb-20 lg:pt-24">
 
     <p class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
       <a href="<?php echo esc_url( $sdn_services ); ?>"
@@ -311,7 +311,7 @@ $sdn_ticker_facts = $is_en ? array(
     <div class="sdn-grid"></div>
   </div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-24">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-24">
     <div class="lg:grid lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-16">
 
       <div data-reveal-group class="lg:sticky lg:top-[calc(var(--sdn-bar-h)+1rem)] lg:self-start">
@@ -398,7 +398,7 @@ $sdn_ticker_facts = $is_en ? array(
   <div class="sdn-grid" aria-hidden="true"></div>
   <div class="sdn-stripe-bg" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-12 lg:px-6 lg:py-14">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-12 lg:px-6 lg:py-14">
     <div data-reveal-group>
 
       <div class="sdn-reveal-stagger flex flex-wrap items-center gap-3">
@@ -511,7 +511,7 @@ $sdn_ticker_facts = $is_en ? array(
     muted loop playsinline preload="none"
     aria-hidden="true" tabindex="-1"></video>
   <div class="sdn-veil" aria-hidden="true"></div>
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
     <div data-reveal-group class="lg:grid lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-16">
 
       <div class="sdn-reveal-stagger">

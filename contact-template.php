@@ -121,7 +121,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
   <?php endif; ?>
   <div class="sdn-veil" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 pb-14 pt-16 lg:px-6 lg:pb-16 lg:pt-24">
 
     <p data-i18n="contact.eyebrow" class="sdn-hero-fade font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-rule">
       <?php echo esc_html( $c['eyebrow'] ); ?>
@@ -154,7 +154,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
 <section class="sdn-surface sdn-surface--paper border-b border-rule">
   <div class="sdn-fixed-field" aria-hidden="true"></div>
 
-  <div class="sdn-layer mx-auto grid max-w-[1200px] gap-12 px-3 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-6 lg:py-20">
+  <div class="sdn-layer mx-auto grid max-w-[1400px] gap-12 px-3 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-16 lg:px-6 lg:py-20">
 
     <!-- Columna de datos — cada renglón sobre su propia ficha opaca:
          el fondo fijo de la sección (.sdn-fixed-field) sigue ahí, pero
@@ -225,17 +225,17 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
       <nav aria-label="<?php echo esc_attr( $c['social'] ); ?>" data-i18n-aria-label="contact.social" class="sdn-reveal-stagger mt-8 flex items-center gap-2">
         <a href="<?php echo esc_url( $sdn['facebook'] ); ?>" target="_blank" rel="noopener noreferrer"
            class="sdn-tilt flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-muted transition-colors duration-150 hover:border-accent hover:text-accent-2">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M13.5 21v-7.6h2.6l.4-3h-3V8.5c0-.9.25-1.5 1.5-1.5H16.6V4.3A20 20 0 0 0 14.3 4.2c-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
           <span class="sr-only">Facebook</span>
         </a>
         <a href="<?php echo esc_url( $sdn['instagram'] ); ?>" target="_blank" rel="noopener noreferrer"
            class="sdn-tilt flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-muted transition-colors duration-150 hover:border-accent hover:text-accent-2">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M12 4.6c2.4 0 2.7 0 3.6.05.9.04 1.4.2 1.7.32.43.17.74.37 1.06.7.33.32.53.63.7 1.06.12.3.28.8.32 1.7.05.9.05 1.2.05 3.6s0 2.7-.05 3.6c-.04.9-.2 1.4-.32 1.7-.17.43-.37.74-.7 1.06-.32.33-.63.53-1.06.7-.3.12-.8.28-1.7.32-.9.05-1.2.05-3.6.05s-2.7 0-3.6-.05c-.9-.04-1.4-.2-1.7-.32a2.9 2.9 0 0 1-1.06-.7 2.9 2.9 0 0 1-.7-1.06c-.12-.3-.28-.8-.32-1.7C4.6 14.7 4.6 14.4 4.6 12s0-2.7.05-3.6c.04-.9.2-1.4.32-1.7.17-.43.37-.74.7-1.06a2.9 2.9 0 0 1 1.06-.7c.3-.12.8-.28 1.7-.32.9-.05 1.2-.05 3.6-.05Zm0 4a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm0 5.6a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4Zm4.35-5.74a.8.8 0 1 1-1.6 0 .8.8 0 0 1 1.6 0Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 01-1.38-.9 3.72 3.72 0 01-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63a5.88 5.88 0 00-2.13 1.38A5.88 5.88 0 00.63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.73 1.46 1.38 2.13a5.88 5.88 0 002.13 1.38c.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56a5.88 5.88 0 002.13-1.38 5.88 5.88 0 001.38-2.13c.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.88 5.88 0 00-1.38-2.13A5.88 5.88 0 0019.86.63C19.1.33 18.22.13 16.95.07 15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zm0 10.16a4 4 0 110-8 4 4 0 010 8zm6.4-11.85a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
           <span class="sr-only">Instagram</span>
         </a>
         <a href="<?php echo esc_url( $sdn['tiktok'] ); ?>" target="_blank" rel="noopener noreferrer"
            class="sdn-tilt flex h-10 w-10 items-center justify-center rounded-sm border border-rule text-muted transition-colors duration-150 hover:border-accent hover:text-accent-2">
-          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M16.1 3h-2.7v11.4a2.1 2.1 0 1 1-1.75-2.07V9.6a4.9 4.9 0 1 0 4.45 4.88V9.06a5.9 5.9 0 0 0 3.4 1.07V7.4a3.3 3.3 0 0 1-3.4-3.2V3Z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.36a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.4z"/></svg>
           <span class="sr-only">TikTok</span>
         </a>
       </nav>
@@ -280,7 +280,7 @@ $sdn_hero_words = explode( ' ', $c['h1'] );
 <section class="sdn-surface sdn-surface--paper-2 sdn-edge-accent">
   <div class="sdn-grid" aria-hidden="true"></div>
   <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(circle at 90% 100%, color-mix(in oklab, var(--color-accent) 14%, transparent), transparent 45%);"></div>
-  <div class="sdn-layer mx-auto max-w-[1200px] px-3 py-16 lg:px-6 lg:py-20">
+  <div class="sdn-layer mx-auto max-w-[1400px] px-3 py-16 lg:px-6 lg:py-20">
     <div data-reveal-group>
       <h2 data-i18n="contact.directions" class="sdn-reveal-stagger font-display text-[1.5rem] font-semibold leading-tight text-ink sm:text-[1.75rem]">
         <?php echo esc_html( $c['directions'] ); ?>

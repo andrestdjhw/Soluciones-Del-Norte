@@ -113,6 +113,10 @@ const dict = {
     "home.lang.p": "Una carta del IRS o del Departamento de Ingresos no se entiende mejor porque alguien te la traduzca por teléfono. Te explicamos qué dice, qué te están pidiendo y qué pasa si no respondes — en el idioma en el que tomas decisiones.",
     "home.lang.alt": "Equipo de Soluciones del Norte en la oficina de Hillsboro",
 
+    "home.reviews.eyebrow": "Reseñas",
+    "home.reviews.h2": "Lo que dicen los clientes después de trabajar con nosotros.",
+    "home.reviews.cta": "Dejar una reseña en Google",
+
     "home.faq.l": "Preguntas",
     "home.faq.h2": "Lo que se pregunta antes de la primera llamada.",
     "home.faq.note": "Si la tuya no está aquí, hazla en la consulta inicial — para eso es.",
@@ -443,7 +447,7 @@ const dict = {
     "privacy.6.body": "Guardamos los mensajes de contacto mientras dure la relación con tu negocio, o mientras sea razonable para darte seguimiento. Si nos escribes y no sigues con nosotros, puedes pedir que borremos tu información en cualquier momento.",
     "privacy.7.rail": "Tus derechos",
     "privacy.7.head": "Qué puedes pedirnos",
-    "privacy.7.body": "Puedes pedirnos que te digamos qué información tenemos sobre ti, que la corrijamos si está mal, o que la borremos. Escríbenos a <a href=\"mailto:Admin@solucionesnorte.com\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">Admin@solucionesnorte.com</a> o llama al <a href=\"tel:+19714778337\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">971-477-8337</a>.",
+    "privacy.7.body": "Puedes pedirnos que te digamos qué información tenemos sobre ti, que la corrijamos si está mal, o que la borremos. Escríbenos a <a href=\"mailto:delmys@solucionesnorte.com\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">delmys@solucionesnorte.com</a> o llama al <a href=\"tel:+15036080667\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">503-608-0667</a>.",
     "privacy.8.rail": "Seguridad",
     "privacy.8.head": "Cómo protegemos tu información",
     "privacy.8.body": "El sitio se sirve por conexión cifrada (HTTPS). El acceso a los mensajes que recibimos está limitado al equipo que atiende consultas.",
@@ -576,6 +580,10 @@ const dict = {
     "home.lang.h2": "Language isn’t an add-on.",
     "home.lang.p": "A letter from the IRS or the Department of Revenue doesn’t get clearer because someone translates it over the phone. We explain what it says, what they’re asking for and what happens if you don’t answer — in the language you make decisions in.",
     "home.lang.alt": "Soluciones del Norte team at the Hillsboro office",
+
+    "home.reviews.eyebrow": "Reviews",
+    "home.reviews.h2": "What clients say after working with us.",
+    "home.reviews.cta": "Leave a review on Google",
 
     "home.faq.l": "FAQ",
     "home.faq.h2": "What people ask before the first call.",
@@ -902,7 +910,7 @@ const dict = {
     "privacy.6.body": "We keep contact messages for as long as the relationship with your business lasts, or as long as it’s reasonable to follow up. If you write to us and don’t move forward, you can ask us to delete your information at any time.",
     "privacy.7.rail": "Your rights",
     "privacy.7.head": "What you can ask us for",
-    "privacy.7.body": "You can ask what information we hold about you, ask us to correct it if it’s wrong, or ask us to delete it. Write to <a href=\"mailto:Admin@solucionesnorte.com\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">Admin@solucionesnorte.com</a> or call <a href=\"tel:+19714778337\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">971-477-8337</a>.",
+    "privacy.7.body": "You can ask what information we hold about you, ask us to correct it if it’s wrong, or ask us to delete it. Write to <a href=\"mailto:delmys@solucionesnorte.com\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">delmys@solucionesnorte.com</a> or call <a href=\"tel:+15036080667\" class=\"underline decoration-rule underline-offset-4 hover:decoration-accent\">503-608-0667</a>.",
     "privacy.8.rail": "Security",
     "privacy.8.head": "How we protect your information",
     "privacy.8.body": "The site is served over an encrypted connection (HTTPS). Access to the messages we receive is limited to the team that handles enquiries.",

@@ -18,10 +18,10 @@ function sdn_asset_version( $relative_path ) {
 }
 
 function sdn_load_assets() {
-	// IBM Plex Serif (display + cuerpo) · Electrolize (etiquetas mono)
+	// IBM Plex Serif (display + cuerpo) · IBM Plex Mono (etiquetas mono)
 	wp_enqueue_style(
 		'sdn-fonts',
-		'https://fonts.googleapis.com/css2?family=Electrolize&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
@@ -204,16 +204,16 @@ function sdn_site_data() {
 		// TODO: el archivo de la biblioteca tiene el nombre mal escrito ("dle").
 		'logo'          => content_url( '/uploads/2026/08/soluciones-dle-norte-horizontal.png' ),
 		'logo_white'    => content_url( '/uploads/2026/08/logo-blanco.png' ),
-		'phone1'        => '971-477-8337',
-		'phone2'        => '971-471-2600',
-		'email'         => 'Admin@solucionesnorte.com',
+		'phone1'        => '503-608-0667',
+		'phone2'        => '503-442-7861',
+		'email'         => 'delmys@solucionesnorte.com',
 		'address'       => $address,
 		'address_short' => 'Hillsboro, OR',
-		'map_url'       => 'https://maps.google.com/?q=' . rawurlencode( $address ),
+		'map_url'       => 'https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111',
 		'facebook'      => 'https://www.facebook.com/profile.php?id=61592189014190',
 		'instagram'     => 'https://www.instagram.com/solucionesdelnorte_us',
 		'tiktok'        => 'https://www.tiktok.com/@solucionesnorte',
-		'google_business' => 'https://www.google.com/maps/place/Soluciones+del+Norte/@45.5337104,-122.8832421,834m/data=!3m2!1e3!4b1!4m6!3m5!1s0x54950f1375801945:0xd85645635dc4f439!8m2!3d45.5337104!4d-122.8806672',
+		'google_business' => 'https://www.google.com/maps/place/Soluciones+del+Norte/data=!4m2!3m1!1s0x0:0xd85645635dc4f439?sa=X&ved=1t:2428&hl=en-US&ictx=111',
 		'agency_url'    => 'https://828marketingsolutions.com',
 		'lang'          => sdn_current_lang(),
 	);

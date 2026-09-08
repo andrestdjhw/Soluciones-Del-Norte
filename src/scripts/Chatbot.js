@@ -11,8 +11,8 @@ import { useLang } from "./langState"
    ───────────────────────────────────────────────────────────── */
 
 const DEFAULTS = {
-  phone1: "971-477-8337",
-  email: "Admin@solucionesnorte.com",
+  phone1: "503-608-0667",
+  email: "delmys@solucionesnorte.com",
   contactUrl: "/contacto",
   lang: "es",
 }
